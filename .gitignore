@@ -18,5 +18,23 @@
 *.tar.gz
 *.rar
 
+# eclipse project file
+.settings/
+.classpath
+.project
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
