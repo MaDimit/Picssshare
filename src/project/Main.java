@@ -1,6 +1,11 @@
 package project;
 
+import java.util.HashMap;
+
 public class Main {
-	//neshto drugo sled nego, da sme na edin red
-	//My comment ggggggggggggggggggggggggg
+	private String qko;
+	
+	public HashMap<String,String> method(){
+		return new HashMap<>();
+	}
 }
