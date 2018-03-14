@@ -1,5 +1,5 @@
 package project;
 
 public class Main {
-	//My comment
+	//neshto drugo sled nego, da sme na edin red
 }
