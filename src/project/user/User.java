@@ -31,7 +31,14 @@ public class User {
 	//server would proceed requests like login and register and would have info about all the users
 	private Server server;
 	
-	
+	public User() {
+		this.subscriptions = new HashSet<>();
+		this.subscribers = new HashSet<>();
+		this.posts = new TreeSet<>(new Post.ComparatorByDate());
+		this.likedPosts = new TreeSet<>(new Post.ComparatorByDate());
+		this.bookmarks = new TreeSet<>(new Post.ComparatorByDate());
+		this.notifications = new TreeSet<>((n1, n2)->(n1.getDate().compareTo(n2.getDate())));
+	}
 
 	public User(String username, String password, String firstName, String lastName, String email) {
 		this(username, password,email);
@@ -41,14 +48,10 @@ public class User {
 	}
 	
 	public User(String username, String password, String email) {
+		this();
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.subscriptions = new HashSet<>();
-		this.subscribers = new HashSet<>();
-		this.posts = new TreeSet<>(new Post.ComparatorByDate());
-		this.likedPosts = new TreeSet<>(new Post.ComparatorByDate());
-		this.bookmarks = new TreeSet<>(new Post.ComparatorByDate());
 	}
 	
 	//=================FILL COLLECTIONS===============//
@@ -56,8 +59,8 @@ public class User {
 		if(u!=null) {
 			this.subscribers.add(u);
 			u.subscriptions.add(this);
-			this.addNotification(new SubscriptionNotification());
-			System.out.println(u.getUsername() + " subscribed to " + this.getUsername());
+			u.addNotification(new SubscriptionNotification(this));
+			System.out.println(this.getUsername() + " subscribed to " + u.getUsername());
 		}
 		else {
 			System.out.println("Problem during subscriptio");
@@ -69,7 +72,7 @@ public class User {
 	public void addPost(Post p) {
 		if(p!=null) {
 			this.posts.add(p);
-			System.out.println("Post added.");
+			System.out.println("Post added by "+this.username);
 		}
 		else {
 			System.out.println("Error with adding post.");
@@ -79,8 +82,8 @@ public class User {
 	public void addLiked(Post c) {
 		if(c!=null) {
 			this.likedPosts.add(c);
-			c.getPoster().addNotification(new LikeNotification());
-			System.out.println("Post added to liked.");
+			c.getPoster().addNotification(new LikeNotification(this));
+			System.out.println("Post added to liked photos in "+this.username+" collection.");
 		}
 		else {
 			System.out.println("Problem with adding a post to liked ones.");
@@ -94,7 +97,7 @@ public class User {
 	public void addBookmark(Post c) {
 		if(c!=null) {
 			this.bookmarks.add(c);
-			System.out.println("Bookmarked content.");
+			System.out.println("Bookmarked content by "+this.username);
 		}
 		else {
 			System.out.println("Error with bookmark.");
@@ -109,6 +112,19 @@ public class User {
 	
 	public void addNotification(Notification n) {
 		this.notifications.add(n);
+	}
+	
+	public void showNotifications() {
+		for(Notification n: this.notifications) {
+			System.out.println(n.getDate() + " : " +n.getDescription());
+		}
+	}
+	
+	public void showSubscribers() {
+		System.out.println("----------People subscribed to "+this.username+"---------");
+		for(User u: this.subscriptions) {
+			System.out.println("==="+u.getUsername()+"====");
+		}
 	}
 	
 	//==================REGISTER/LOGIN===============//

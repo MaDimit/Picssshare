@@ -14,9 +14,11 @@ public class Server {
 //	}
 	
 	public void showUsers() {
+		System.out.println("+++++++++USERS ON THE SERVER++++++++++");
 		for(Map.Entry<String, User> u: UserLogging.getUsers().entrySet()) {
 			System.out.println(u.getValue());
 		}
+		System.out.println("++++++++++++++++++++++++++++++++++++");
 	}
 
 }

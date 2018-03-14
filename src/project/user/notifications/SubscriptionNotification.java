@@ -1,10 +1,12 @@
 package project.user.notifications;
 
-public class SubscriptionNotification extends Notification {
+import project.user.User;
 
-	public SubscriptionNotification() {
-		super("Description for subscription notification");
-		// TODO Auto-generated constructor stub
+public class SubscriptionNotification extends Notification {
+	private User causer;
+	public SubscriptionNotification(User user) {
+		super(user.getUsername() + " subscribed to you.");
+		
 	}
 
 }

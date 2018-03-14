@@ -38,24 +38,31 @@ public class Demo {
 		
 		user.loginRequest();
 		user1.loginRequest();
-		
-		System.out.println("tigra logged " + (UserLogging.login("tigra","TigaraBe3?") ? "succsefully" : "unseccessfully"));
-		System.out.println("tigra logged " + (UserLogging.login("tigra","qwerty") ? "succsefully" : "unseccessfully"));
-		System.out.println("tigra logged " + (UserLogging.login("tigran","TigaraBe3?") ? "succsefully" : "unseccessfully"));
 
-
-		user1.loginRequest(); 
 		System.out.println("========================");
 		Post post = new PhotoPost(user, "C:\\Users\\Philip\\Desktop\\saf.ttxt");
 		post.addLike();
 		post.addLike();
 		post.addLike();
+		
 		post.addComment(user3, "MNOO QK");
 		post.addComment(user2, "CHESTNO");
 		post.addComment(user1, "TAKA E");
 		post.showInfo();
 		post.deleteComment(1);
 		post.showInfo();
+		
+		user.addPost(post);
+		user1.addBookmark(post);
+		user1.addLiked(post);
+		System.out.println(user.getUsername() + " notifications ------>");
+		user.showNotifications();
+		user.subscribe(user1);
+		user1.showSubscribers();
+		System.out.println(user1.getUsername() + " notifications ----->");
+		user1.showNotifications();
+		
+		
 	}
 
 }
