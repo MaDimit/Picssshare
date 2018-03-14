@@ -43,7 +43,6 @@ public abstract class Post {
 	}
 	
 	public void showInfo() {
-		System.out.println("=====INFO ABOUT POST=======");
 		System.out.println("Likes: "+this.likes);
 		System.out.println("Post time: "+this.date);
 		System.out.println("Poster: "+this.poster.getUsername());
@@ -55,11 +54,14 @@ public abstract class Post {
 			System.out.print("  --> posted on: "+entry.getValue().getPostTime());
 			System.out.println();
 		}
-		System.out.println("================");
 	}
 	
 	public User getPoster() {
 		return poster;
+	}
+	
+	public LocalDateTime getDate() {
+		return date;
 	}
 
 	public boolean isPhoto() {
