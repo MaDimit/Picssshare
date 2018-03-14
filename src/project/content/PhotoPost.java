@@ -8,5 +8,10 @@ public class PhotoPost extends Post {
 	public PhotoPost(User poster, String url) {
 		super(poster, url);
 	}
+	
+	@Override
+	public boolean isPhoto() {
+		return true;
+	}
 
 }

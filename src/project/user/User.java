@@ -1,11 +1,17 @@
 package project.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeSet;
 
 import project.Server;
 import project.UserLogging;
 import project.content.Post;
 import project.feed.Feed;
+import project.user.notifications.LikeNotification;
+import project.user.notifications.Notification;
+import project.user.notifications.SubscriptionNotification;
 
 public class User {
 		
@@ -15,45 +21,50 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	//set for unique in subscriptions
-	private ArrayList<User> subscriptions;
-	
-	//subscribers(Observer pattern)
-	private ArrayList<Post> posts;
+	private HashSet<User> subscriptions;
+	private HashSet<User> subscribers;
+	private TreeSet<Post> posts;
 	private Feed feed;
-	
-	private ArrayList<Post> likedPhotos;
-	private ArrayList<Post> bookmarks;
+	private TreeSet<Notification> notifications;
+	private TreeSet<Post> likedPosts;
+	private TreeSet<Post> bookmarks;
 	//server would proceed requests like login and register and would have info about all the users
 	private Server server;
 	
 	
 
 	public User(String username, String password, String firstName, String lastName, String email) {
-		super();
-		this.username = username;
-		this.password = password;
+		this(username, password,email);
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-		this.subscriptions = new ArrayList<User>();
-		this.posts = new ArrayList<Post>();
-		this.likedPhotos = new ArrayList<Post>();
-		this.bookmarks = new ArrayList<Post>();
 		//TODO: Feed part
 	}
 	
+	public User(String username, String password, String email) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.subscriptions = new HashSet<>();
+		this.subscribers = new HashSet<>();
+		this.posts = new TreeSet<>(new Post.ComparatorByDate());
+		this.likedPosts = new TreeSet<>(new Post.ComparatorByDate());
+		this.bookmarks = new TreeSet<>(new Post.ComparatorByDate());
+	}
+	
 	//=================FILL COLLECTIONS===============//
-	public void addSubscription(User u) {
+	public void subscribe(User u) {
 		if(u!=null) {
-			//notify user about being subscribed
-			this.subscriptions.add(u);
-			System.out.println("Subscribed to "+u.getUsername());
+			this.subscribers.add(u);
+			u.subscriptions.add(this);
+			this.addNotification(new SubscriptionNotification());
+			System.out.println(u.getUsername() + " subscribed to " + this.getUsername());
 		}
 		else {
-			System.out.println("Problem during subscription to user.");
+			System.out.println("Problem during subscriptio");
 		}
 	}
+	
+	
 	
 	public void addPost(Post p) {
 		if(p!=null) {
@@ -65,27 +76,39 @@ public class User {
 		}
 	}
 	
-	public void addLikedPhoto(Post c) {
-		if(c.isPhoto() && c!=null) {
-			//TODO check if not already in liked
-			//notify liked photo user about like
-			this.likedPhotos.add(c);
-			System.out.println("Photo added to liked.");
+	public void addLiked(Post c) {
+		if(c!=null) {
+			this.likedPosts.add(c);
+			c.getPoster().addNotification(new LikeNotification());
+			System.out.println("Post added to liked.");
 		}
 		else {
-			System.out.println("Problem with adding a photo to liked ones.");
+			System.out.println("Problem with adding a post to liked ones.");
 		}
+	}
+	
+	public TreeSet<Post> getLikedPhotos() {
+		return likedPosts;
 	}
 	
 	public void addBookmark(Post c) {
 		if(c!=null) {
-			//TODO check if not already in liked
 			this.bookmarks.add(c);
 			System.out.println("Bookmarked content.");
 		}
 		else {
 			System.out.println("Error with bookmark.");
 		}
+	}
+	
+	public TreeSet<Post> getBookmarks(){
+		return bookmarks;
+	}
+	
+	//==================Notifications===============//
+	
+	public void addNotification(Notification n) {
+		this.notifications.add(n);
 	}
 	
 	//==================REGISTER/LOGIN===============//

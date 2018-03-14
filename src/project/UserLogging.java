@@ -66,7 +66,7 @@ public class UserLogging {
 
 	// validate username
 	public static boolean validateUsername(String username) {
-		return (username != null && !username.isEmpty() && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
+		return (username != null && !username.isEmpty() && !users.containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
 				? true
 				: false;
 	}

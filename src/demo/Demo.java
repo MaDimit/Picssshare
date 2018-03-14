@@ -16,13 +16,12 @@ public class Demo {
 	}
 	
 	public static void main(String[] args) {
-		//PUSH TEST
-		//New push test
 		Server server = new Server();
 		User user = new User("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
 		User user1 = new User("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
 		User user2 = new User("peshoO91", "toughpassword123", "Petyr", "Petrov", "peshko@gmail.com");
 		User user3 = new User("tigra", "TigaraBe3?", "Tisho", "Petrov", "tishoooooo@gmail.com");
+		User user4 = new User("amatrixable", "qWerty123","Name", "Surname", "Email@email.com");
 		user.setServer(server);
 		user1.setServer(server);
 		user2.setServer(server);
@@ -32,6 +31,7 @@ public class Demo {
 		user1.registerRequest();
 		user2.registerRequest();
 		user3.registerRequest();
+		user4.registerRequest();
 		
 		server.showUsers();
 		

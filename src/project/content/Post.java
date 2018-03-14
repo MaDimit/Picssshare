@@ -1,6 +1,7 @@
 package project.content;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public abstract class Post {
 
 	protected int likes;
 	protected LocalDateTime date;
-	//TODO: COMMENTS -> Classes ? true : false; ------- true (should contain user info, date and text)
+	
 
 	protected User poster;
 	protected String url;
@@ -54,10 +55,21 @@ public abstract class Post {
 			System.out.println();
 		}
 	}
+	
+	public User getPoster() {
+		return poster;
+	}
 
 	public boolean isPhoto() {
-		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public static class ComparatorByDate implements Comparator<Post>{
+		@Override
+		public int compare(Post o1, Post o2) {
+			return o1.date.compareTo(o2.date);
+		}
+		
 	}
 	
 	
