@@ -1,5 +1,5 @@
 package project.feed;
 
-public class TrendingFeed {
+public class TrendingFeed extends Feed{
 
 }
