@@ -37,7 +37,7 @@ public class User {
 		this.posts = new TreeSet<>(new Post.ComparatorByDate());
 		this.likedPosts = new TreeSet<>(new Post.ComparatorByDate());
 		this.bookmarks = new TreeSet<>(new Post.ComparatorByDate());
-		this.notifications = new TreeSet<>((n1, n2)->(n1.getDate().compareTo(n2.getDate())));
+		this.notifications = new TreeSet<>(new Notification.ComparatorByDate());
 	}
 
 	public User(String username, String password, String firstName, String lastName, String email) {
@@ -82,7 +82,7 @@ public class User {
 	public void addLiked(Post c) {
 		if(c!=null) {
 			this.likedPosts.add(c);
-			c.getPoster().addNotification(new LikeNotification(this));
+			c.getPoster().addNotification(new LikeNotification(this, c));
 			System.out.println("Post added to liked photos in "+this.username+" collection.");
 		}
 		else {
@@ -117,6 +117,7 @@ public class User {
 	public void showNotifications() {
 		for(Notification n: this.notifications) {
 			System.out.println(n.getDate() + " : " +n.getDescription());
+			n.seen();
 		}
 	}
 	
