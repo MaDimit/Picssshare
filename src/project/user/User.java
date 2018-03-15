@@ -9,6 +9,7 @@ import project.Server;
 import project.UserLogging;
 import project.content.Post;
 import project.feed.Feed;
+import project.feed.MainFeed;
 import project.user.notifications.LikeNotification;
 import project.user.notifications.Notification;
 import project.user.notifications.SubscriptionNotification;
@@ -38,6 +39,7 @@ public class User {
 		this.likedPosts = new TreeSet<>(new Post.ComparatorByDate());
 		this.bookmarks = new TreeSet<>(new Post.ComparatorByDate());
 		this.notifications = new TreeSet<>(new Notification.ComparatorByDate());
+		this.feed = new MainFeed(this);
 	}
 
 	public User(String username, String password, String firstName, String lastName, String email) {
@@ -81,6 +83,7 @@ public class User {
 	
 	public void addLiked(Post c) {
 		if(c!=null) {
+			c.addLike();
 			this.likedPosts.add(c);
 			c.getPoster().addNotification(new LikeNotification(this, c));
 			System.out.println("Post added to liked photos in "+this.username+" collection.");
@@ -90,9 +93,6 @@ public class User {
 		}
 	}
 	
-	public TreeSet<Post> getLikedPhotos() {
-		return likedPosts;
-	}
 	
 	public void addBookmark(Post c) {
 		if(c!=null) {
@@ -144,6 +144,22 @@ public class User {
 	}
 	
 	//=====================GETTERS AND SETTERS===============//
+
+	public TreeSet<Post> getLikedPhotos() {
+		return likedPosts;
+	}
+	
+	public Feed getFeed() {
+		return feed;
+	}
+	
+	public TreeSet<Post> getPosts() {
+		return posts;
+	}
+	
+	public HashSet<User> getSubscribers() {
+		return subscribers;
+	}
 	
 	public String getUsername() {
 		return username;

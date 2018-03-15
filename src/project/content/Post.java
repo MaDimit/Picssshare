@@ -8,9 +8,13 @@ import java.util.Map;
 import project.user.User;
 
 public abstract class Post {
+	//a constant for calculating coefficient of significance
+	public static final int SIGNIFICANCE_CONSTANT = 100;
 
 	protected int likes;
+	protected int dislikes; 
 	protected LocalDateTime date;
+	protected int coefficient;
 	
 
 	protected User poster;
@@ -22,15 +26,40 @@ public abstract class Post {
 	public Post(User poster, String url) {
 		
 		this.likes = 0;
+		this.dislikes=0;
 		this.date = LocalDateTime.now();
 		this.poster = poster;
 		this.url = url;
 		this.comments = new HashMap<Integer, Comment>();
+		//this.coefficient = 
 		
+	}
+	/*
+	 * If the date of the post is within 1 week, the dominant factor for significance is Date
+	 * Date = 50% / Likes - Dislikes = 30% / Comments = 20%
+	 * If post date is within 1 month, the dominant factor for significance is Likes - Dislikes
+	 * Date = 20% / Likes - Dislikes = 50% / Comments = 20%
+	 * If post date is older than 1 month, post will not be displayed in Feed at all
+	 * 
+//	 */
+	private int generateCoefficient(LocalDateTime currentDate) {
+		//TODO:
+		if(currentDate.minusWeeks(1).isBefore(this.date)) {
+			
+		}
+		if(currentDate.minusMonths(1).isBefore(this.date)) {
+			return (int)0.2*SIGNIFICANCE_CONSTANT+(int)((0.5*(this.likes-this.dislikes)))+(int)((0.3*SIGNIFICANCE_CONSTANT));
+		}
+		return 0;
+	
 	}
 	
 	public void addLike() {
 		this.likes++;
+	}
+	
+	public void addDislike() {
+		this.dislikes++;
 	}
 	
 	public void addComment(User user, String content) {
@@ -45,6 +74,7 @@ public abstract class Post {
 	public void showInfo() {
 		System.out.println("=====INFO ABOUT POST=======");
 		System.out.println("Likes: "+this.likes);
+		System.out.println("Dislikes: "+this.dislikes);
 		System.out.println("Post time: "+this.date);
 		System.out.println("Poster: "+this.poster.getUsername());
 		System.out.println("URL: "+this.url);
@@ -77,6 +107,5 @@ public abstract class Post {
 		}
 		
 	}
-	
 	
 }
