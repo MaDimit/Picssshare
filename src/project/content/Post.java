@@ -1,6 +1,7 @@
 package project.content;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +9,13 @@ import java.util.Map;
 import project.user.User;
 
 public abstract class Post {
-	//a constant for calculating coefficient of significance
+	//a constant for calculating coefficient of significance for version 1
 	public static final int SIGNIFICANCE_CONSTANT = 100;
+	
+	//coefficients for version 2
+	private static final double LIKES_COEFFICIENT = 1.0;
+	private static final double COMMENTS_COEFFICIENT = 2.0;
+	private static final double DATE_COEFFICIENT = 0.5;
 
 	protected int likes;
 	protected int dislikes; 
@@ -34,7 +40,8 @@ public abstract class Post {
 		//this.coefficient = 
 		
 	}
-	/*
+	/*	
+	 * Version 1:
 	 * If the date of the post is within 1 week, the dominant factor for significance is Date
 	 * Date = 50% / Likes - Dislikes = 30% / Comments = 20%
 	 * If post date is within 1 month, the dominant factor for significance is Likes - Dislikes
@@ -52,6 +59,18 @@ public abstract class Post {
 		}
 		return 0;
 	
+	}
+	
+	/*
+	 * Version 2:
+	 * 
+	 */
+	public double generateCoefficient() {
+		long secondsDifference = ChronoUnit.SECONDS.between(this.date, LocalDateTime.now());
+		System.out.println("Seconds difference: " + secondsDifference);
+		double coefficient = (likes * LIKES_COEFFICIENT + commentsCounter * COMMENTS_COEFFICIENT)/ secondsDifference * DATE_COEFFICIENT;
+		System.out.println("coefificient: " + coefficient);
+		return coefficient;
 	}
 	
 	public void addLike() {
@@ -102,10 +121,16 @@ public abstract class Post {
 	
 	public static class ComparatorByDate implements Comparator<Post>{
 		@Override
-		public int compare(Post o1, Post o2) {
-			return o1.date.compareTo(o2.date);
+		public int compare(Post p1, Post p2) {
+			return p1.date.compareTo(p2.date) > 0 ? -1 : 1;
 		}
-		
+	}
+	
+	public static class ComparatorByCoefficient implements Comparator<Post>{
+		@Override
+		public int compare(Post p1, Post p2) {
+			return p1.generateCoefficient() - p2.generateCoefficient() > 0 ? -1 : 1;
+		}
 	}
 	
 }

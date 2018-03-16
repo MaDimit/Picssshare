@@ -10,6 +10,7 @@ import project.UserLogging;
 import project.content.Post;
 import project.feed.Feed;
 import project.feed.MainFeed;
+import project.feed.TrendingFeed;
 import project.user.notifications.LikeNotification;
 import project.user.notifications.Notification;
 import project.user.notifications.SubscriptionNotification;
@@ -22,8 +23,8 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private HashSet<User> subscriptions;
-	private HashSet<User> subscribers;
+	private HashSet<User> subscriptions; // Users that this is subscribed to (Used for feed)
+	private HashSet<User> subscribers;  // Users that subscribed to this	(Used for notifications)
 	private TreeSet<Post> posts;
 	private Feed feed;
 	private TreeSet<Notification> notifications;
@@ -39,7 +40,6 @@ public class User {
 		this.likedPosts = new TreeSet<>(new Post.ComparatorByDate());
 		this.bookmarks = new TreeSet<>(new Post.ComparatorByDate());
 		this.notifications = new TreeSet<>(new Notification.ComparatorByDate());
-		this.feed = new MainFeed(this);
 	}
 
 	public User(String username, String password, String firstName, String lastName, String email) {
@@ -57,15 +57,15 @@ public class User {
 	}
 	
 	//=================FILL COLLECTIONS===============//
-	public void subscribe(User u) {
+	public void subscribeTo(User u) {
 		if(u!=null) {
-			this.subscribers.add(u);
-			u.subscriptions.add(this);
+			this.subscriptions.add(u);
+			u.subscribers.add(this);
 			u.addNotification(new SubscriptionNotification(this));
 			System.out.println(this.getUsername() + " subscribed to " + u.getUsername());
 		}
 		else {
-			System.out.println("Problem during subscriptio");
+			System.out.println("Problem during subscription");
 		}
 	}
 	
@@ -75,6 +75,7 @@ public class User {
 		if(p!=null) {
 			this.posts.add(p);
 			System.out.println("Post added by "+this.username);
+			server.addPost(p);
 		}
 		else {
 			System.out.println("Error with adding post.");
@@ -149,7 +150,15 @@ public class User {
 		return likedPosts;
 	}
 	
-	public Feed getFeed() {
+	public Feed getFeed(Feed.Type type) {
+		switch(type) {
+		case MAIN_FEED: 
+			this.feed = new MainFeed(this);
+			break;
+		case TRENDING_FEED:
+			this.feed = new TrendingFeed();
+			break;
+		}
 		return feed;
 	}
 	
@@ -159,6 +168,10 @@ public class User {
 	
 	public HashSet<User> getSubscribers() {
 		return subscribers;
+	}
+	
+	public HashSet<User> getSubscriptions() {
+		return subscriptions;
 	}
 	
 	public String getUsername() {

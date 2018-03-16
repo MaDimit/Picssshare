@@ -7,7 +7,6 @@ import project.user.User;
 public class UserLogging {
 	
 	public static int usersID = 100000;
-	private static HashMap<String,User> users = new HashMap<>();
 	
 	//========================REGISTER PART===================================//
 	
@@ -58,7 +57,7 @@ public class UserLogging {
 		if(correctUsername && correctPassword && correctFirstName && correctLastName && correctEmail) {
 			user.setId(usersID);
 			usersID++;
-			users.put(user.getUsername(),user);
+			Server.getInstance().getUsers().put(user.getUsername(),user);
 			System.out.println(user.getUsername() + " has been successfully registered.");
 			
 		}
@@ -66,7 +65,7 @@ public class UserLogging {
 
 	// validate username
 	public static boolean validateUsername(String username) {
-		return (username != null && !username.isEmpty() && !users.containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
+		return (username != null && !username.isEmpty() && !Server.getInstance().getUsers().containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
 				? true
 				: false;
 	}
@@ -111,7 +110,7 @@ public class UserLogging {
 	
 	//Logging by username and password
 	public static boolean login(String userName, String password) {
-		User u = users.get(userName);
+		User u = Server.getInstance().getUsers().get(userName);
 		if(u == null) {
 			System.out.println("Wrong username!");
 			return false;
@@ -121,11 +120,6 @@ public class UserLogging {
 			return false;
 		}
 		return true;
-	}
-	
-	
-	public static HashMap<String, User> getUsers() {
-		return users;
 	}
 	
 }

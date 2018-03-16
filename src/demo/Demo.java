@@ -9,6 +9,7 @@ import project.UserLogging;
 import project.content.PhotoPost;
 import project.content.Post;
 import project.feed.Feed;
+import project.feed.Feed.Type;
 import project.feed.MainFeed;
 import project.user.User;
 
@@ -19,8 +20,8 @@ public class Demo {
 		return r.nextInt(range)+startPoint;
 	}
 	
-	public static void main(String[] args) {
-		Server server = new Server();
+	public static void main(String[] args){
+		Server server = Server.getInstance();
 		User user = new User("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
 		User user1 = new User("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
 		User user2 = new User("peshoO91", "toughpassword123", "Petyr", "Petrov", "peshko@gmail.com");
@@ -83,8 +84,8 @@ public class Demo {
 		//showNotifications && showSubscribers test
 		System.out.println(user.getUsername() + " notifications ------>");
 		user.showNotifications();
-		user.subscribe(user1);
-		user.subscribe(user3);
+		user.subscribeTo(user1);
+		user.subscribeTo(user3);
 		user1.showSubscribers();
 		System.out.println(user1.getUsername() + " notifications ----->");
 		user1.showNotifications();
@@ -95,7 +96,52 @@ public class Demo {
 		//user has been subscribed to user1 and user3 / each have posted 1 post / result: displayed 2 posts
 		System.out.println();
 		System.out.println();
-		user.getFeed().displayPostsInfo();
+		user.getFeed(Type.MAIN_FEED).displayPostsInfo();
+		
+		try {
+			feedTest();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void feedTest() throws InterruptedException {
+		User user1 = new User("user1","password123","email@email.com");
+		User user2 = new User("user2","notpassword321","email2@email.com");
+		user1.setServer(Server.getInstance());
+		user2.setServer(Server.getInstance());
+		
+		user1.subscribeTo(user2);
+		user2.subscribeTo(user1);
+		
+		Post post1 = new PhotoPost(user1, "some photo url1");
+		Thread.sleep(1000);
+		Post post2 = new PhotoPost(user1, "some photo url2");
+		Thread.sleep(1000);
+		Post post3 = new PhotoPost(user1, "some photo url3");
+		Thread.sleep(1000);
+		
+		post1.addLike();
+		post1.addLike();
+		post1.addLike();
+		post1.addLike();
+		post2.addLike();
+		
+		post1.addComment(user2, "comment1");
+		post1.addComment(user2, "comment2");
+		post1.addComment(user2, "comment3");
+		post1.addComment(user2, "comment4");
+		post2.addComment(user2, "comment");
+		
+		user1.addPost(post1);
+		user1.addPost(post2);
+		user1.addPost(post3);
+		
+		user2.getFeed(Type.MAIN_FEED).displayPostsInfo();
+		
+		System.out.println("\n\nTrending posts: \n");
+		user2.getFeed(Type.TRENDING_FEED).displayPostsInfo();
+
 	}
 
 }
