@@ -1,17 +1,33 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 public class CommentBean {
+	
+	public static class ComparatorByDate implements Comparator<CommentBean>{
+		@Override
+		public int compare(CommentBean comment1, CommentBean comment2) {
+			return comment1.postTime.compareTo(comment2.postTime) > 0 ? -1 : 1;
+		}
+	}
+	
+	// Adding comments in post can be done by id for comments instead of using HashMap;
+	public static class ComparatorById implements Comparator<CommentBean>{
+		@Override
+		public int compare(CommentBean comment1, CommentBean comment2) {
+			return comment1.id - comment2.id;
+		}
+	}
 	
 	private UserBean poster;
 	private LocalDateTime postTime;
 	private String content;
+	private int id;
 	
-	public CommentBean(UserBean poster, LocalDateTime postTime, String content) {
-		
+	public CommentBean(UserBean poster, String content) {
 		this.poster = poster;
-		this.postTime = postTime;
+		this.postTime = LocalDateTime.now();
 		this.content = content;
 	}
 

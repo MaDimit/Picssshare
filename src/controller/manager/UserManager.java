@@ -17,7 +17,7 @@ public class UserManager {
 	private static UserManager instance;
 
 	private UserManager() {
-		//TODO ????? constructor for singleton manager ?????
+		//uid = TODO get last uid from DB or collection;
 	}
 
 	public static synchronized UserManager getInstance() {
@@ -53,7 +53,6 @@ public class UserManager {
 	public void addPost(UserBean user, PostBean post) {
 		if (post != null) {
 			user.addPost(post);
-			
 			System.out.println("Post added by " + user.getUsername());
 		} else {
 			System.out.println("Error with adding post.");

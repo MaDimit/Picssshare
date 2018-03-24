@@ -4,8 +4,8 @@ import model.UserBean;
 
 public class PhotoPostBean extends PostBean{
 	
-	public PhotoPostBean(UserBean poster, String url) {
-		super(poster, url);
+	public PhotoPostBean(UserBean poster, String url, int uid) {
+		super(poster, url, uid);
 	}
 	
 	@Override

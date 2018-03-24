@@ -3,13 +3,18 @@ package model.post;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeSet;
 
+import controller.manager.PostManager;
 import model.CommentBean;
 import model.UserBean;
 
 
 
 public class PostBean {
+	
+	public enum Type{ PHOTO_POST, VIDEO_POST }
 	
 	public static class ComparatorByDate implements Comparator<PostBean>{
 		@Override
@@ -21,39 +26,46 @@ public class PostBean {
 	public static class ComparatorByCoefficient implements Comparator<PostBean>{
 		@Override
 		public int compare(PostBean p1, PostBean p2) {
-			return p1.generateCoefficient() - p2.generateCoefficient() > 0 ? -1 : 1;
+			return PostManager.getInstance().generateCoefficient(p1) - PostManager.getInstance().generateCoefficient(p1) > 0 ? -1 : 1;
 		}
 	}
-	
-	//a constant for calculating coefficient of significance for version 1
-		public static final int SIGNIFICANCE_CONSTANT = 100;
-		
-		//coefficients for version 2
-		private static final double LIKES_COEFFICIENT = 1.0;
-		private static final double COMMENTS_COEFFICIENT = 2.0;
-		private static final double DATE_COEFFICIENT = 0.5;
-
+		protected int uid;
 		protected int likes;
 		protected int dislikes; 
 		protected LocalDateTime date;
-		protected int coefficient;
-		
-
 		protected UserBean poster;
 		protected String url;
 		protected HashMap<Integer, CommentBean> comments;
 		//commentsCounter is needed when user decide to delete comment, it is a criteria when clicking a button
 		protected int commentsCounter = 0;
 		
+		//????? comments sorting can be implemented with TreeSet with comparator by date or id?????
+		protected TreeSet<CommentBean> commentsById;
 		
-		public PostBean(UserBean poster, String url) {
+		public PostBean(UserBean poster, String url, int uid) {
+			this.uid = uid;
 			this.likes = 0;
 			this.dislikes=0;
 			this.date = LocalDateTime.now();
 			this.poster = poster;
 			this.url = url;
 			this.comments = new HashMap<Integer, CommentBean>();
-			//this.coefficient = 
+		}
+		
+		public void addComment(CommentBean comment) {
+			this.comments.put(commentsCounter++, comment);
+		}
+		
+		public void removeComment(int id) {
+			this.comments.remove(id);
+		}
+		
+		public void like() {
+			likes++;
+		}
+		
+		public void dislike() {
+			dislikes--;
 		}
 		
 		public boolean isPhoto() {
@@ -115,15 +127,6 @@ public class PostBean {
 		public void setCommentsCounter(int commentsCounter) {
 			this.commentsCounter = commentsCounter;
 		}
-		
-		public int getCoefficient() {
-			return coefficient;
-		}
-		
-		public void setCoefficient(int coefficient) {
-			this.coefficient = coefficient;
-		}
-		
 		
 
 }
