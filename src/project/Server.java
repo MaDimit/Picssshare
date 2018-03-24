@@ -2,8 +2,8 @@ package project;
 
 import java.util.Map;
 
+import model.UserBean;
 import project.content.Post;
-import project.user.User;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class Server {
 	
 	private static Server server;
-	private HashMap<String,User> users;
+	private HashMap<String,UserBean> users;
 	private HashSet<Post> posts;
 	
 	private Server() {
@@ -29,7 +29,7 @@ public class Server {
 	
 	public void showUsers() {
 		System.out.println("+++++++++USERS ON THE SERVER++++++++++");
-		for(Map.Entry<String, User> u: this.users.entrySet()) {
+		for(Map.Entry<String, UserBean> u: this.users.entrySet()) {
 			System.out.println(u.getValue());
 		}
 		System.out.println("++++++++++++++++++++++++++++++++++++");
@@ -45,7 +45,7 @@ public class Server {
 		return posts;
 	}
 	
-	public HashMap<String, User> getUsers() {
+	public HashMap<String, UserBean> getUsers() {
 		return this.users;
 	}
 

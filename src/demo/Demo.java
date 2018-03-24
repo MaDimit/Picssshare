@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.TreeSet;
 
+import model.UserBean;
 import project.Server;
 import project.UserLogging;
 import project.content.PhotoPost;
@@ -11,7 +12,6 @@ import project.content.Post;
 import project.feed.Feed;
 import project.feed.Feed.Type;
 import project.feed.MainFeed;
-import project.user.User;
 
 public class Demo {
 	
@@ -22,11 +22,11 @@ public class Demo {
 	
 	public static void main(String[] args){
 		Server server = Server.getInstance();
-		User user = new User("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
-		User user1 = new User("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
-		User user2 = new User("peshoO91", "toughpassword123", "Petyr", "Petrov", "peshko@gmail.com");
-		User user3 = new User("tigra", "TigaraBe3?", "Tisho", "Petrov", "tishoooooo@gmail.com");
-		User user4 = new User("amatrixable", "qWerty123","Name", "Surname", "Email@email.com");
+		UserBean user = new UserBean("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
+		UserBean user1 = new UserBean("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
+		UserBean user2 = new UserBean("peshoO91", "toughpassword123", "Petyr", "Petrov", "peshko@gmail.com");
+		UserBean user3 = new UserBean("tigra", "TigaraBe3?", "Tisho", "Petrov", "tishoooooo@gmail.com");
+		UserBean user4 = new UserBean("amatrixable", "qWerty123","Name", "Surname", "Email@email.com");
 		user.setServer(server);
 		user1.setServer(server);
 		user2.setServer(server);
@@ -106,8 +106,8 @@ public class Demo {
 	}
 	
 	private static void feedTest() throws InterruptedException {
-		User user1 = new User("user1","password123","email@email.com");
-		User user2 = new User("user2","notpassword321","email2@email.com");
+		UserBean user1 = new UserBean("user1","password123","email@email.com");
+		UserBean user2 = new UserBean("user2","notpassword321","email2@email.com");
 		user1.setServer(Server.getInstance());
 		user2.setServer(Server.getInstance());
 		
