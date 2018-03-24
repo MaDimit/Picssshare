@@ -2,20 +2,24 @@ package model.feed;
 
 import java.util.TreeSet;
 
-import project.content.Post;
+import model.post.PostBean;
 
 public class FeedBean {
 	
 public enum Type{MAIN_FEED, TRENDING_FEED}
 	
 	//the user to whom this feed belongs
-	protected TreeSet<Post> posts;
+	protected TreeSet<PostBean> posts;
 
 	public FeedBean() {
-		this.posts = new TreeSet<>(new Post.ComparatorByCoefficient());
+		this.posts = new TreeSet<>(new PostBean.ComparatorByCoefficient());
 	}
 	
-	public TreeSet<Post> getPosts() {
+	public void addPost(PostBean post) {
+		this.posts.add(post);
+	}
+	
+	public TreeSet<PostBean> getPosts() {
 		return posts;
 	}
 

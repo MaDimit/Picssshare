@@ -5,15 +5,12 @@ import java.util.TreeSet;
 
 import javax.management.Notification;
 
-import org.apache.catalina.realm.JNDIRealm.User;
 
 import controller.manager.PostManager;
 import model.feed.FeedBean;
 import model.notification.NotificationBean;
 import model.notification.SubscriptionNotificationBean;
 import model.post.PostBean;
-import project.content.Post;
-import project.feed.Feed;
 
 public class UserBean {
 	
@@ -55,54 +52,67 @@ public class UserBean {
 	
 	public UserBean id(int id) {
 		this.id = id;
+		return this;
 	}
 	
 	public UserBean username(String username) {
 		this.username = username;
+		return this;
 	}
 	
 	public UserBean password(String password) {
 		this.password = password;
+		return this;
 	}
 	
 	public UserBean firstName(String firstName) {
 		this.firstName = firstName;
+		return this;
 	}
 	
 	public UserBean lastName(String lastName) {
 		this.lastName = lastName;
+		return this;
 	}
 	
 	public UserBean email(String email) {
 		this.email = email;
+		return this;
 	}
 	
 	public UserBean subscriptions(HashSet<UserBean> subscriptions) {
 		this.subscriptions = subscriptions;
+		return this;
 	}
 	
 	public UserBean subscribers(HashSet<UserBean> subscribers) {
 		this.subscribers = subscribers;
+		return this;
 	}
 	
 	public UserBean posts(TreeSet<PostBean> posts) {
 		this.posts = posts;
+		return this;
 	}
 	
 	public UserBean feed(FeedBean feed) {
 		this.feed = feed;
+		return this;
 	}
 	
 	public UserBean notifications(TreeSet<NotificationBean> notifications) {
 		this.notifications = notifications;
+		return this;
 	}
 	
 	public UserBean likedPosts(TreeSet<PostBean> likedPosts) {
 		this.likedPosts = likedPosts;
+		return this;
 	}
 	
 	public UserBean bookmarks(TreeSet<PostBean> bookmarks) {
 		this.bookmarks = bookmarks;
+		return this;
 	}
 	
 	//================= Adding to collections =================\\

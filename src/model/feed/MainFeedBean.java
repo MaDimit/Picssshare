@@ -8,7 +8,13 @@ public class MainFeedBean extends FeedBean{
 	
 	public MainFeedBean(UserBean user) {
 		this.user = user;
-		System.out.println("\n\nCoeficients(generateCoefficient() method in Post): \n");
-		generateFeed();
+	}
+	
+	public UserBean getUser() {
+		return user;
+	}
+	
+	public void setUser(UserBean user) {
+		this.user = user;
 	}
 }

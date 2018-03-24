@@ -5,6 +5,8 @@ import java.util.Comparator;
 
 public class NotificationBean {
 	
+	public enum Type{ LIKE_NOTIFICATION, POST_NOTIFICATION, SUBSCRIPTION_NOTIFICATION}
+	
 	public static class ComparatorByDate implements Comparator<NotificationBean>{
 
 		@Override

@@ -1,27 +1,32 @@
 package controller.manager;
 
+import model.UserBean;
 import model.feed.FeedBean;
+import model.feed.MainFeedBean;
+import model.feed.TrendingFeedBean;
+import model.post.PostBean;
 
 public class FeedManager {
 	
-	public void generateFeed(FeedBean feed) {
-		//TODO generate feed depending on feed type;
-	}
-	
 	public void displayPostsInfo(FeedBean feed) {
-		feed.getPosts().forEach(p -> p.showInfo());
+		feed.getPosts().forEach(p -> PostManager.getInstance().showInfo(p));
 	}
 	
-	private void generateMainFeed(){
-		for(User u: this.user.getSubscriptions()) {
-			for(Post p: u.getPosts()) {
-				this.posts.add(p);
+	public MainFeedBean generateMainFeed(UserBean user){
+		MainFeedBean feed = new MainFeedBean(user);
+		for(UserBean u: user.getSubscriptions()) {
+			for(PostBean p: u.getPosts()) {
+				feed.addPost(p);
 			}
 		}
+		return feed;
 	}
 	
-	private void generateTrendingFeed() {
-		this.posts.addAll(Server.getInstance().getPosts());
+	//TODO generate Trending feed from feed or post dao
+	private TrendingFeedBean generateTrendingFeed() {
+		TrendingFeedBean feed = new TrendingFeedBean();
+		//this.posts.addAll(Server.getInstance().getPosts());
+		return feed;
 	}
 
 }
