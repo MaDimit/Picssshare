@@ -1,12 +1,28 @@
 package controller.manager;
 
+import model.UserBean;
+import project.Server;
+
 public class LoggingManager {
 	
-	public static int usersID = 1;
+	public static int userID = 1;
+	
+	private static LoggingManager instance;
+	
+	private LoggingManager() {
+		// userId = TODO get last id from DB or collection
+	}
+	
+	public static synchronized LoggingManager getInstance() {
+		if(instance == null) {
+			instance = new LoggingManager();
+		}
+		return instance;
+	}
 	
 	//========================REGISTER PART===================================//
 	
-		public static void register(UserBean user) {
+		public void register(UserBean user) {
 			boolean correctUsername = false;
 			boolean correctPassword = false;
 			boolean correctFirstName = false;
@@ -51,16 +67,16 @@ public class LoggingManager {
 			}
 			
 			if(correctUsername && correctPassword && correctFirstName && correctLastName && correctEmail) {
-				user.setId(usersID);
-				usersID++;
-				Server.getInstance().getUsers().put(user.getUsername(),user);
+				user.setId(userID);
+				userID++;
+				Server.getInstance().getUsers().put(user.getUsername(),user); // TODO add to DB and Collection
 				System.out.println(user.getUsername() + " has been successfully registered.");
 				
 			}
 		}
 
 		// validate username
-		public static boolean validateUsername(String username) {
+		public boolean validateUsername(String username) {
 			return (username != null && !username.isEmpty() && !Server.getInstance().getUsers().containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
 					? true
 					: false;
@@ -74,23 +90,23 @@ public class LoggingManager {
 		 * At least one digit, (?=.*?[0-9]) 
 		 * Minimum eight in length .{8,} (with the anchors)
 		 */
-		public static boolean validatePassword(String password) {
+		public boolean validatePassword(String password) {
 			return (password != null && !password.isEmpty()
 					&& password.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")) ? true : false;
 		}
 
 		// validate first name
-		public static boolean validateFirstName(String firstName) {
+		public boolean validateFirstName(String firstName) {
 			return firstName.matches("[A-Z][a-zA-Z]*");
 		}
 
 		// validate last name
-		public static boolean validateLastName(String lastName) {
+		public boolean validateLastName(String lastName) {
 			return lastName.matches("[a-zA-z]+([ '-][a-zA-Z]+)*");
 		}
 
 		// validate email address
-		public static boolean validateEmailAddress(String email) {
+		public boolean validateEmailAddress(String email) {
 			String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 			java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
 			java.util.regex.Matcher m = p.matcher(email);
@@ -100,12 +116,12 @@ public class LoggingManager {
 		//================================================================//
 		
 		//Logging by user object
-		public static boolean login(UserBean user) {
+		public boolean login(UserBean user) {
 			return login(user.getUsername(), user.getPassword());
 		}
 		
 		//Logging by username and password
-		public static boolean login(String userName, String password) {
+		public boolean login(String userName, String password) {
 			UserBean u = Server.getInstance().getUsers().get(userName);
 			if(u == null) {
 				System.out.println("Wrong username!");

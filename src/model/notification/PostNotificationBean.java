@@ -1,7 +1,6 @@
 package model.notification;
 
 import model.post.PostBean;
-import project.content.Post;
 
 public class PostNotificationBean extends NotificationBean{
 	
