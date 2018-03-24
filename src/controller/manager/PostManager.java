@@ -13,20 +13,6 @@ import project.user.User;
 
 public class PostManager {
 	
-	public static class ComparatorByDate implements Comparator<Post>{
-		@Override
-		public int compare(PostBean p1, PostBean p2) {
-			return p1.date.compareTo(p2.date) > 0 ? -1 : 1;
-		}
-	}
-	
-	public static class ComparatorByCoefficient implements Comparator<Post>{
-		@Override
-		public int compare(PostBean p1, PostBean p2) {
-			return p1.generateCoefficient() - p2.generateCoefficient() > 0 ? -1 : 1;
-		}
-	}
-	
 	private static PostManager instance;
 	
 	private PostManager() {
@@ -64,7 +50,7 @@ public class PostManager {
 		return coefficient;
 	}
 	
-	public void addLike() {
+	public void addLike(PostBean post) {
 		this.likes++;
 	}
 	

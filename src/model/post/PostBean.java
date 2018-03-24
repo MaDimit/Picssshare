@@ -1,9 +1,8 @@
 package model.post;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
-
-import javax.xml.stream.events.Comment;
 
 import model.CommentBean;
 import model.UserBean;
@@ -11,6 +10,20 @@ import model.UserBean;
 
 
 public class PostBean {
+	
+	public static class ComparatorByDate implements Comparator<PostBean>{
+		@Override
+		public int compare(PostBean p1, PostBean p2) {
+			return p1.date.compareTo(p2.date) > 0 ? -1 : 1;
+		}
+	}
+	
+	public static class ComparatorByCoefficient implements Comparator<PostBean>{
+		@Override
+		public int compare(PostBean p1, PostBean p2) {
+			return p1.generateCoefficient() - p2.generateCoefficient() > 0 ? -1 : 1;
+		}
+	}
 	
 	//a constant for calculating coefficient of significance for version 1
 		public static final int SIGNIFICANCE_CONSTANT = 100;

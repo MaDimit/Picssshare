@@ -3,11 +3,17 @@ package model;
 import java.util.HashSet;
 import java.util.TreeSet;
 
-import project.Server;
+import javax.management.Notification;
+
+import org.apache.catalina.realm.JNDIRealm.User;
+
+import controller.manager.PostManager;
+import model.feed.FeedBean;
+import model.notification.NotificationBean;
+import model.notification.SubscriptionNotificationBean;
+import model.post.PostBean;
 import project.content.Post;
 import project.feed.Feed;
-import project.user.User;
-import project.user.notifications.Notification;
 
 public class UserBean {
 	
@@ -17,20 +23,119 @@ public class UserBean {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private HashSet<User> subscriptions; // Users that this is subscribed to (Used for feed)
-	private HashSet<User> subscribers;  // Users that subscribed to this	(Used for notifications)
-	private TreeSet<Post> posts;
-	private Feed feed;
-	private TreeSet<Notification> notifications;
-	private TreeSet<Post> likedPosts;
-	private TreeSet<Post> bookmarks;
-	//server would proceed requests like login and register and would have info about all the users
+	private HashSet<UserBean> subscriptions; // Users that this is subscribed to (Used for feed)
+	private HashSet<UserBean> subscribers;  // Users that subscribed to this	(Used for notifications)
+	private TreeSet<PostBean> posts;
+	private FeedBean feed;
+	private TreeSet<NotificationBean> notifications;
+	private TreeSet<PostBean> likedPosts;
+	private TreeSet<PostBean> bookmarks;
+	
+	// ????? Later surely will be replaced with collections from DB, do we need this ?????
+	// Adding default collections
+	public UserBean() {
+		this.subscriptions = new HashSet<>();
+		this.subscribers = new HashSet<>();
+		this.posts = new TreeSet<>(new PostBean.ComparatorByDate());
+		this.notifications = new TreeSet<>(new NotificationBean.ComparatorByDate());
+		this.likedPosts = new TreeSet<>(new PostBean.ComparatorByDate());
+		this.bookmarks = new TreeSet<>(new PostBean.ComparatorByDate());
+		
+	}
 	
 	public UserBean(int id, String username, String password, String email) {
+		this();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.email = email;
+	}
+
+	//================= Builder =================\\
+	
+	public UserBean id(int id) {
+		this.id = id;
+	}
+	
+	public UserBean username(String username) {
+		this.username = username;
+	}
+	
+	public UserBean password(String password) {
+		this.password = password;
+	}
+	
+	public UserBean firstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public UserBean lastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public UserBean email(String email) {
+		this.email = email;
+	}
+	
+	public UserBean subscriptions(HashSet<UserBean> subscriptions) {
+		this.subscriptions = subscriptions;
+	}
+	
+	public UserBean subscribers(HashSet<UserBean> subscribers) {
+		this.subscribers = subscribers;
+	}
+	
+	public UserBean posts(TreeSet<PostBean> posts) {
+		this.posts = posts;
+	}
+	
+	public UserBean feed(FeedBean feed) {
+		this.feed = feed;
+	}
+	
+	public UserBean notifications(TreeSet<NotificationBean> notifications) {
+		this.notifications = notifications;
+	}
+	
+	public UserBean likedPosts(TreeSet<PostBean> likedPosts) {
+		this.likedPosts = likedPosts;
+	}
+	
+	public UserBean bookmarks(TreeSet<PostBean> bookmarks) {
+		this.bookmarks = bookmarks;
+	}
+	
+	//================= Adding to collections =================\\
+	
+	/*
+	 * more readable than using getters for adding to collections.
+	 * --- Example with getters from UserManager : "subscribedTo.getNotifications().add((new SubscriptionNotificationBean(subscribedTo)));"
+	 * --- Example with add methods : "user.addNotification(new Notification())"
+	 * validation will be done in UserManager
+	 */
+	
+	public void addSubscribtion(UserBean user) {
+		this.subscriptions.add(user);
+	}
+	
+	public void addSubscriber(UserBean user) {
+		this.subscribers.add(user);
+	}
+	
+	public void addPost(PostBean post) {
+		this.posts.add(post);
+	}
+	
+	public void addLikedPost(PostBean post) {
+		this.likedPosts.add(post);
+	}
+	
+	public void addBookmark(PostBean post) {
+		this.bookmarks.add(post);
+	}
+	
+	public void addNotification(NotificationBean notificaton) {
+		this.notifications.add(notificaton);
 	}
 	
 	//================= Object methods =================\\
@@ -68,8 +173,10 @@ public class UserBean {
 	
 	//================= Getters and Setters =================\\
 	
+	/*
+	 * Later unused getters and setters should be removed
+	 */
 	
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -118,59 +225,59 @@ public class UserBean {
 		this.lastName = lastName;
 	}
 
-	public HashSet<User> getSubscriptions() {
+	public HashSet<UserBean> getSubscriptions() {
 		return subscriptions;
 	}
 
-	public void setSubscriptions(HashSet<User> subscriptions) {
+	public void setSubscriptions(HashSet<UserBean> subscriptions) {
 		this.subscriptions = subscriptions;
 	}
 
-	public HashSet<User> getSubscribers() {
+	public HashSet<UserBean> getSubscribers() {
 		return subscribers;
 	}
 
-	public void setSubscribers(HashSet<User> subscribers) {
+	public void setSubscribers(HashSet<UserBean> subscribers) {
 		this.subscribers = subscribers;
 	}
 
-	public TreeSet<Post> getPosts() {
+	public TreeSet<PostBean> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(TreeSet<Post> posts) {
+	public void setPosts(TreeSet<PostBean> posts) {
 		this.posts = posts;
 	}
 
-	public Feed getFeed() {
+	public FeedBean getFeed() {
 		return feed;
 	}
 
-	public void setFeed(Feed feed) {
+	public void setFeed(FeedBean feed) {
 		this.feed = feed;
 	}
 
-	public TreeSet<Notification> getNotifications() {
+	public TreeSet<NotificationBean> getNotifications() {
 		return notifications;
 	}
 
-	public void setNotifications(TreeSet<Notification> notifications) {
+	public void setNotifications(TreeSet<NotificationBean> notifications) {
 		this.notifications = notifications;
 	}
 
-	public TreeSet<Post> getLikedPosts() {
+	public TreeSet<PostBean> getLikedPosts() {
 		return likedPosts;
 	}
 
-	public void setLikedPosts(TreeSet<Post> likedPosts) {
+	public void setLikedPosts(TreeSet<PostBean> likedPosts) {
 		this.likedPosts = likedPosts;
 	}
 
-	public TreeSet<Post> getBookmarks() {
+	public TreeSet<PostBean> getBookmarks() {
 		return bookmarks;
 	}
 
-	public void setBookmarks(TreeSet<Post> bookmarks) {
+	public void setBookmarks(TreeSet<PostBean> bookmarks) {
 		this.bookmarks = bookmarks;
 	}
 }
