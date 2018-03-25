@@ -2,6 +2,7 @@ package controller.manager;
 
 import model.CommentBean;
 import model.UserBean;
+import model.post.PostBean;
 
 public class CommentManager {
 	
@@ -19,10 +20,10 @@ public class CommentManager {
 		return instance;
 	}
 	
-	public CommentBean createComment(String content, UserBean poster) {
+	public CommentBean createComment(String content, UserBean poster, PostBean belongedPost) {
 		CommentBean comment = null;
 		if(content != null && !content.isEmpty() && poster != null) {
-			comment = new CommentBean(poster, content);
+			comment = new CommentBean(poster, content, belongedPost);
 		}
 		return comment;
 	}

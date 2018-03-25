@@ -3,8 +3,10 @@ package model;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
+import model.post.PostBean;
+
 public class CommentBean {
-	
+	public static int ID=1;
 	public static class ComparatorByDate implements Comparator<CommentBean>{
 		@Override
 		public int compare(CommentBean comment1, CommentBean comment2) {
@@ -24,13 +26,25 @@ public class CommentBean {
 	private LocalDateTime postTime;
 	private String content;
 	private int id;
+	private PostBean belongedPost;
 	
-	public CommentBean(UserBean poster, String content) {
+	public CommentBean(UserBean poster, String content, PostBean belongedPost) {
+		this.id=ID;
+		ID++;
 		this.poster = poster;
 		this.postTime = LocalDateTime.now();
 		this.content = content;
+		this.belongedPost=belongedPost;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
+	public PostBean getBelongedPost() {
+		return belongedPost;
+	}
+	
 	public UserBean getPoster() {
 		return poster;
 	}

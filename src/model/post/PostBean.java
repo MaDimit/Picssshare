@@ -29,6 +29,7 @@ public class PostBean {
 			return PostManager.getInstance().generateCoefficient(p1) - PostManager.getInstance().generateCoefficient(p1) > 0 ? -1 : 1;
 		}
 	}
+		protected int id;
 		protected int uid;
 		protected int likes;
 		protected int dislikes; 
@@ -38,11 +39,28 @@ public class PostBean {
 		protected HashMap<Integer, CommentBean> comments;
 		//commentsCounter is needed when user decide to delete comment, it is a criteria when clicking a button
 		protected int commentsCounter = 0;
+		public static int ID = 1;
 		
 		//????? comments sorting can be implemented with TreeSet with comparator by date or id?????
 		protected TreeSet<CommentBean> commentsById;
 		
+		
+		
+		public PostBean(int id, int uid, int likes, int dislikes, LocalDateTime date, String url,
+				HashMap<Integer, CommentBean> comments) {
+			super();
+			this.id = id;
+			this.uid = uid;
+			this.likes = likes;
+			this.dislikes = dislikes;
+			this.date = date;
+			this.url = url;
+			this.comments = comments;
+		}
+
 		public PostBean(UserBean poster, String url, int uid) {
+			this.id=ID;
+			ID++;
 			this.uid = uid;
 			this.likes = 0;
 			this.dislikes=0;
@@ -50,6 +68,7 @@ public class PostBean {
 			this.poster = poster;
 			this.url = url;
 			this.comments = new HashMap<Integer, CommentBean>();
+			this.commentsById = new TreeSet<CommentBean>((c2,c1)->(c2.getPostTime().compareTo(c1.getPostTime())));
 		}
 		
 		public void addComment(CommentBean comment) {
@@ -95,6 +114,10 @@ public class PostBean {
 		public void setDate(LocalDateTime date) {
 			this.date = date;
 		}
+		
+		public int getId() {
+			return id;
+		}
 
 		public UserBean getPoster() {
 			return poster;
@@ -126,6 +149,14 @@ public class PostBean {
 
 		public void setCommentsCounter(int commentsCounter) {
 			this.commentsCounter = commentsCounter;
+		}
+		
+		public TreeSet<CommentBean> getCommentsById() {
+			return commentsById;
+		}
+		
+		public void setCommentsById(TreeSet<CommentBean> commentsById) {
+			this.commentsById = commentsById;
 		}
 		
 
