@@ -15,7 +15,7 @@ import model.UserBean;
 import model.post.PostBean;
 
 public class FeedDao {
-	private CommentDao commentDao;
+	private PostDao postDao;
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://localhost/picssshare";
@@ -35,7 +35,7 @@ public class FeedDao {
 	}
 
 	public FeedDao() {
-		this.commentDao = CommentDao.getInstance();
+		this.postDao = PostDao.getInstance();
 		this.posts = new TreeSet<>();
 		// STEP 2: Register JDBC driver
 		try {
@@ -56,8 +56,8 @@ public class FeedDao {
 	}
 
 	public TreeSet<PostBean> getAllPostsForUser(UserBean u) {
-		TreeSet<PostBean> userPosts = new TreeSet<>();
-		for (Map.Entry<PostBean, TreeSet<CommentBean>> posts : this.commentDao.getPost_comments().entrySet()) {
+		TreeSet<PostBean> userPosts = new TreeSet<>((p1,p2)->(p1.getDate().compareTo(p2.getDate())));
+		for (Map.Entry<PostBean, TreeSet<CommentBean>> posts : this.postDao.getPost_comments().entrySet()) {
 			if (posts.getKey().getPoster().getId() == u.getId()) {
 				PostBean post = posts.getKey();
 				post.setCommentsById(posts.getValue());

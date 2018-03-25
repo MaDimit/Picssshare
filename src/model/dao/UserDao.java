@@ -16,7 +16,7 @@ public class UserDao {
     static Connection conn = null;
     static Statement stmt = null;
 
-    private static HashMap<String, UserBean> users;
+    public  HashMap<String, UserBean> users;
     private static UserDao instance = null;
     //singleton
     public UserDao() {
@@ -39,8 +39,8 @@ public class UserDao {
         }
     }
     //method for printing all the users ## maybe used only when testing the connection with database
-    public static void printCollectionInfo() {
-        for (Map.Entry<String, UserBean> entry : UserDao.users.entrySet()) {
+    public void printCollectionInfo() {
+        for (Map.Entry<String, UserBean> entry : this.users.entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue().getFirstName());
         }
     }
@@ -52,6 +52,10 @@ public class UserDao {
         }
         return instance;
     }
+    
+    public  HashMap<String, UserBean> getUsers() {
+		return users;
+	}
 
 
     public static void getAllUsersInfo() {

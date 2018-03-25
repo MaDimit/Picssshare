@@ -118,6 +118,8 @@ public class PostBean {
 		public int getId() {
 			return id;
 		}
+		
+		
 
 		public UserBean getPoster() {
 			return poster;
