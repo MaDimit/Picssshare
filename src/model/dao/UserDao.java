@@ -24,7 +24,7 @@ public class UserDao {
 	// method for printing all the users ## maybe used only when testing the
 	public void printCollectionInfo() {
 		for (Map.Entry<String, UserBean> entry : this.users.entrySet()) {
-			System.out.println(entry.getKey() + " " + entry.getValue().getFirstName());
+			System.out.println(entry.getKey() + " " + entry.getValue().getPassword());
 		}
 	}
 
@@ -41,7 +41,7 @@ public class UserDao {
 		return users;
 	}
 
-	public static void getAllUsersInfo() {
+	public static void fillCollectionWithUsers() {
 		// JDBC driver name and database URL
 
 		Connection conn = null;
@@ -76,14 +76,16 @@ public class UserDao {
 				String password = rs.getString("password");
 				String firstName = rs.getString("firstName");
 				String lastName = rs.getString("lastName");
+				String email = rs.getString("lastName");
+				UserDao.getInstance().getUsers().put(username, new UserBean().email(email).lastName(lastName).firstName(firstName).password(password).username(username).id(id));
 
 				// Display values
-				System.out.print("ID: " + id);
-				System.out.print(", username: " + username);
-				System.out.print(", password: " + password);
-				System.out.print(", firstName: " + firstName);
-				System.out.print(", lastName: " + lastName);
-				System.out.println();
+//				System.out.print("ID: " + id);
+//				System.out.print(", username: " + username);
+//				System.out.print(", password: " + password);
+//				System.out.print(", firstName: " + firstName);
+//				System.out.print(", lastName: " + lastName);
+//				System.out.println();
 			}
 			// STEP 6: Clean-up environment
 			rs.close();
@@ -172,5 +174,55 @@ public class UserDao {
 			// end try
 			System.out.println("Goodbye!");
 		}
+	}
+	
+	public void addSubscription(UserBean subscriber, UserBean subscribed) {
+		Connection conn = null;
+		Statement stmt = null;
+		// STEP 2: Register JDBC driver
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			// STEP 3: Open a connection
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			// STEP 4: Execute a query
+			System.out.println("Creating statement...");
+			stmt = conn.createStatement();
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			String sql;
+			sql = "INSERT INTO `picssshare`.`subscriber_subscribed` (`subscriber_id`,`subscribed_id`) VALUES ('" + subscriber.getId() + "', '" + subscribed.getId() + "')";
+			stmt.executeUpdate(sql);
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+		} finally {
+			// finally block used to close resources
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException se2) {
+			} // nothing we can do
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} // end finally try
+			// end try
+			System.out.println("Goodbye!");
+		}
+		
+		
 	}
 }

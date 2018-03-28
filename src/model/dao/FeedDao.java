@@ -57,10 +57,8 @@ public class FeedDao {
 
 	public TreeSet<PostBean> getAllPostsForUser(UserBean u) {
 		TreeSet<PostBean> userPosts = new TreeSet<>((p1,p2)->(p1.getDate().compareTo(p2.getDate())));
-		for (Map.Entry<PostBean, TreeSet<CommentBean>> posts : this.postDao.getPost_comments().entrySet()) {
-			if (posts.getKey().getPoster().getId() == u.getId()) {
-				PostBean post = posts.getKey();
-				post.setCommentsById(posts.getValue());
+		for (PostBean post : this.postDao.getPosts().values()) {
+			if (post.getId() == u.getId()) {
 				userPosts.add(post);
 			}
 		}

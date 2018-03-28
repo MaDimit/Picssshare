@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import model.CommentBean;
+import model.dao.PostDao;
 import model.post.PostBean;
 
 public class PostManager {
@@ -13,15 +14,14 @@ public class PostManager {
 	 * Singleton (may be changed later) ????? using eager singleton for better
 	 * performance ?????
 	 */
+	private static PostManager instance;
+	private static int uid;
 
 	// Coefficients for sorting posts in feed
 	private static final double LIKES_COEFFICIENT = 1.0;
 	private static final double COMMENTS_COEFFICIENT = 2.0;
 	private static final double DATE_COEFFICIENT = 0.5;
-
-	private static PostManager instance;
-	private static int uid;
-
+	 
 	private PostManager() {
 		// uid = TODO get uid from db or collection
 	}
@@ -44,23 +44,35 @@ public class PostManager {
 
 	// TODO validation (May be done in JS)
 	public void addLike(PostBean post) {
-		post.like();
+		if(post!=null) {
+			PostDao.getInstance().getPosts().get(post.getId()).like();
+			PostDao.getInstance().updateLikes(post);
+		}
+		else {
+			System.out.println("No such post found!");
+		}
 	}
 
 	// TODO validation (May be done in JS)
 	public void addDislike(PostBean post) {
-		post.dislike();
-		;
+		if(post!=null) {
+			PostDao.getInstance().getPosts().get(post.getId()).dislike();
+			PostDao.getInstance().updateLikes(post);
+		}
+		else {
+			System.out.println("No such post found!");
+		}
 	}
 
 	// TODO Comments id
-	public boolean addComment(PostBean post, CommentBean comment) {
-		if (post != null && comment != null) {
-			post.addComment(comment);
-			return true;
-		}
-		return false;
-	}
+//	public boolean addComment(PostBean post, CommentBean comment) {
+//		if (post != null && comment != null) {
+//			PostDao.getInstance().
+//			post.addComment(comment);
+//			return true;
+//		}
+//		return false;
+//	}
 
 	public void deleteComment(PostBean post, int id) {
 		post.removeComment(id);
@@ -69,7 +81,6 @@ public class PostManager {
 	public void showInfo(PostBean post) {
 		System.out.println("=====INFO ABOUT POST=======");
 		System.out.println("Likes: " + post.getLikes());
-		System.out.println("Dislikes: " + post.getDislikes());
 		System.out.println("Post time: " + post.getDate());
 		System.out.println("Poster: " + post.getPoster().getUsername());
 		System.out.println("URL: " + post.getUrl());

@@ -14,7 +14,7 @@ public class PostDaoTest {
 		PostBean post = new PostBean(u.getUsers().get(ub.getUsername()), "url", ub.getId());
 		postDao.addPost(post);
 		CommentBean c = new CommentBean(ub, "cool", post);
-		PostDao.commentDao.addCommentInDB(c);
+		//PostDao.commentDao.addCommentInDB(c);
 	}
 
 }

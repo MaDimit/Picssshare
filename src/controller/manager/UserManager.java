@@ -3,6 +3,8 @@ package controller.manager;
 import java.util.TreeSet;
 
 import model.UserBean;
+import model.dao.PostDao;
+import model.dao.UserDao;
 import model.notification.LikeNotificationBean;
 import model.notification.NotificationBean;
 import model.notification.SubscriptionNotificationBean;
@@ -39,6 +41,9 @@ public class UserManager {
 			// Adding to UserBean subscriptions collections
 			subscriber.addSubscribtion(subscribedTo);
 			subscribedTo.addSubscriber(subscriber);
+			
+			//add in db
+			UserDao.getInstance().addSubscription(subscriber, subscribedTo);
 
 			// Adding to notifications collection of subscribedTo UserBean
 			subscribedTo.addNotification(new SubscriptionNotificationBean(subscriber));
@@ -49,11 +54,12 @@ public class UserManager {
 		}
 	}
 	
-	//TODO adding post to DB
+	
 	public void addPost(UserBean user, PostBean post) {
 		if (post != null) {
 			user.addPost(post);
 			System.out.println("Post added by " + user.getUsername());
+			PostDao.getInstance().addPost(post);
 		} else {
 			System.out.println("Error with adding post.");
 		}

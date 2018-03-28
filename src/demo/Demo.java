@@ -4,9 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.TreeSet;
 
+import controller.manager.CommentManager;
 import controller.manager.LoggingManager;
+import controller.manager.PostManager;
+import controller.manager.UserManager;
 import model.UserBean;
+import model.dao.PostDao;
 import model.dao.UserDao;
+import model.post.PostBean;
 
 public class Demo {
 	
@@ -16,74 +21,52 @@ public class Demo {
 	}
 	
 	public static void main(String[] args){
-//		Server server = Server.getInstance();
-//		UserBean user = new UserBean("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
-//		UserBean user1 = new UserBean("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
-//		UserBean user2 = new UserBean("peshoO91", "toughpassword123", "Petyr", "Petrov", "peshko@gmail.com");
-//		UserBean user3 = new UserBean("tigra", "TigaraBe3?", "Tisho", "Petrov", "tishoooooo@gmail.com");
-//		UserBean user4 = new UserBean("amatrixable", "qWerty123","Name", "Surname", "Email@email.com");
-//		user.setServer(server);
-//		user1.setServer(server);
-//		user2.setServer(server);
-//		user3.setServer(server);
-		UserBean user5 = new UserBean("filippp", "FilippKasss992", "asdddd@gmail.com");
-		user5.setFirstName("Filip");
-		user5.setLastName("Kasapov");
-		LoggingManager.getInstance().register(user5);
-		UserBean user6 = new UserBean("filipppp", "FilippKasss992", "asdddd@gmail.com");
-		user6.setFirstName("Filip");
-		user6.setLastName("Kasapov");
-		LoggingManager.getInstance().register(user6);
-		UserDao.getAllUsersInfo();
+		//everytime the server starts the collections must be filled up with the data from users table
+		UserDao.fillCollectionWithUsers();
+		/////////////////////////////////////////
+		//testing registering of existing user
+//		UserBean user5 = new UserBean("filippp", "FilippKasss992", "asdddd@gmail.com");
+//		user5.setFirstName("Filip");
+//		user5.setLastName("Kasapov");
+//		LoggingManager.getInstance().register(user5);
 //		
-//		user.registerRequest();
-//		user1.registerRequest();
-//		user2.registerRequest();
-//		user3.registerRequest();
-//		user4.registerRequest();
-//		
-//		server.showUsers();
-//		
-//		user.loginRequest();
-//		user1.loginRequest();
-		//adding post and show that deleteComment function works
-//		Post post = new PhotoPost(user, "C:\\Users\\Philip\\Desktop\\saf.ttxt");
-//		post.addLike();
-//		post.addLike();
-//		post.addLike();
-//		post.addComment(user3, "MNOO QK");
-//		post.addComment(user2, "CHESTNO");
-//		post.addComment(user1, "TAKA E");
+//		UserBean user6 = new UserBean("filipppp", "FilippKasss992", "asdddd@gmail.com");
+//		user6.setFirstName("Filip");
+//		user6.setLastName("Kasapov");
+//		LoggingManager.getInstance().register(user6);
+		///////////////////////////////////////////
+		//testing subscribing
+		UserBean user = UserDao.getInstance().getUsers().get("filippp");
+		UserBean user2 = UserDao.getInstance().getUsers().get("filipppp");
+		
+		//UserManager.getInstance().subscribe(user, user2);
+		////////////////////////////////////////////////
+		//testing login
+		System.out.println(LoggingManager.getInstance().login("filippp", "FilippKasss992"));
+		/////////////////////////////////////////////
+		//testing posting
+		PostBean post = new PostBean(user2, "url", 1);
+		UserManager.getInstance().addPost(user2, post);
+//		PostBean post2 = new PostBean(user2, "url2", 1);
+//		UserManager.getInstance().addPost(user2, post2);
+		PostBean post2 = PostDao.getInstance().getPosts().get(1);
+//		PostManager.getInstance().addLike(post);
+//
+//		PostManager.getInstance().addLike(post);
+//
+//		PostManager.getInstance().addDislike(post);
+		
+		CommentManager.getInstance().createComment("KO MEN TAR", user2, post2);
+		/////////////////////////////////////////////
+		
+		//Philip: Done testing and adding here...continue with the below
+		
+		
 //		post.showInfo();
 //		post.deleteComment(1);
 //		post.showInfo();
 //		user.addPost(post);
 //		
-//		//add 2 more posts which are posted from different user
-//		Post post1 = new PhotoPost(user3, "daf.ttxt");
-//		post1.addLike();
-//		post1.addLike();
-//		post1.addLike();
-//		post1.addLike();
-//		post1.addLike();
-//		post1.addDislike();
-//		post1.addDislike();
-//		post1.addComment(user3, "buu");
-//		post1.addComment(user2, "bee");
-//		post1.addComment(user1, "eee");
-//		user1.addPost(post1);
-//		Post post3 = new PhotoPost(user1, "uaf.ttxt");
-//		post3.addLike();
-//		post3.addLike();
-//		post3.addLike();
-//		post3.addLike();
-//		post3.addDislike();
-//		post3.addComment(user3, "te");
-//		post3.addComment(user2, "sa");
-//		post3.addComment(user1, "te");
-//		user3.addPost(post3);
-//		user1.addBookmark(post);
-//		user1.addLiked(post);
 //		
 //		//showNotifications && showSubscribers test
 //		System.out.println(user.getUsername() + " notifications ------>");

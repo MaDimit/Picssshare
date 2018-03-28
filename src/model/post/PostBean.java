@@ -31,39 +31,32 @@ public class PostBean {
 	}
 		protected int id;
 		protected int uid;
-		protected int likes;
-		protected int dislikes; 
+		protected int likes; 
 		protected LocalDateTime date;
 		protected UserBean poster;
 		protected String url;
 		protected HashMap<Integer, CommentBean> comments;
 		//commentsCounter is needed when user decide to delete comment, it is a criteria when clicking a button
 		protected int commentsCounter = 0;
-		public static int ID = 1;
 		
 		//????? comments sorting can be implemented with TreeSet with comparator by date or id?????
 		protected TreeSet<CommentBean> commentsById;
 		
 		
 		
-		public PostBean(int id, int uid, int likes, int dislikes, LocalDateTime date, String url,
+		public PostBean(int uid, int likes,  LocalDateTime date, String url,
 				HashMap<Integer, CommentBean> comments) {
 			super();
-			this.id = id;
 			this.uid = uid;
 			this.likes = likes;
-			this.dislikes = dislikes;
 			this.date = date;
 			this.url = url;
 			this.comments = comments;
 		}
 
 		public PostBean(UserBean poster, String url, int uid) {
-			this.id=ID;
-			ID++;
 			this.uid = uid;
 			this.likes = 0;
-			this.dislikes=0;
 			this.date = LocalDateTime.now();
 			this.poster = poster;
 			this.url = url;
@@ -72,7 +65,7 @@ public class PostBean {
 		}
 		
 		public void addComment(CommentBean comment) {
-			this.comments.put(commentsCounter++, comment);
+			this.comments.put(comment.getId(), comment);
 		}
 		
 		public void removeComment(int id) {
@@ -84,7 +77,7 @@ public class PostBean {
 		}
 		
 		public void dislike() {
-			dislikes--;
+			likes--;
 		}
 		
 		public boolean isPhoto() {
@@ -98,14 +91,11 @@ public class PostBean {
 		public void setLikes(int likes) {
 			this.likes = likes;
 		}
-
-		public int getDislikes() {
-			return dislikes;
+		
+		public void setId(int id) {
+			this.id = id;
 		}
 
-		public void setDislikes(int dislikes) {
-			this.dislikes = dislikes;
-		}
 
 		public LocalDateTime getDate() {
 			return date;

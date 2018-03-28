@@ -5,8 +5,6 @@ import model.dao.UserDao;
 
 public class LoggingManager {
 	
-	public static int userID = 1;
-	
 	private static LoggingManager instance;
 	
 	private LoggingManager() {
@@ -22,7 +20,7 @@ public class LoggingManager {
 	
 	//========================REGISTER PART===================================//
 	
-		public void register(UserBean user) {
+		public synchronized void register(UserBean user) {
 			boolean correctUsername = false;
 			boolean correctPassword = false;
 			boolean correctFirstName = false;
@@ -44,19 +42,22 @@ public class LoggingManager {
 				System.out.println("Please note that the password must contains at least one uppercase letter"
 						+ ", one lowercase letter, one digit, one special character and must be at least 8 characters long!");
 			}
-			if(validateFirstName(user.getFirstName())) {
+			
+			//unnecessary fields
+			if(user.getFirstName()!=null && validateFirstName(user.getFirstName())) {
 				correctFirstName = true;
 			}
 			else {
-				System.out.println("Incorrect first name!");
+				System.out.println("First name error!");
 			}
 			
-			if(validateLastName(user.getLastName())) {
+			if(user.getLastName() != null && validateLastName(user.getLastName())) {
 				correctLastName = true;
 			}
 			else {
-				System.out.println("Incorrect last name!");
+				System.out.println("Last name error!");
 			}
+			//end of unnecessary fields
 			
 			if(validateEmailAddress(user.getEmail())) {
 				correctEmail = true;
@@ -64,23 +65,28 @@ public class LoggingManager {
 			else {
 				System.out.println("Incorrect email address!");
 			}
-			
-			if(correctUsername && correctPassword && correctFirstName && correctLastName && correctEmail) {
-				user.setId(userID);
-				userID++;
-				//UserDao.getInstance().getUsers().put(user.getUsername(),user); // TODO add to DB and Collection
-				UserDao.getInstance().registerUser(user);
-				System.out.println(user.getUsername() + " has been successfully registered.");
-				
+			//check the if the input data is ok
+			if(correctUsername && correctPassword && correctEmail) {
+				//if it is ok, check if the user already exists
+				if(UserDao.getInstance().getUsers().containsKey(user.getUsername())) {
+					System.out.println("User already exists. ");
+				}
+				else {
+					//add in collection
+					UserDao.getInstance().getUsers().put(user.getUsername(),user); 
+					//add in db
+					UserDao.getInstance().registerUser(user);
+					System.out.println(user.getUsername() + " has been successfully registered.");
+				}
 			}
 		}
 
 		// validate username
 		public boolean validateUsername(String username) {
-			if (username != null && !username.isEmpty() && !UserDao.getInstance().getUsers().containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
+			if (username != null && !username.isEmpty() && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")) {
 				return true;
-			else
-				return false;
+			}
+			return false;
 		}
 
 		/*
@@ -117,7 +123,7 @@ public class LoggingManager {
 		//================================================================//
 		
 		//Logging by user object
-		public boolean login(UserBean user) {
+		public synchronized boolean login(UserBean user) {
 			return login(user.getUsername(), user.getPassword());
 		}
 		
