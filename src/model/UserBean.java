@@ -40,9 +40,9 @@ public class UserBean {
 		
 	}
 	
-	public UserBean(int id, String username, String password, String email) {
+	public UserBean(String username, String password, String email) {
 		this();
-		this.id = id;
+		
 		this.username = username;
 		this.password = password;
 		this.email = email;

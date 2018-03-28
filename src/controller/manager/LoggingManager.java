@@ -1,7 +1,7 @@
 package controller.manager;
 
 import model.UserBean;
-import project.Server;
+import model.dao.UserDao;
 
 public class LoggingManager {
 	
@@ -44,7 +44,6 @@ public class LoggingManager {
 				System.out.println("Please note that the password must contains at least one uppercase letter"
 						+ ", one lowercase letter, one digit, one special character and must be at least 8 characters long!");
 			}
-			
 			if(validateFirstName(user.getFirstName())) {
 				correctFirstName = true;
 			}
@@ -69,7 +68,8 @@ public class LoggingManager {
 			if(correctUsername && correctPassword && correctFirstName && correctLastName && correctEmail) {
 				user.setId(userID);
 				userID++;
-				Server.getInstance().getUsers().put(user.getUsername(),user); // TODO add to DB and Collection
+				//UserDao.getInstance().getUsers().put(user.getUsername(),user); // TODO add to DB and Collection
+				UserDao.getInstance().registerUser(user);
 				System.out.println(user.getUsername() + " has been successfully registered.");
 				
 			}
@@ -77,9 +77,10 @@ public class LoggingManager {
 
 		// validate username
 		public boolean validateUsername(String username) {
-			return (username != null && !username.isEmpty() && !Server.getInstance().getUsers().containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
-					? true
-					: false;
+			if (username != null && !username.isEmpty() && !UserDao.getInstance().getUsers().containsKey(username) && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$"))
+				return true;
+			else
+				return false;
 		}
 
 		/*
@@ -122,7 +123,7 @@ public class LoggingManager {
 		
 		//Logging by username and password
 		public boolean login(String userName, String password) {
-			UserBean u = Server.getInstance().getUsers().get(userName);
+			UserBean u = UserDao.getInstance().getUsers().get(userName);
 			if(u == null) {
 				System.out.println("Wrong username!");
 				return false;

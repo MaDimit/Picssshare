@@ -1,26 +1,21 @@
-//package demo;
-//
-//import java.time.LocalDateTime;
-//import java.util.Random;
-//import java.util.TreeSet;
-//
-//import model.UserBean;
-//import project.Server;
-//import project.UserLogging;
-//import project.content.PhotoPost;
-//import project.content.Post;
-//import project.feed.Feed;
-//import project.feed.Feed.Type;
-//import project.feed.MainFeed;
-//
-//public class Demo {
-//	
-//	public static int getRandomNumber(int range, int startPoint) {
-//		Random r = new Random();
-//		return r.nextInt(range)+startPoint;
-//	}
-//	
-//	public static void main(String[] args){
+package demo;
+
+import java.time.LocalDateTime;
+import java.util.Random;
+import java.util.TreeSet;
+
+import controller.manager.LoggingManager;
+import model.UserBean;
+import model.dao.UserDao;
+
+public class Demo {
+	
+	public static int getRandomNumber(int range, int startPoint) {
+		Random r = new Random();
+		return r.nextInt(range)+startPoint;
+	}
+	
+	public static void main(String[] args){
 //		Server server = Server.getInstance();
 //		UserBean user = new UserBean("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
 //		UserBean user1 = new UserBean("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
@@ -31,6 +26,15 @@
 //		user1.setServer(server);
 //		user2.setServer(server);
 //		user3.setServer(server);
+		UserBean user5 = new UserBean("filippp", "FilippKasss992", "asdddd@gmail.com");
+		user5.setFirstName("Filip");
+		user5.setLastName("Kasapov");
+		LoggingManager.getInstance().register(user5);
+		UserBean user6 = new UserBean("filipppp", "FilippKasss992", "asdddd@gmail.com");
+		user6.setFirstName("Filip");
+		user6.setLastName("Kasapov");
+		LoggingManager.getInstance().register(user6);
+		UserDao.getAllUsersInfo();
 //		
 //		user.registerRequest();
 //		user1.registerRequest();
@@ -42,7 +46,7 @@
 //		
 //		user.loginRequest();
 //		user1.loginRequest();
-//		//adding post and show that deleteComment function works
+		//adding post and show that deleteComment function works
 //		Post post = new PhotoPost(user, "C:\\Users\\Philip\\Desktop\\saf.ttxt");
 //		post.addLike();
 //		post.addLike();
@@ -143,5 +147,6 @@
 //		user2.getFeed(Type.TRENDING_FEED).displayPostsInfo();
 //
 //	}
-//
-//}
+
+}
+}
