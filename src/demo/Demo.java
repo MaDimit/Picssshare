@@ -56,7 +56,7 @@ public class Demo {
 //
 //		PostManager.getInstance().addDislike(post);
 		
-		CommentManager.getInstance().createComment("KO MEN TAR", user2, post2);
+//		CommentManager.getInstance().createComment("KO MEN TAR", user2, post2);
 		/////////////////////////////////////////////
 		
 		//Philip: Done testing and adding here...continue with the below

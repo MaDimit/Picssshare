@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import model.UserBean;
+import project.DbProperties;
+import project.DbProperties.Key;
 
 public class UserDao {
 	// Database credentials
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	final static String DB_URL = "jdbc:mysql://localhost/picssshare";
-	final static String USER = "root";
-	final static String PASS = "root";
+	final static String DB_URL = DbProperties.getDbProperty(Key.TEST_URL);
+	final static String USER = DbProperties.getDbProperty(Key.TEST_USER);
+	final static String PASS = DbProperties.getDbProperty(Key.TEST_PASS);;
 
 	public HashMap<String, UserBean> users;
 	private static UserDao instance = null;

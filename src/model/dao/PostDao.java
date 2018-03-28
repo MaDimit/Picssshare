@@ -11,14 +11,16 @@ import java.util.TreeSet;
 
 import model.CommentBean;
 import model.post.PostBean;
+import project.DbProperties;
+import project.DbProperties.Key;
 
 public class PostDao {
 	// collection holding the posts is in the FeedDao
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/picssshare";
+	static final String DB_URL = DbProperties.getDbProperty(Key.TEST_URL);;
 	// Database credentials
-	static final String USER = "root";
-	static final String PASS = "root";
+	static final String USER = DbProperties.getDbProperty(Key.TEST_USER);;
+	static final String PASS = DbProperties.getDbProperty(Key.TEST_PASS);;
 	// collection for storing posts
 	private HashMap<Integer, PostBean> posts;
 	private static PostDao instance = null;

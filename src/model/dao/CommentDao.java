@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 import model.CommentBean;
 import model.post.PostBean;
+import project.DbProperties;
+import project.DbProperties.Key;
 
 //package model.dao;
 //
@@ -24,10 +26,10 @@ import model.post.PostBean;
 public class CommentDao {
 	// collection holding the posts is in the FeedDao
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/picssshare";
+	static final String DB_URL = DbProperties.getDbProperty(Key.TEST_URL);
 	// Database credentials
-	static final String USER = "root";
-	static final String PASS = "root";
+	static final String USER = DbProperties.getDbProperty(Key.TEST_USER);
+	static final String PASS = DbProperties.getDbProperty(Key.TEST_PASS);
 	private static CommentDao instance = null;
 
 	// singleton instance used in commentdao
