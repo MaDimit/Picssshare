@@ -79,37 +79,28 @@ public class UserDao {
 			}
 
 	}
-
-	public void registerUser(UserBean u) throws Exception {
-		// put in collection
-		this.users.put(u.getUsername(), u);
-		// insert in db
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-			conn = dbManager.getConnection();
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement();
+	
+	public void registerUser(UserBean user) throws SQLException{
+		Connection conn = dbManager.getConnection();
 		
-			String sql;
-			sql = "INSERT INTO `picssshare_test`.`users` (`username`, `password`, `firstName`, `lastName`, `email`) VALUES ('" + u.getUsername() + "', '" + u.getPassword() + "', '" + u.getFirstName()
-					+ "', '" + u.getLastName() + "', '" + u.getEmail() + "')";
-			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = stmt.getGeneratedKeys();
-			int id = 0;
-			if (rs != null && rs.next()) {
-				id = rs.getInt(1);
-			}
-			System.out.println("FROM DATABASE: " + id);
-			//set id to the user
-			u.setId(id);
-			System.out.println("FROM ALREADY SET ID: " + u.getId());
+		//Inserting into DB
+		String sql = "INSERT INTO picssshare_test.users (username, password, email) VALUES (?,?,?)";
+		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		stmt.setString(1, user.getUsername());
+		stmt.setString(2, user.getPassword());
+		stmt.setString(3, user.getEmail());
+		stmt.executeUpdate();
 		
-
+		//Getting id for registered user
+		ResultSet generatedKeys = stmt.getGeneratedKeys();
+        if (generatedKeys.next()) {
+        	user.setId(generatedKeys.getInt(1));
+        }else {
+        	throw new SQLException("Creating user failed, no ID obtained.");
+        }
+        
+        //adding to runtime users collection
+        this.users.put(user.getUsername(), user);
 	}
 	
 	public void addSubscription(UserBean subscriber, UserBean subscribed) throws Exception{

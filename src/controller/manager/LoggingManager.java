@@ -1,5 +1,7 @@
 package controller.manager;
 
+import java.sql.SQLException;
+
 import model.UserBean;
 import model.dao.UserDao;
 
@@ -8,7 +10,7 @@ public class LoggingManager {
 	private static LoggingManager instance;
 	
 	private LoggingManager() {
-		// userId = TODO get last id from DB or collection
+		
 	}
 	
 	public static synchronized LoggingManager getInstance() {
@@ -80,7 +82,35 @@ public class LoggingManager {
 				}
 			}
 		}
-
+		
+		public synchronized boolean register(String username, String password, String email){
+			if(!validateUsername(username)) {
+				System.err.println("Wrong username (already exists, not matching RegEx or empty)");
+				return false;
+			}
+			if(!validatePassword(password)) {
+				System.err.println("Weak password");
+				return false;
+			}
+			if(!validateEmailAddress(email)) {
+				System.err.println("Email is not valid");
+				return false;
+			}
+			
+			//if data is valid user obj is created
+			UserBean user = new UserBean(username, password, email);
+			
+			//adding to DB and collections
+			try {
+				UserDao.getInstance().registerUser1(user);
+			}catch (SQLException e) {
+				System.out.println("Registering to DB problem: " + e.getMessage());
+				return false;
+			}
+			
+			System.out.println("Registration of " + user.getUsername() + " is successfull!");
+			return true;
+		}
 		// validate username
 		public boolean validateUsername(String username) {
 			if (username != null && !username.isEmpty() && username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")) {

@@ -21,10 +21,18 @@ public class Demo {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		first_demo();
+//		firstDemo();
+		secondDemo();
 	}
 	
-	private static void first_demo() throws Exception {
+	private static void secondDemo() {
+		UserManager userManager = UserManager.getInstance();
+		LoggingManager loggingManager = LoggingManager.getInstance();
+		
+		loggingManager.register("Maxim", "Da123456", "email@email.com");
+	}
+	
+	private static void firstDemo() throws Exception {
 		//everytime the server starts the collections must be filled up with the data from users table
 				UserDao.getInstance().fillCollectionWithUsers();
 				/////////////////////////////////////////
