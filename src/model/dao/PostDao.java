@@ -1,77 +1,57 @@
 package model.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.TreeSet;
-
-import model.CommentBean;
 import model.post.PostBean;
-import project.DbProperties;
-import project.DbProperties.Key;
 
 public class PostDao {
-	// collection holding the posts is in the FeedDao
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = DbProperties.getDbProperty(Key.TEST_URL);;
-	// Database credentials
-	static final String USER = DbProperties.getDbProperty(Key.TEST_USER);;
-	static final String PASS = DbProperties.getDbProperty(Key.TEST_PASS);;
 	// collection for storing posts
 	private HashMap<Integer, PostBean> posts;
 	private static PostDao instance = null;
+	private DbManager dbManager;
 	
 
 	// singleton instance used in commentmanager
 	public static PostDao getInstance() {
 		if (instance == null) {
 			instance = new PostDao();
-
 		}
 		return instance;
 	}
 
-	public PostDao() {
+	private PostDao() {
 		this.posts = new HashMap<>();
-		
-		
-		
+		this.dbManager = DbManager.getInstance();
 	}
 
 	public HashMap<Integer, PostBean> getPosts() {
 		return posts;
 	}
 
-	public void addPost(PostBean p) {
+	public void addPost(PostBean p) throws Exception {
 		// add in collection
 
 		// insert in db
 		Connection conn = null;
 		Statement stmt = null;
 		// STEP 2: Register JDBC driver
-		try {
+		
 			Class.forName("com.mysql.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = dbManager.getConnection();
 			// STEP 4: Execute a query
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
 
-		try {
+		
 			String sql;
-			sql = "INSERT INTO `picssshare`.`post` (`likes`,  `date`,  `poster_id`,`url`) VALUES ('"
+			sql = "INSERT INTO `picssshare_test`.`post` (`likes`,  `date`,  `poster_id`,`url`) VALUES ('"
 					+ p.getLikes() + "', '"  + p.getDate() + "', '" + p.getPoster().getId()
 					+ "', '" + p.getUrl() + "')";
 
@@ -84,35 +64,11 @@ public class PostDao {
 			// set the given from database id for the post
 			p.setId(id);
 
-			rs.close();
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}
-		} // end finally try
-
-		// add in collection after received id
 		this.posts.put(p.getId(), p);
-		System.out.println("Goodbye!");
 
 	}
 
-	public void deletePost(PostBean p) {
+	public void deletePost(PostBean p) throws Exception{
 
 		// remove from collection
 		this.posts.remove(p.getId());
@@ -120,103 +76,44 @@ public class PostDao {
 		Connection conn = null;
 		Statement stmt = null;
 		// STEP 2: Register JDBC driver
-		try {
+
 			Class.forName("com.mysql.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = dbManager.getConnection();
 			// STEP 4: Execute a query
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		try {
+		
 			String sql;
-			sql = "Delete from `picssshare`.`post` where id=" + p.getId();
+			sql = "Delete from `picssshare_test`.`post` where id=" + p.getId();
 
 			stmt.executeUpdate(sql);
 
-			// STEP 6: Clean-up environment
-
-			// stmt.close();
-			// conn.close();
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} // end finally try
-			System.out.println("Goodbye!");
-		}
 	}
 
-	public void updateLikes(PostBean post) {
+	public void updateLikes(PostBean post) throws Exception{
 
 		// update in db
 		Connection conn = null;
 		Statement stmt = null;
 		// STEP 2: Register JDBC driver
-		try {
+
 			Class.forName("com.mysql.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = dbManager.getConnection();
 			// STEP 4: Execute a query
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		try {
 			String sql;
-			sql = "UPDATE `picssshare`.`post` SET `post`.`likes` =" + post.getLikes() + " WHERE id=" + post.getId();
+			sql = "UPDATE `picssshare_test`.`post` SET `post`.`likes` =" + post.getLikes() + " WHERE id=" + post.getId();
 			stmt.executeUpdate(sql);
 
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}
-		} // end finally try
-		System.out.println("Goodbye!");
 	}
 
 	 

@@ -5,22 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import model.UserBean;
-import project.DbProperties;
-import project.DbProperties.Key;
 
 public class UserDao {
-	// Database credentials
-	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	final static String DB_URL = DbProperties.getDbProperty(Key.TEST_URL);
-	final static String USER = DbProperties.getDbProperty(Key.TEST_USER);
-	final static String PASS = DbProperties.getDbProperty(Key.TEST_PASS);;
 
 	public HashMap<String, UserBean> users;
 	private static UserDao instance = null;
+	private static DbManager dbManager;
 
 	// singleton
-	public UserDao() {
+	private UserDao() {
 		this.users = new HashMap<>();
+		dbManager = DbManager.getInstance();
 	}
 
 	// method for printing all the users ## maybe used only when testing the
@@ -31,10 +26,9 @@ public class UserDao {
 	}
 
 	// singleton instance used in usermanager
-	public static UserDao getInstance() {
+	public static synchronized UserDao getInstance() {
 		if (instance == null) {
 			instance = new UserDao();
-
 		}
 		return instance;
 	}
@@ -43,29 +37,23 @@ public class UserDao {
 		return users;
 	}
 
-	public static void fillCollectionWithUsers() {
+	public void fillCollectionWithUsers() throws Exception{
 		// JDBC driver name and database URL
 
 		Connection conn = null;
 		Statement stmt = null;
 		// STEP 2: Register JDBC driver
-		try {
+		
 			Class.forName("com.mysql.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = dbManager.getConnection();
 			// STEP 4: Execute a query
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		try {
+		
 			String sql;
 			sql = "select * from users";
 			ResultSet rs = stmt.executeQuery(sql);
@@ -89,58 +77,26 @@ public class UserDao {
 //				System.out.print(", lastName: " + lastName);
 //				System.out.println();
 			}
-			// STEP 6: Clean-up environment
-			rs.close();
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
 
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} // end finally try
-		} // end try
-		System.out.println("Goodbye!");
 	}
 
-	public void registerUser(UserBean u) {
+	public void registerUser(UserBean u) throws Exception {
 		// put in collection
 		this.users.put(u.getUsername(), u);
 		// insert in db
 		Connection conn = null;
 		Statement stmt = null;
 		// STEP 2: Register JDBC driver
-		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = dbManager.getConnection();
 			// STEP 4: Execute a query
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
+		
 			String sql;
-			sql = "INSERT INTO `picssshare`.`users` (`username`, `password`, `firstName`, `lastName`, `email`) VALUES ('" + u.getUsername() + "', '" + u.getPassword() + "', '" + u.getFirstName()
+			sql = "INSERT INTO `picssshare_test`.`users` (`username`, `password`, `firstName`, `lastName`, `email`) VALUES ('" + u.getUsername() + "', '" + u.getPassword() + "', '" + u.getFirstName()
 					+ "', '" + u.getLastName() + "', '" + u.getEmail() + "')";
 			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -152,79 +108,30 @@ public class UserDao {
 			//set id to the user
 			u.setId(id);
 			System.out.println("FROM ALREADY SET ID: " + u.getId());
-			//close rs resourse
-			rs.close();
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} // end finally try
-			// end try
-			System.out.println("Goodbye!");
-		}
+		
+
 	}
 	
-	public void addSubscription(UserBean subscriber, UserBean subscribed) {
+	public void addSubscription(UserBean subscriber, UserBean subscribed) throws Exception{
 		Connection conn = null;
 		Statement stmt = null;
 		// STEP 2: Register JDBC driver
-		try {
+		
 			Class.forName("com.mysql.jdbc.Driver");
 			// STEP 3: Open a connection
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = dbManager.getConnection();
 			// STEP 4: Execute a query
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		
-		try {
+		
 			String sql;
-			sql = "INSERT INTO `picssshare`.`subscriber_subscribed` (`subscriber_id`,`subscribed_id`) VALUES ('" + subscriber.getId() + "', '" + subscribed.getId() + "')";
+			sql = "INSERT INTO `picssshare_test`.`subscriber_subscribed` (`subscriber_id`,`subscribed_id`) VALUES ('" + subscriber.getId() + "', '" + subscribed.getId() + "')";
 			stmt.executeUpdate(sql);
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} // end finally try
-			// end try
-			System.out.println("Goodbye!");
-		}
-		
 		
 	}
+		
+	
 }

@@ -43,7 +43,12 @@ public class UserManager {
 			subscribedTo.addSubscriber(subscriber);
 			
 			//add in db
-			UserDao.getInstance().addSubscription(subscriber, subscribedTo);
+			try {
+				UserDao.getInstance().addSubscription(subscriber, subscribedTo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			// Adding to notifications collection of subscribedTo UserBean
 			subscribedTo.addNotification(new SubscriptionNotificationBean(subscriber));
@@ -59,7 +64,12 @@ public class UserManager {
 		if (post != null) {
 			user.addPost(post);
 			System.out.println("Post added by " + user.getUsername());
-			PostDao.getInstance().addPost(post);
+			try {
+				PostDao.getInstance().addPost(post);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			System.out.println("Error with adding post.");
 		}
