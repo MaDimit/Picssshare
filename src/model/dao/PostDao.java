@@ -1,10 +1,14 @@
 package model.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+
 import model.post.PostBean;
 
 public class PostDao {
@@ -116,5 +120,18 @@ public class PostDao {
 
 	}
 
-	 
+//	public HashSet<PostBean> getUserPostsById(int id) throws SQLException{
+//		HashSet<PostBean> posts = new HashSet<>();
+//		Connection conn = dbManager.getConnection();
+//		String sql = "SELECT * FROM posts WHERE id=(?)";
+//		PreparedStatement stmt = conn.prepareStatement(sql);
+//		stmt.setInt(1, id);
+//		ResultSet rs = stmt.executeQuery();
+//		
+//		while(rs.next()) {
+//			PostBean post = new PostBean(poster, url, uid)
+//		}
+//		
+//		return posts;
+//	}
 }

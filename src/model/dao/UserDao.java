@@ -78,7 +78,6 @@ public class UserDao {
 		}catch(SQLException e) {
 			System.out.println("Problem during filling users collection: " + e.getMessage());
 		}
-		
 		return users;
 	}
 	
@@ -105,25 +104,13 @@ public class UserDao {
         this.users.put(user.getUsername(), user);
 	}
 	
-	public void addSubscription(UserBean subscriber, UserBean subscribed) throws Exception{
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
-		
-			Class.forName("com.mysql.jdbc.Driver");
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-			conn = dbManager.getConnection();
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement();
-
-		
-		
-			String sql;
-			sql = "INSERT INTO `picssshare_test`.`subscriber_subscribed` (`subscriber_id`,`subscribed_id`) VALUES ('" + subscriber.getId() + "', '" + subscribed.getId() + "')";
-			stmt.executeUpdate(sql);
-		
+	public void addSubscription(UserBean subscriber, UserBean subscribed) throws SQLException{
+		Connection conn = dbManager.getConnection();
+		String sql = "INSERT INTO subscriber_subscribed (subscriber_id, subscribed_id) VALUES (?,?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, subscriber.getId());
+		stmt.setInt(2, subscribed.getId());
+		stmt.executeUpdate();
 	}
 		
 	

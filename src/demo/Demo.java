@@ -26,16 +26,56 @@ public class Demo {
 	}
 	
 	private static void secondDemo() {
+		// Clear collection before using
+		//register();
+		UserDao.getInstance().printCollectionInfo();
+		
+		//Login testing
+		//login();
+		
+		//Subscription testing
+		subscribe();
+	}
+	
+	private static void register() {
 		UserManager userManager = UserManager.getInstance();
 		LoggingManager loggingManager = LoggingManager.getInstance();
 		
 		//Registering users
 		loggingManager.register("Maxim1", "Da123456", "email@email.com");
 		loggingManager.register("Chocho1", "4343jh24aS", "emailhi1@email.com");
+
+	}
+	
+	private static void login() {
+		LoggingManager lm = LoggingManager.getInstance();
 		
-		//
+		//Correct login
+		UserBean user1 = lm.login("Maxim", "Da123456");
+		System.out.println(user1);
 		
-		UserDao.getInstance().printCollectionInfo();
+		//Wrong password login
+		UserBean user2 = lm.login("Maxim", "qwerty");
+		System.out.println(user2);
+		
+		//Wrong username login
+		UserBean user3 = lm.login("Anonymos", "passs");
+		System.out.println(user3);
+	}
+
+	private static void subscribe() {
+		UserManager um = UserManager.getInstance();
+		LoggingManager lm = LoggingManager.getInstance();
+		
+		UserBean subscribedTo = lm.login("Maxim", "Da123456");
+		UserBean subscriber = lm.login("Chocho", "434324aS");
+		
+		um.subscribe(subscriber, subscribedTo);
+		
+		UserBean oneMoreUser = lm.login("Chocho1", "4343jh24aS");
+		
+		um.subscribe(oneMoreUser, subscriber);
+		
 	}
 	
 	private static void firstDemo() throws Exception {

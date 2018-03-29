@@ -190,17 +190,17 @@ public class LoggingManager {
 		//================================================================//
 			
 		//Logging by username and password
-		public boolean login(String username, String password) {
+		public UserBean login(String username, String password) {
 			UserBean u = UserDao.getInstance().getUsers().get(username);
 			if(u == null) {
 				System.out.println("Wrong username!");
-				return false;
+				return null;
 			}
 			if(!u.getPassword().equals(password)){
 				System.out.println("Wrong password");
-				return false;
+				return null;
 			}
-			return true;
+			return u;
 		}
 
 }

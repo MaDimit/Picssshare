@@ -1,5 +1,6 @@
 package controller.manager;
 
+import java.sql.SQLException;
 import java.util.TreeSet;
 
 import model.UserBean;
@@ -34,29 +35,31 @@ public class UserManager {
 	 * TODO more validation for all insertions to UserBean collections
 	 */
 
-	// TODO adding subscription and notification to DB
-	public void subscribe(UserBean subscriber, UserBean subscribedTo) {
-		if (subscribedTo != null && subscriber != null) {
+	public boolean subscribe(UserBean subscriber, UserBean subscribedTo) {
+		if (subscribedTo == null && subscriber == null) {
+			System.out.println("Subscriber or subscribed is null");
+			return false;
+		}
+			//add in DB
+			try {
+				UserDao.getInstance().addSubscription(subscriber, subscribedTo);
+			} catch (SQLException e) {
+				System.out.println("Adding subscribtin to DB went wrong: " + e.getMessage());
+				return false;
+			}
 
 			// Adding to UserBean subscriptions collections
 			subscriber.addSubscribtion(subscribedTo);
 			subscribedTo.addSubscriber(subscriber);
+		
 			
-			//add in db
-			try {
-				UserDao.getInstance().addSubscription(subscriber, subscribedTo);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			//TODO add notification to DB
+			
 			// Adding to notifications collection of subscribedTo UserBean
 			subscribedTo.addNotification(new SubscriptionNotificationBean(subscriber));
 
 			System.out.println(subscriber.getUsername() + " subscribed to " + subscribedTo.getUsername());
-		} else {
-			System.out.println("Problem during subscription");
-		}
+			return true;
 	}
 	
 	
