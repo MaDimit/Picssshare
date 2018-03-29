@@ -14,8 +14,8 @@ public class UserDao {
 
 	// singleton
 	private UserDao() {
-		this.users = new HashMap<>();
 		dbManager = DbManager.getInstance();
+		this.users = getAllUsers();
 	}
 
 	// method for printing all the users ## maybe used only when testing the
@@ -36,55 +36,57 @@ public class UserDao {
 	public HashMap<String, UserBean> getUsers() {
 		return users;
 	}
-
-	public void fillCollectionWithUsers() throws Exception{
-		// JDBC driver name and database URL
-
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
+	
+	//Initializing runtime users collection
+	private HashMap<String, UserBean> getAllUsers(){
+		HashMap<String, UserBean> users = new HashMap<>();
+		Connection conn = dbManager.getConnection();
+		PreparedStatement stmt;
+		ResultSet rs;
 		
-			Class.forName("com.mysql.jdbc.Driver");
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-			conn = dbManager.getConnection();
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement();
-
-
-		
-			String sql;
-			sql = "select * from users";
-			ResultSet rs = stmt.executeQuery(sql);
-
-			// Extract data from result set
+		//Fetching users from DB
+		String sql = "SELECT * FROM users";
+		try{
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			//Adding users to runtime collection
+			int id;
+			String username;
+			String password;
+			String firstName;
+			String lastName;
+			String email;
 			while (rs.next()) {
 				// Retrieve by column name
-				int id = rs.getInt("id");
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				String firstName = rs.getString("firstName");
-				String lastName = rs.getString("lastName");
-				String email = rs.getString("lastName");
-				UserDao.getInstance().getUsers().put(username, new UserBean().email(email).lastName(lastName).firstName(firstName).password(password).username(username).id(id));
-
-				// Display values
-//				System.out.print("ID: " + id);
-//				System.out.print(", username: " + username);
-//				System.out.print(", password: " + password);
-//				System.out.print(", firstName: " + firstName);
-//				System.out.print(", lastName: " + lastName);
-//				System.out.println();
+				id = rs.getInt("id");
+				username = rs.getString("username");
+				password = rs.getString("password");
+				firstName = rs.getString("firstName");
+				lastName = rs.getString("lastName");
+				email = rs.getString("email");
+				UserBean user = new UserBean()
+						.id(id)
+						.username(username)
+						.password(password)
+						.firstName(firstName)
+						.lastName(lastName)
+						.email(email);
+				//TODO add user collections;
+				users.put(username, user);
 			}
-
+		}catch(SQLException e) {
+			System.out.println("Problem during filling users collection: " + e.getMessage());
+		}
+		
+		return users;
 	}
 	
 	public void registerUser(UserBean user) throws SQLException{
 		Connection conn = dbManager.getConnection();
 		
 		//Inserting into DB
-		String sql = "INSERT INTO picssshare_test.users (username, password, email) VALUES (?,?,?)";
+		String sql = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, user.getUsername());
 		stmt.setString(2, user.getPassword());

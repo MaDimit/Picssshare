@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -42,7 +43,7 @@ public class DbManager {
 	private final String DB_URL;
 	private final String USER;
 	private final String PASS;
-//	private final String SCHEMA;
+	private final String SCHEMA;
 	
 	
 	private static DbManager instance;
@@ -53,7 +54,7 @@ public class DbManager {
 		this.DB_URL = getProperty(Key.TEST_URL);
 		this.USER = getProperty(Key.TEST_USER);
 		this.PASS = getProperty(Key.TEST_PASS);
-//		this.SCHEMA = getProperty(Key.TEST_SCHEMA);
+		this.SCHEMA = getProperty(Key.TEST_SCHEMA);
 		
 		try {
 			Class.forName(JDBC_DRIVER);
@@ -63,6 +64,8 @@ public class DbManager {
 		} catch(SQLException se) {
 			System.err.println("Connection creating error: " + se.getMessage());
 		}
+		
+		useStatment(this.SCHEMA);
 	}
 	
 	public static synchronized DbManager getInstance() {
@@ -91,6 +94,18 @@ public class DbManager {
 	private String getProperty(Key key) {
 		String value = PROPERTIES.getProperty(key.toString());
 		return value;
+	}
+	
+	private void useStatment(String schema) {
+		String sql = "USE " + schema;
+		PreparedStatement stmt;
+		
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Problem during USE statment: " + e.getMessage());
+		}
 	}
 	
 	

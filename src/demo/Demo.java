@@ -29,7 +29,13 @@ public class Demo {
 		UserManager userManager = UserManager.getInstance();
 		LoggingManager loggingManager = LoggingManager.getInstance();
 		
-		loggingManager.register("Maxim", "Da123456", "email@email.com");
+		//Registering users
+		loggingManager.register("Maxim1", "Da123456", "email@email.com");
+		loggingManager.register("Chocho1", "4343jh24aS", "emailhi1@email.com");
+		
+		//
+		
+		UserDao.getInstance().printCollectionInfo();
 	}
 	
 	private static void firstDemo() throws Exception {
