@@ -1,7 +1,10 @@
 package model.notification;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+
+import model.UserBean;
 
 public class NotificationBean {
 	
@@ -15,19 +18,31 @@ public class NotificationBean {
 		}
 		
 	}
-	
+	private int id;
 	private String description;
 	private LocalDateTime date;
 	private boolean seen;
+	private UserBean receiver;
+	private UserBean causer;
 	
-	NotificationBean(String description) {
+	NotificationBean(String description, UserBean causer, UserBean receiver) {
 		this.description = description;
+		this.causer = causer;
+		this.receiver = receiver;
 		this.date = LocalDateTime.now();
 		this.seen = false;
 	}
 	
 	public void seen(){
 		this.seen = true;
+	}
+	
+	public int getReceiverID() {
+		return receiver.getId();
+	}
+	
+	public int getCauserID() {
+		return causer.getId();
 	}
 
 	public String getDescription() {
@@ -46,12 +61,16 @@ public class NotificationBean {
 		this.date = date;
 	}
 
-	public boolean isSeen() {
-		return seen;
+	public int isSeen() {
+		return seen ? 1 : 0;
 	}
 
 	public void setSeen(boolean seen) {
 		this.seen = seen;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

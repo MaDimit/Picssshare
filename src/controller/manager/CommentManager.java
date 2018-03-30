@@ -27,7 +27,12 @@ public class CommentManager {
 			comment = new CommentBean(poster, content, belongedPost);
 		}
 		
-		CommentDao.getInstance().addCommentInDB(belongedPost, comment);
+		try {
+			CommentDao.getInstance().addCommentInDB(belongedPost, comment);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
