@@ -1,5 +1,6 @@
 package controller.manager;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -88,6 +89,24 @@ public class PostManager {
 
 	public void deleteComment(PostBean post, int id) {
 		post.removeComment(id);
+	}
+	
+	public boolean addPost(UserBean user, String url) {
+		if (url == null || url.isEmpty()) {
+			System.out.println("Post url is empty.");
+			return false;
+		}
+		PostBean post = new PostBean(user, url);
+		
+		try {
+			PostDao.getInstance().addPost(post);
+		} catch (SQLException e) {
+			System.out.println("Problem during adding post to DB: " + e.getMessage());
+			return false;
+		}
+		user.addPost(post);
+		System.out.println("Post added by " + user.getUsername());
+		return true;	
 	}
 
 	public void showInfo(PostBean post) {

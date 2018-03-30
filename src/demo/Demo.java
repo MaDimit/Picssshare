@@ -35,7 +35,7 @@ public class Demo {
 		//login();
 		
 		//Subscription testing
-		subscribe();
+//		subscribe();
 		
 		//Post adding
 		addPosts();
@@ -46,7 +46,7 @@ public class Demo {
 		// Subscription testing
 		//subscribe();
 		
-		likeTest();
+		//likeTest();
 
 	}
 
@@ -67,9 +67,9 @@ public class Demo {
 		UserBean liker = lm.login("Maxim1", "Da123456");
 		UserBean liker2 = lm.login("Chocho1", "4343jh24aS");
 
-		PostBean p = new PostBean(liker, "asdas", 1);
-		PostBean p2 = new PostBean(liker2, "das", 1);
-		PostBean p3 = new PostBean(liker, "asqerdas", 1);
+		PostBean p = new PostBean(liker, "asdas");
+		PostBean p2 = new PostBean(liker2, "das");
+		PostBean p3 = new PostBean(liker, "asqerdas");
 		try {
 			PostDao.getInstance().addPost(p);
 			PostDao.getInstance().addPost(p2);
@@ -116,7 +116,14 @@ public class Demo {
 
 	
 	private static void addPosts() {
+		LoggingManager lm = LoggingManager.getInstance();
+		PostManager pm = PostManager.getInstance();
+
+		UserBean user1 = lm.login("Maxim", "Da123456");
+		UserBean user2 = lm.login("Chocho1", "4343jh24aS");
 		
+		pm.addPost(user1, "some photo url");
+		pm.addPost(user2, "url of post");
 	}
 	
 

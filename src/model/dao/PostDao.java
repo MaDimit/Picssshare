@@ -5,9 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import model.UserBean;
 import model.post.PostBean;
@@ -34,38 +39,23 @@ public class PostDao {
 	public HashMap<Integer, PostBean> getPosts() {
 		return posts;
 	}
-
-	public void addPost(PostBean p) throws Exception {
-		// add in collection
-
-		// insert in db
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
-
-		Class.forName("com.mysql.jdbc.Driver");
-		// STEP 3: Open a connection
-		System.out.println("Connecting to database...");
-		conn = dbManager.getConnection();
-		// STEP 4: Execute a query
-		System.out.println("Creating statement...");
-		stmt = conn.createStatement();
-
-		String sql;
-		sql = "INSERT INTO `picssshare`.`post` (`likes`,  `date`,  `poster_id`,`url`) VALUES ('" + p.getLikes() + "', '"
-				+ p.getDate() + "', '" + p.getPoster().getId() + "', '" + p.getUrl() + "')";
-
-		stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-		ResultSet rs = stmt.getGeneratedKeys();
-		int id = 0;
-		if (rs != null && rs.next()) {
-			id = rs.getInt(1);
-		}
-		// set the given from database id for the post
-		p.setId(id);
-
-		this.posts.put(p.getId(), p);
-
+	
+	public void addPost(PostBean post) throws SQLException{
+		Connection conn = dbManager.getConnection();
+		String sql = "INSERT INTO posts (likes,  date, poster_id, url) VALUES (?,?,?,?)";
+		PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+		stmt.setInt(1, post.getLikes());
+		stmt.setTimestamp(2,Timestamp.from(post.getDate().toInstant(ZoneOffset.ofHours(0))));
+		stmt.setInt(3, post.getPoster().getId());
+		stmt.setString(4, post.getUrl());
+		stmt.executeUpdate();
+		
+		ResultSet generatedKeys = stmt.getGeneratedKeys();
+		 if (generatedKeys.next()) {
+			 post.setId(generatedKeys.getInt(1));
+	     }else {
+	        throw new SQLException("Creating user failed, no ID obtained.");
+	     }
 	}
 
 	public void deletePost(PostBean p) throws Exception {

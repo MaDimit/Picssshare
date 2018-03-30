@@ -74,21 +74,6 @@ public class UserManager {
 	}
 	
 	
-	public void addPost(UserBean user, PostBean post) {
-		if (post != null) {
-			user.addPost(post);
-			System.out.println("Post added by " + user.getUsername());
-			try {
-				PostDao.getInstance().addPost(post);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Error with adding post.");
-		}
-	}
-	
 	//TODO adding liked post to DB
 	// ????? dividing on separate methods for liking and adding to liked ?????
 	public void like(UserBean liker, PostBean likedPost) {

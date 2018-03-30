@@ -18,6 +18,7 @@ public class NotificationBean {
 		}
 		
 	}
+	
 	private int id;
 	private String description;
 	private LocalDateTime date;
