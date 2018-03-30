@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.TreeSet;
 
 import model.UserBean;
+import model.dao.NotificationDao;
 import model.dao.PostDao;
 import model.dao.UserDao;
 import model.notification.LikeNotificationBean;
@@ -56,9 +57,17 @@ public class UserManager {
 			//TODO add notification to DB
 			
 			// Adding to notifications collection of subscribedTo UserBean
-			subscribedTo.addNotification(new SubscriptionNotificationBean(subscriber));
+			SubscriptionNotificationBean notification = new SubscriptionNotificationBean(subscriber, subscribedTo);
+			subscribedTo.addNotification(notification);
 
 			System.out.println(subscriber.getUsername() + " subscribed to " + subscribedTo.getUsername());
+			
+			try {
+				NotificationDao.getInstance().addNotificationInDB(notification);
+			} catch (SQLException e) {
+				System.out.println("Error while inserting notification in DB.");
+				e.printStackTrace();
+			}
 			return true;
 	}
 	
@@ -82,10 +91,17 @@ public class UserManager {
 	// ????? dividing on separate methods for liking and adding to liked ?????
 	public void like(UserBean liker, PostBean likedPost) {
 		if (likedPost != null) {
-			PostManager.getInstance().addLike(likedPost);
+			PostManager.getInstance().addLike(liker, likedPost);
 			liker.addLikedPost(likedPost);
-			likedPost.getPoster().addNotification(new LikeNotificationBean(liker, likedPost));
+			NotificationBean n = new LikeNotificationBean(liker,likedPost.getPoster(), likedPost);
+			likedPost.getPoster().addNotification(n);
 			System.out.println("Post added to liked photos in " + liker.getUsername() + " collection.");
+			try {
+				NotificationDao.getInstance().addNotificationInDB(n);
+			} catch (SQLException e) {
+				System.out.println("Problem with adding notification to db.");
+				e.printStackTrace();
+			}
 		} else {
 			System.out.println("Problem with adding a post to liked ones.");
 		}

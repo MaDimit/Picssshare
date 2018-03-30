@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import model.CommentBean;
+import model.UserBean;
 import model.dao.PostDao;
 import model.post.PostBean;
 
@@ -43,10 +44,16 @@ public class PostManager {
 	}
 
 	// TODO validation (May be done in JS)
-	public void addLike(PostBean post) {
+	public void addLike(UserBean liker, PostBean post) {
 		if(post!=null) {
 			PostDao.getInstance().getPosts().get(post.getId()).like();
-			PostDao.getInstance().updateLikes(post);
+			try {
+				PostDao.getInstance().updateLikes(post);
+				PostDao.getInstance().addInLikerPostTable(liker, post);
+			} catch (Exception e) {
+				System.out.println("Error with updating likes in DB.");
+				e.printStackTrace();
+			}
 		}
 		else {
 			System.out.println("No such post found!");
@@ -57,7 +64,12 @@ public class PostManager {
 	public void addDislike(PostBean post) {
 		if(post!=null) {
 			PostDao.getInstance().getPosts().get(post.getId()).dislike();
-			PostDao.getInstance().updateLikes(post);
+			try {
+				PostDao.getInstance().updateLikes(post);
+			} catch (Exception e) {
+				System.out.println("Problem with updating likes.");
+				e.printStackTrace();
+			}
 		}
 		else {
 			System.out.println("No such post found!");
