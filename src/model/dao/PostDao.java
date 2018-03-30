@@ -57,6 +57,7 @@ public class PostDao {
 	     }else {
 	        throw new SQLException("Creating user failed, no ID obtained.");
 	     }
+		 this.posts.put(post.getId(), post);
 	}
 	
 	
@@ -74,7 +75,7 @@ public class PostDao {
 	
 	public void updateLikes(PostBean post) throws SQLException {
 		Connection conn = dbManager.getConnection();
-		String sql = "UPDATE posts SET likes = (?) WHERE id = (?)";
+		String sql = "UPDATE posts SET likes = ? WHERE id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, post.getLikes());
 		stmt.setInt(2, post.getId());
@@ -83,29 +84,28 @@ public class PostDao {
 
 	public void addInLikerPostTable(UserBean liker, PostBean post) throws SQLException {
 		// update in db
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
-
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// STEP 3: Open a connection
-		System.out.println("Connecting to database...");
-		conn = dbManager.getConnection();
-		// STEP 4: Execute a query
-		System.out.println("Creating statement...");
-		stmt = conn.createStatement();
-
+		
+//		// STEP 2: Register JDBC driver
+//
+//		try {
+//			Class.forName("com.mysql.jdbc.Driver");
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		// STEP 3: Open a connection
+//		System.out.println("Connecting to database...");
+//		conn = dbManager.getConnection();
+//		// STEP 4: Execute a query
+//		
+		Connection conn = dbManager.getConnection();
+		PreparedStatement stmt = null;
 		String sql;
 		sql = "INSERT INTO `picssshare`.`liker_post` (`liker_id`, `likedpost_id`) VALUES (?,?)";
-		PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-		pstmt.setInt(1, liker.getId());
-		pstmt.setInt(2, post.getId());
-		pstmt.executeUpdate();
+		stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, liker.getId());
+		stmt.setInt(2, post.getId());
+		stmt.executeUpdate();	
 	}
 
 	// public HashSet<PostBean> getUserPostsById(int id) throws SQLException{

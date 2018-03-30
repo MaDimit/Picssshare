@@ -47,6 +47,7 @@ public class PostManager {
 	// TODO validation (May be done in JS)
 	public void addLike(UserBean liker, PostBean post) {
 		if(post!=null) {
+			System.out.println(post.getId());
 			PostDao.getInstance().getPosts().get(post.getId()).like();
 			try {
 				PostDao.getInstance().updateLikes(post);

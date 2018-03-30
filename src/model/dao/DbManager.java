@@ -51,10 +51,10 @@ public class DbManager {
 	
 	private DbManager() {
 		this.PROPERTIES = getProperties();
-		this.DB_URL = getProperty(Key.TEST_URL);
-		this.USER = getProperty(Key.TEST_USER);
-		this.PASS = getProperty(Key.TEST_PASS);
-		this.SCHEMA = getProperty(Key.TEST_SCHEMA);
+		this.DB_URL ="jdbc:"+ getProperty(Key.URL);
+		this.USER = getProperty(Key.USER);
+		this.PASS = getProperty(Key.PASS);
+		this.SCHEMA = getProperty(Key.SCHEMA);
 		
 		try {
 			Class.forName(JDBC_DRIVER);

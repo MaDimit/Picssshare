@@ -28,24 +28,26 @@ public class Demo {
 	private static void secondDemo() {
 		// Clear collection before using
 		// register();
-		UserDao.getInstance().printCollectionInfo();
+		// UserDao.getInstance().printCollectionInfo();
 
-		
-		//Login testing
-		//login();
-		
-		//Subscription testing
-//		subscribe();
-		
-		//Post adding
-		addPosts();
+		// Login testing
+		 login();
+
+		// Subscription testing
+		// subscribe();
+
+		// Post adding
+		// addPosts();
+
+		// Post deleting
+		// deletePost();
 
 		// Login testing
 		// login();
 
 		// Subscription testing
-		//subscribe();
-		
+		// subscribe();
+
 		//likeTest();
 
 	}
@@ -55,18 +57,18 @@ public class Demo {
 		LoggingManager loggingManager = LoggingManager.getInstance();
 
 		// Registering users
-		loggingManager.register("Maxim1", "Da123456", "email@email.com");
-		loggingManager.register("Chocho1", "4343jh24aS", "emailhi1@email.com");
+		loggingManager.register("Maxim", "Da123456", "email@email.com");
+		loggingManager.register("Philip", "Ne112233", "emailhi1@email.com");
 
 	}
 
 	private static void likeTest() {
 		UserManager um = UserManager.getInstance();
 		LoggingManager lm = LoggingManager.getInstance();
-		
-		UserBean liker = lm.login("Maxim1", "Da123456");
-		UserBean liker2 = lm.login("Chocho1", "4343jh24aS");
 
+		UserBean liker = lm.login("Maxim", "Da123456");
+		UserBean liker2 = lm.login("Philip", "Ne112233");
+		//
 		PostBean p = new PostBean(liker, "asdas");
 		PostBean p2 = new PostBean(liker2, "das");
 		PostBean p3 = new PostBean(liker, "asqerdas");
@@ -78,9 +80,9 @@ public class Demo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		UserManager.getInstance().like(liker, p2);
-		
+
 	}
 
 	private static void login() {
@@ -89,10 +91,12 @@ public class Demo {
 		// Correct login
 		UserBean user1 = lm.login("Maxim", "Da123456");
 		System.out.println(user1);
+		UserBean user2 = lm.login("Philip", "Ne112233");
+		System.out.println(user2);
 
 		// Wrong password login
-		UserBean user2 = lm.login("Maxim", "qwerty");
-		System.out.println(user2);
+		UserBean user4 = lm.login("Maxim", "qwerty");
+		System.out.println(user4);
 
 		// Wrong username login
 		UserBean user3 = lm.login("Anonymos", "passs");
@@ -103,38 +107,42 @@ public class Demo {
 		UserManager um = UserManager.getInstance();
 		LoggingManager lm = LoggingManager.getInstance();
 
-		UserBean subscribedTo = lm.login("Maxim1", "Da123456");
-		UserBean subscriber = lm.login("Chocho1", "4343jh24aS");
+		UserBean subscribedTo = lm.login("Maxim", "Da123456");
+		UserBean subscriber = lm.login("Philip", "Ne112233");
 
 		um.subscribe(subscriber, subscribedTo);
 
-		UserBean oneMoreUser = lm.login("Chocho1", "4343jh24aS");
+		// UserBean oneMoreUser = lm.login("Chocho1", "4343jh24aS");
 
-		um.subscribe(oneMoreUser, subscriber);
+		um.subscribe(subscribedTo, subscriber);
 
 	}
 
-	
 	private static void addPosts() {
 		LoggingManager lm = LoggingManager.getInstance();
 		PostManager pm = PostManager.getInstance();
 
 		UserBean user1 = lm.login("Maxim", "Da123456");
-		UserBean user2 = lm.login("Chocho1", "4343jh24aS");
-		
+		UserBean user2 = lm.login("Philip", "Ne112233");
+
 		pm.addPost(user1, "some photo url");
 		pm.addPost(user2, "url of post");
-		
+
+	}
+
+	public static void deletePost() {
+		LoggingManager lm = LoggingManager.getInstance();
+		PostManager pm = PostManager.getInstance();
+
+		UserBean user1 = lm.login("Maxim", "Da123456");
+		UserBean user2 = lm.login("Philip", "Ne112233");
 		pm.deletePost(1);
 	}
-	
-
-
 
 	private static void firstDemo() throws Exception {
 		// everytime the server starts the collections must be filled up with the data
 		// from users table
-		UserDao.getInstance().fillCollectionWithUsers();
+		//UserDao.getInstance().fillCollectionWithUsers();
 		/////////////////////////////////////////
 		// testing registering of existing user
 		// UserBean user5 = new UserBean("filippp", "FilippKasss992",
@@ -159,8 +167,8 @@ public class Demo {
 		System.out.println(LoggingManager.getInstance().login("filippp", "FilippKasss992"));
 		/////////////////////////////////////////////
 		// testing posting
-		PostBean post = new PostBean(user2, "url", 1);
-		UserManager.getInstance().addPost(user2, post);
+		//PostBean post = new PostBean(user2, "url", 1);
+		//	UserManager.getInstance().addPost(user2, post);
 		// PostBean post2 = new PostBean(user2, "url2", 1);
 		// UserManager.getInstance().addPost(user2, post2);
 		PostBean post2 = PostDao.getInstance().getPosts().get(1);
