@@ -27,8 +27,15 @@ public class CommentBean {
 	private int id;
 	private PostBean belongedPost;
 	
+	public CommentBean(int id, UserBean poster, String content, LocalDateTime date, PostBean belongedPost) {
+		this.id = id;
+		this.poster = poster;
+		this.postTime = date;
+		this.content = content;
+		this.belongedPost=belongedPost;
+	}
+	
 	public CommentBean(UserBean poster, String content, PostBean belongedPost) {
-		
 		this.poster = poster;
 		this.postTime = LocalDateTime.now();
 		this.content = content;

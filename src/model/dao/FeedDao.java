@@ -8,33 +8,21 @@ import java.util.TreeSet;
 import model.UserBean;
 import model.post.PostBean;
 
-public class FeedDao {
+public class FeedDao extends Dao{
 	private PostDao postDao;
 
-	static Connection conn = null;
-	static Statement stmt = null;
 	private static FeedDao instance = null;
 	private TreeSet<PostBean> posts;
 
-	public static FeedDao getInstance() {
+	public static synchronized FeedDao getInstance() {
 		if (instance == null) {
 			instance = new FeedDao();
 		}
 		return instance;
 	}
 
-	public FeedDao()  {
-//		this.postDao = PostDao.getInstance();
-//		this.posts = new TreeSet<>();
-//		// STEP 2: Register JDBC driver
-//			Class.forName("com.mysql.jdbc.Driver");
-//			// STEP 3: Open a connection
-//			System.out.println("Connecting to database...");
-//			conn = DbManager.getInstance().getConnection();
-//			// STEP 4: Execute a query
-//			System.out.println("Creating statement...");
-//			stmt = conn.createStatement();
-
+	private FeedDao()  {
+		super();
 	}
 
 	public TreeSet<PostBean> getAllPostsForUser(UserBean u) {

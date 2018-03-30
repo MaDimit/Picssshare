@@ -34,12 +34,9 @@ public class PostBean {
 		protected LocalDateTime date;
 		protected UserBean poster;
 		protected String url;
-		protected HashMap<Integer, CommentBean> comments;
-		//commentsCounter is needed when user decide to delete comment, it is a criteria when clicking a button
-		protected int commentsCounter = 0;
 		
 		//????? comments sorting can be implemented with TreeSet with comparator by date or id?????
-		protected TreeSet<CommentBean> commentsById;
+		protected TreeSet<CommentBean> comments;
 		
 		//Constructor for adding new post
 		public PostBean(UserBean poster, String url) {
@@ -47,7 +44,7 @@ public class PostBean {
 			this.url = url;
 			this.likes = 0;
 			this.date = LocalDateTime.now();
-			this.comments = new HashMap<>();
+			this.comments = new TreeSet<>(new CommentBean.ComparatorByDate());
 		}
 		
 		//Constructor for creating post from DB
@@ -59,7 +56,7 @@ public class PostBean {
 		}
 		
 		public void addComment(CommentBean comment) {
-			this.comments.put(comment.getId(), comment);
+			this.comments.add(comment);
 		}
 		
 		public void removeComment(int id) {
@@ -121,29 +118,7 @@ public class PostBean {
 			this.url = url;
 		}
 
-		public HashMap<Integer, CommentBean> getComments() {
-			return comments;
-		}
 
-		public void setComments(HashMap<Integer, CommentBean> comments) {
-			this.comments = comments;
-		}
-
-		public int getCommentsCounter() {
-			return commentsCounter;
-		}
-
-		public void setCommentsCounter(int commentsCounter) {
-			this.commentsCounter = commentsCounter;
-		}
-		
-		public TreeSet<CommentBean> getCommentsById() {
-			return commentsById;
-		}
-		
-		public void setCommentsById(TreeSet<CommentBean> commentsById) {
-			this.commentsById = commentsById;
-		}
 		
 
 }

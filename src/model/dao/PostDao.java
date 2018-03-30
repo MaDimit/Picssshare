@@ -18,11 +18,10 @@ import javax.print.attribute.standard.DateTimeAtCompleted;
 import model.UserBean;
 import model.post.PostBean;
 
-public class PostDao {
+public class PostDao extends Dao{
 	// collection for storing posts
 	private HashMap<Integer, PostBean> posts;
-	private static PostDao instance = null;
-	private DbManager dbManager;
+	private static PostDao instance;
 
 	// singleton instance used in commentmanager
 	public static PostDao getInstance() {
@@ -33,12 +32,28 @@ public class PostDao {
 	}
 
 	private PostDao() {
+		super();
 		this.posts = new HashMap<>();
-		this.dbManager = DbManager.getInstance();
 	}
 
 	public HashMap<Integer, PostBean> getPosts() {
 		return posts;
+	}
+	
+	public ResultSet getAllPosts() {
+		Connection conn = dbManager.getConnection();
+		PreparedStatement stmt;
+		ResultSet rs = null;
+		
+		//Fetching users from DB
+		String sql = "SELECT * FROM posts";
+		try{
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+		}catch(SQLException e) {
+			System.out.println("Problem during filling users collection: " + e.getMessage());
+		}
+		return rs;
 	}
 	
 	public void addPost(PostBean post) throws SQLException{
@@ -83,25 +98,11 @@ public class PostDao {
 	}
 
 	public void addInLikerPostTable(UserBean liker, PostBean post) throws SQLException {
-		// update in db
-		
-//		// STEP 2: Register JDBC driver
-//
-//		try {
-//			Class.forName("com.mysql.jdbc.Driver");
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		// STEP 3: Open a connection
-//		System.out.println("Connecting to database...");
-//		conn = dbManager.getConnection();
-//		// STEP 4: Execute a query
 //		
 		Connection conn = dbManager.getConnection();
 		PreparedStatement stmt = null;
 		String sql;
-		sql = "INSERT INTO `picssshare`.`liker_post` (`liker_id`, `likedpost_id`) VALUES (?,?)";
+		sql = "INSERT INTO liker_post (`liker_id`, `likedpost_id`) VALUES (?,?)";
 		stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, liker.getId());
 		stmt.setInt(2, post.getId());

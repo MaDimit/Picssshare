@@ -10,21 +10,20 @@ import com.mysql.jdbc.Statement;
 
 import model.notification.NotificationBean;
 
-public class NotificationDao {
+public class NotificationDao extends Dao{
 	private static NotificationDao instance = null;
-	private DbManager dbManager;
-
-	// singleton instance used in commentmanager
-	public static NotificationDao getInstance() {
-		if (instance == null) {
-			instance = new NotificationDao();
-		}
-		return instance;
-	}
 
 	private NotificationDao() {
-		this.dbManager = DbManager.getInstance();
+		super();
 	}
+	
+	// singleton instance used in commentmanager
+		public static NotificationDao getInstance() {
+			if (instance == null) {
+				instance = new NotificationDao();
+			}
+			return instance;
+		}
 
 	public void addNotificationInDB(NotificationBean n) throws SQLException {
 		Connection conn = dbManager.getConnection();
