@@ -39,7 +39,9 @@ public class UserManager {
 		if (subscribedTo == null && subscriber == null) {
 			System.out.println("Subscriber or subscribed is null");
 			return false;
-		}
+		}	
+			//TODO Check if already not in subscriptions
+			
 			//add in DB
 			try {
 				UserDao.getInstance().addSubscription(subscriber, subscribedTo);

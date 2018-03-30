@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -90,8 +91,8 @@ public class UserBean {
 		return this;
 	}
 	
-	public UserBean posts(TreeSet<PostBean> posts) {
-		this.posts = posts;
+	public UserBean posts(Collection<PostBean> posts) {
+		this.posts.addAll(posts);
 		return this;
 	}
 	

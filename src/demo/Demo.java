@@ -35,6 +35,9 @@ public class Demo {
 		
 		//Subscription testing
 		subscribe();
+		
+		//Post adding
+		addPosts();
 	}
 	
 	private static void register() {
@@ -75,6 +78,10 @@ public class Demo {
 		UserBean oneMoreUser = lm.login("Chocho1", "4343jh24aS");
 		
 		um.subscribe(oneMoreUser, subscriber);
+		
+	}
+	
+	private static void addPosts() {
 		
 	}
 	

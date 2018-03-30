@@ -2,9 +2,11 @@ package model.dao;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import model.UserBean;
+import model.post.PostBean;
 
 public class UserDao {
 
@@ -72,6 +74,7 @@ public class UserDao {
 						.firstName(firstName)
 						.lastName(lastName)
 						.email(email);
+						//.posts(PostDao.getInstance().getUserPostsById(id));
 				//TODO add user collections;
 				users.put(username, user);
 			}
