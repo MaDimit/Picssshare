@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,50 +58,27 @@ public class PostDao {
 	        throw new SQLException("Creating user failed, no ID obtained.");
 	     }
 	}
-
-	public void deletePost(PostBean p) throws Exception {
-
-		// remove from collection
-		this.posts.remove(p.getId());
-		// remove from db
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
-
-		Class.forName("com.mysql.jdbc.Driver");
-		// STEP 3: Open a connection
-		System.out.println("Connecting to database...");
-		conn = dbManager.getConnection();
-		// STEP 4: Execute a query
-		System.out.println("Creating statement...");
-		stmt = conn.createStatement();
-
-		String sql;
-		sql = "Delete from `picssshare_test`.`post` where id=" + p.getId();
-
-		stmt.executeUpdate(sql);
-
+	
+	
+	public void deletePost(PostBean post) throws SQLException{
+		deletePost(post.getId());
 	}
-
-	public void updateLikes(PostBean post) throws Exception {
-
-		// update in db
-		Connection conn = null;
-		Statement stmt = null;
-		// STEP 2: Register JDBC driver
-
-		Class.forName("com.mysql.jdbc.Driver");
-		// STEP 3: Open a connection
-		System.out.println("Connecting to database...");
-		conn = dbManager.getConnection();
-		// STEP 4: Execute a query
-		System.out.println("Creating statement...");
-		stmt = conn.createStatement();
-
-		String sql;
-		sql = "UPDATE `picssshare`.`post` SET `post`.`likes` =" + post.getLikes() + " WHERE id=" + post.getId();
-		stmt.executeUpdate(sql);
-
+	
+	public void deletePost(int id) throws SQLException{
+		Connection conn = dbManager.getConnection();
+		String sql = "DELETE FROM posts WHERE id=(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, id);
+		stmt.executeUpdate();
+	}
+	
+	public void updateLikes(PostBean post) throws SQLException {
+		Connection conn = dbManager.getConnection();
+		String sql = "UPDATE posts SET likes = (?) WHERE id = (?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, post.getLikes());
+		stmt.setInt(2, post.getId());
+		stmt.executeUpdate();
 	}
 
 	public void addInLikerPostTable(UserBean liker, PostBean post) throws SQLException {

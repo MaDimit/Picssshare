@@ -124,6 +124,8 @@ public class Demo {
 		
 		pm.addPost(user1, "some photo url");
 		pm.addPost(user2, "url of post");
+		
+		pm.deletePost(1);
 	}
 	
 

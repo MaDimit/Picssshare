@@ -96,6 +96,11 @@ public class PostManager {
 			System.out.println("Post url is empty.");
 			return false;
 		}
+		if(user == null) {
+			System.out.println("Adding post is not successfull, user is null");
+			return false;
+		}
+		
 		PostBean post = new PostBean(user, url);
 		
 		try {
@@ -107,6 +112,21 @@ public class PostManager {
 		user.addPost(post);
 		System.out.println("Post added by " + user.getUsername());
 		return true;	
+	}
+	
+	public boolean deletePost(int postID) {
+		if(postID <= 0) {
+			System.out.println("Negative id value");
+			return false;
+		}
+		try {
+			PostDao.getInstance().deletePost(postID);
+		}catch(SQLException e) {
+			System.out.println("Problem during post deleting: " + e.getMessage());
+			return false;
+		}
+		
+		return true;
 	}
 
 	public void showInfo(PostBean post) {
