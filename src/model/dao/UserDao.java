@@ -10,13 +10,11 @@ import model.post.PostBean;
 
 public class UserDao extends Dao{
 
-	public HashMap<String, UserBean> users;
 	private static UserDao instance = null;
 
 	// singleton
 	private UserDao() {
 		super();
-		this.users = null;
 	}
 
 	// method for printing all the users ## maybe used only when testing the
@@ -32,26 +30,6 @@ public class UserDao extends Dao{
 			instance = new UserDao();
 		}
 		return instance;
-	}
-
-	public HashMap<String, UserBean> getUsers() {
-		return users;
-	}
-	
-	public ResultSet getAllUsers() {
-		Connection conn = dbManager.getConnection();
-		PreparedStatement stmt;
-		ResultSet rs = null;
-		
-		//Fetching users from DB
-		String sql = "SELECT * FROM users";
-		try{
-			stmt = conn.prepareStatement(sql);
-			rs = stmt.executeQuery();
-		}catch(SQLException e) {
-			System.out.println("Problem during filling users collection: " + e.getMessage());
-		}
-		return rs;
 	}
 
 	
