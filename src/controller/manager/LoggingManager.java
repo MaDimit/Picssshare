@@ -150,7 +150,7 @@ public class LoggingManager {
 			if(!username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")) {
 				throw new InvalidUsernameCharactersException();
 			}
-			if(UserDao.getInstance().getUsers().containsKey(username)) {
+			if(CollectionsManager.getInstance().alreadyExists(username)) {
 				throw new UsernameAlreadyExistsException();
 			}
 			return true;
@@ -191,7 +191,7 @@ public class LoggingManager {
 			
 		//Logging by username and password
 		public UserBean login(String username, String password) {
-			UserBean u = UserDao.getInstance().getUsers().get(username);
+			UserBean u = CollectionsManager.getInstance().getUser(username);
 			if(u == null) {
 				System.out.println("Wrong username!");
 				return null;

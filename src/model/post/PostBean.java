@@ -59,8 +59,8 @@ public class PostBean {
 			this.comments.add(comment);
 		}
 		
-		public void removeComment(int id) {
-			this.comments.remove(id);
+		public void removeComment(CommentBean comment) {
+			this.comments.remove(comment);
 		}
 		
 		public void like() {

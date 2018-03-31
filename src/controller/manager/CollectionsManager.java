@@ -106,11 +106,15 @@ public class CollectionsManager {
 		try {
 			ResultSet rs = Dao.getAll(Tables.SUBSCRIPTIONS);
 			int subscriberID;
-			int subscribedID;
+			int subscribedtoID;
 			while (rs.next()) {
 				subscriberID = rs.getInt("subscriber_id");
-				subscribedID = rs.getInt("subscribed_id");
-				UserManager.getInstance().subscribe(usersByID.get(subscriberID), usersByID.get(subscribedID));
+				subscribedtoID = rs.getInt("subscribedto_id");
+				UserBean subscriber = usersByID.get(subscriberID);
+				UserBean subscribedto = usersByID.get(subscribedtoID);
+				subscriber.addSubscribtion(subscribedto);
+				subscribedto.addSubscriber(subscriber);
+				
 			}
 		} catch (SQLException e) {
 			System.out.println("Problem during subscriptions adding: " + e.getMessage());
@@ -162,8 +166,8 @@ public class CollectionsManager {
 				id = rs.getInt("id");
 				username = rs.getString("username");
 				password = rs.getString("password");
-				firstName = rs.getString("firstName");
-				lastName = rs.getString("lastName");
+				firstName = rs.getString("first_name");
+				lastName = rs.getString("last_name");
 				email = rs.getString("email");
 				UserBean user = new UserBean().id(id).username(username).password(password).firstName(firstName)
 						.lastName(lastName).email(email);
@@ -211,10 +215,10 @@ public class CollectionsManager {
 			int postID;
 			while (rs.next()) {
 				id = rs.getInt("id");
-				posterID = rs.getInt("comment_poster_id");
-				postTime = rs.getTimestamp("postTime").toLocalDateTime();
+				posterID = rs.getInt("poster_id");
+				postTime = rs.getTimestamp("date").toLocalDateTime();
 				content = rs.getString("content");
-				postID = rs.getInt("belonged_post_id");
+				postID = rs.getInt("post_id");
 				CommentBean comment = new CommentBean(id, usersByID.get(posterID), content, postTime,
 						postsByID.get(postID));
 				comments.add(comment);
@@ -284,6 +288,10 @@ public class CollectionsManager {
 
 	public HashSet<PostBean> getAllPosts() {
 		return this.posts;
+	}
+	
+	public boolean alreadyExists(String username) {
+		return usersByUsername.containsKey(username);
 	}
 }
 	 

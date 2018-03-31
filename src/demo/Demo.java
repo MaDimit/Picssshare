@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.TreeSet;
 
+import controller.manager.CollectionsManager;
 import controller.manager.CommentManager;
 import controller.manager.LoggingManager;
 import controller.manager.PostManager;
@@ -22,7 +23,41 @@ public class Demo {
 
 	public static void main(String[] args) throws Exception {
 		// firstDemo();
-		secondDemo();
+		//secondDemo();
+		
+		thirdDemo();
+	}
+	
+	public static void thirdDemo() {
+		UserManager um = UserManager.getInstance();
+		PostManager pm = PostManager.getInstance();
+		CommentManager cm = CommentManager.getInstance();
+		LoggingManager lm = LoggingManager.getInstance();
+		CollectionsManager colm = CollectionsManager.getInstance();
+		
+		//Registration
+		//lm.register("Maxim", "pass1234QQ", "myEmail@gmail.com");
+		//lm.register("Phillip", "QWErty123", "hisEmail@gmail.com");
+		// -------------- successfull! ------------ //
+		
+		//Loggging
+		UserBean u1 = lm.login("Maxim", "pass1234QQ");
+		UserBean u2 = lm.login("Phillip", "QWErty123");
+		// ------------ successfull! --------------//
+		
+		//Adding posts
+		//pm.addPost(u1, "url of post 1");
+		//pm.addPost(u2, "url of post 2");
+		// ------------ successfull --------------//
+		
+		//Subscription
+		//um.subscribe(u1, u2); // adding to DB
+		//System.out.println(u1.getSubscriptions()); // Checking if collection manager successfully added subscriptions
+		// ------------ successfull --------------//
+		
+		//Adding comments to post
+		cm.createComment("Comment text!", u2, colm.getPost(2));
+		// Cannot add or update a child row: a foreign key constraint fails (`Picssshare`.`comments`, CONSTRAINT `belonged_post_id` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
 	}
 
 	private static void secondDemo() {

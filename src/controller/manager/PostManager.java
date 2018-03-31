@@ -88,9 +88,6 @@ public class PostManager {
 //		return false;
 //	}
 
-	public void deleteComment(PostBean post, int id) {
-		post.removeComment(id);
-	}
 	
 	public boolean addPost(UserBean user, String url) {
 		if (url == null || url.isEmpty()) {

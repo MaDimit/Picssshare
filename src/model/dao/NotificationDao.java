@@ -27,7 +27,7 @@ public class NotificationDao extends Dao{
 
 	public void addNotificationInDB(NotificationBean n) throws SQLException {
 		Connection conn = dbManager.getConnection();
-		String sql = "INSERT INTO `picssshare`.`notifications` (`date`, `seen`, `receiver_id`, `causer_id`, `description`) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO notifications (`date`, `seen`, `receiver_id`, `causer_id`, `description`) VALUES (?,?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		stmt.setObject(1, n.getDate());
 		stmt.setInt(2, n.isSeen());

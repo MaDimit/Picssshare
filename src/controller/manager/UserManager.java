@@ -64,12 +64,12 @@ public class UserManager {
 
 			System.out.println(subscriber.getUsername() + " subscribed to " + subscribedTo.getUsername());
 			
-			try {
-				NotificationDao.getInstance().addNotificationInDB(notification);
-			} catch (SQLException e) {
-				System.out.println("Error while inserting notification in DB.");
-				e.printStackTrace();
-			}
+//			try {
+//				NotificationDao.getInstance().addNotificationInDB(notification);
+//			} catch (SQLException e) {
+//				System.out.println("Error while inserting notification in DB.");
+//				e.printStackTrace();
+//			}
 			return true;
 	}
 	

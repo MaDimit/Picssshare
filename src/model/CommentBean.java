@@ -6,6 +6,7 @@ import java.util.Comparator;
 import model.post.PostBean;
 
 public class CommentBean {
+	
 	public static class ComparatorByDate implements Comparator<CommentBean>{
 		@Override
 		public int compare(CommentBean comment1, CommentBean comment2) {
@@ -27,6 +28,7 @@ public class CommentBean {
 	private int id;
 	private PostBean belongedPost;
 	
+	//Creating existing comment from DB
 	public CommentBean(int id, UserBean poster, String content, LocalDateTime date, PostBean belongedPost) {
 		this.id = id;
 		this.poster = poster;
@@ -35,6 +37,7 @@ public class CommentBean {
 		this.belongedPost=belongedPost;
 	}
 	
+	//Creating new comment
 	public CommentBean(UserBean poster, String content, PostBean belongedPost) {
 		this.poster = poster;
 		this.postTime = LocalDateTime.now();

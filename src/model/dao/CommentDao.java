@@ -1,17 +1,20 @@
 package model.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.ZoneOffset;
+
 import model.CommentBean;
 import model.post.PostBean;
-public class CommentDao {
+public class CommentDao extends Dao{
+	
 	private static CommentDao instance = null;
-	private DbManager dbManager;
 	
 	private CommentDao() {
-		this.dbManager = DbManager.getInstance();
 	}
 
 	// singleton instance used in commentdao
@@ -21,67 +24,37 @@ public class CommentDao {
 		}
 		return instance;
 	}
-
-	public void addCommentInDB(PostBean p, CommentBean c) throws Exception {
-		// STEP 2: Register JDBC driver
-		Connection conn = null;
-		Statement stmt = null;
-		
-			Class.forName("com.mysql.jdbc.Driver");
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-			conn = dbManager.getConnection();
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement();
-
-		
-
-		// insert in db
-		
-			String sql;
-			sql = "INSERT INTO `picssshare_test`.`comments` (`comment_poster_id`,`postTime`, `content`, `belonged_post_id`) VALUES ('"
-					+ c.getPoster().getId() + "', '" + c.getPostTime() + "', '" + c.getContent() + "', '"
-					+ c.getBelongedPost().getId() + "')";
-			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = stmt.getGeneratedKeys();
-			int id = 0;
-			if (rs != null && rs.next()) {
-				id = rs.getInt(1);
-			}
-			c.setId(id);
-
-		// put in collection
-				if (PostDao.getInstance().getPosts().containsKey(p.getId())) {
-					PostDao.getInstance().getPosts().get(p.getId()).addComment(c);
-				} else {
-					System.out.println("No such post!");
-				}
-	}
-
-	public void deleteComment(CommentBean c) throws Exception {
-		Connection conn = null;
-		Statement stmt = null;
 	
-			Class.forName("com.mysql.jdbc.Driver");
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-			conn = dbManager.getConnection();
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement();
-
-
-		// remove comment from post collection
-		PostDao.getInstance().getPosts().get(c.getBelongedPost().getId()).removeComment(c.getId());
-
-		// remove from db
+	public void addComment(CommentBean comment) throws SQLException{
+		Connection conn = dbManager.getConnection();
+		String sql = "INSERT INTO comments (poster_id, date, content, post_id) VALUES (?,?,?,?)";
+		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		stmt.setInt(1, comment.getPoster().getId());
+		stmt.setTimestamp(2, Timestamp.from(comment.getPostTime().toInstant(ZoneOffset.ofHours(0))));
+		stmt.setString(3, comment.getContent());
+		stmt.setInt(4, comment.getBelongedPost().getId());
+		stmt.executeUpdate();
 		
-			String sql;
-			sql = "DELETE FROM `picssshare_test`.`comments` WHERE id=" + c.getId();
-			stmt.executeUpdate(sql);
-
-
+		ResultSet generatedKeys = stmt.getGeneratedKeys();
+		if (generatedKeys.next()) {
+			comment.setId(generatedKeys.getInt(1));
+	    }else {
+	       throw new SQLException("Creating comment failed, no ID obtained.");
+	    }
+		
+		//adding comment to post
+		comment.getBelongedPost().addComment(comment);
+	}
+	
+	public void deleteComment(CommentBean comment) throws SQLException{
+		Connection conn = dbManager.getConnection();
+		String sql = "DELETE FROM comments WHERE id=(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, comment.getId());
+		stmt.executeUpdate();
+		
+		//removing comment from post
+		comment.getBelongedPost().removeComment(comment);
 	}
 
 }

@@ -17,13 +17,6 @@ public class UserDao extends Dao{
 		super();
 	}
 
-	// method for printing all the users ## maybe used only when testing the
-	public void printCollectionInfo() {
-		for (Map.Entry<String, UserBean> entry : this.users.entrySet()) {
-			System.out.println(entry.getKey() + " " + entry.getValue().getPassword());
-		}
-	}
-
 	// singleton instance used in usermanager
 	public static synchronized UserDao getInstance() {
 		if (instance == null) {
@@ -58,7 +51,7 @@ public class UserDao extends Dao{
 	
 	public void addSubscription(UserBean subscriber, UserBean subscribed) throws SQLException{
 		Connection conn = dbManager.getConnection();
-		String sql = "INSERT INTO subscriber_subscribed (subscriber_id, subscribed_id) VALUES (?,?)";
+		String sql = "INSERT INTO subscriber_subscribed (subscriber_id, subscribedto_id) VALUES (?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, subscriber.getId());
 		stmt.setInt(2, subscribed.getId());

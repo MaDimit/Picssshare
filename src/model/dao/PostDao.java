@@ -97,8 +97,7 @@ public class PostDao extends Dao{
 		stmt.executeUpdate();
 	}
 
-	public void addInLikerPostTable(UserBean liker, PostBean post) throws SQLException {
-//		
+	public void addInLikerPostTable(UserBean liker, PostBean post) throws SQLException {		
 		Connection conn = dbManager.getConnection();
 		PreparedStatement stmt = null;
 		String sql;
@@ -108,19 +107,4 @@ public class PostDao extends Dao{
 		stmt.setInt(2, post.getId());
 		stmt.executeUpdate();	
 	}
-
-	// public HashSet<PostBean> getUserPostsById(int id) throws SQLException{
-	// HashSet<PostBean> posts = new HashSet<>();
-	// Connection conn = dbManager.getConnection();
-	// String sql = "SELECT * FROM posts WHERE id=(?)";
-	// PreparedStatement stmt = conn.prepareStatement(sql);
-	// stmt.setInt(1, id);
-	// ResultSet rs = stmt.executeQuery();
-	//
-	// while(rs.next()) {
-	// PostBean post = new PostBean(poster, url, uid)
-	// }
-	//
-	// return posts;
-	// }
 }
