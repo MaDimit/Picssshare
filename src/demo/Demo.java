@@ -36,28 +36,35 @@ public class Demo {
 		CollectionsManager colm = CollectionsManager.getInstance();
 		
 		//Registration
-		//lm.register("Maxim", "pass1234QQ", "myEmail@gmail.com");
-		//lm.register("Phillip", "QWErty123", "hisEmail@gmail.com");
+//		lm.register("Maxim", "pass1234QQ", "myEmail@gmail.com");
+//		lm.register("Phillip", "QWErty123", "hisEmail@gmail.com");
 		// -------------- successfull! ------------ //
 		
 		//Loggging
 		UserBean u1 = lm.login("Maxim", "pass1234QQ");
-		UserBean u2 = lm.login("Phillip", "QWErty123");
+		UserBean u2 = lm.login("Phillip", "Pass112233");
 		// ------------ successfull! --------------//
 		
 		//Adding posts
-		//pm.addPost(u1, "url of post 1");
-		//pm.addPost(u2, "url of post 2");
+//		pm.addPost(u1, "url of post 1");
+//		pm.addPost(u2, "url of post 2");
 		// ------------ successfull --------------//
 		
 		//Subscription
-		//um.subscribe(u1, u2); // adding to DB
-		//System.out.println(u1.getSubscriptions()); // Checking if collection manager successfully added subscriptions
+//		um.subscribe(u1, u2); // adding to DB
+//		System.out.println(u1.getSubscriptions()); // Checking if collection manager successfully added subscriptions
 		// ------------ successfull --------------//
 		
 		//Adding comments to post
-		cm.createComment("Comment text!", u2, colm.getPost(2));
-		// Cannot add or update a child row: a foreign key constraint fails (`Picssshare`.`comments`, CONSTRAINT `belonged_post_id` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
+//		cm.createComment("Comment text!", u2, colm.getPost(2));
+		
+		//UPDATE PROFILE INFO
+		
+		//fill the fileds with new values, the old ones stay with null
+//		UserManager.getInstance().updateProfileInfo(u2, null, "Filip", "Kasapov", null);
+		
+		//-------------successfull ----------------//
+		
 	}
 
 	private static void secondDemo() {
@@ -193,8 +200,8 @@ public class Demo {
 		// LoggingManager.getInstance().register(user6);
 		///////////////////////////////////////////
 		// testing subscribing
-		UserBean user = UserDao.getInstance().getUsers().get("filippp");
-		UserBean user2 = UserDao.getInstance().getUsers().get("filipppp");
+		//UserBean user = UserDao.getInstance().getUsers().get("filippp");
+		//UserBean user2 = UserDao.getInstance().getUsers().get("filipppp");
 
 		// UserManager.getInstance().subscribe(user, user2);
 		////////////////////////////////////////////////

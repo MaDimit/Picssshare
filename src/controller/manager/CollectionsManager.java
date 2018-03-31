@@ -19,6 +19,7 @@ public class CollectionsManager {
 
 	private HashMap<Integer, UserBean> usersByID;
 	private HashMap<String, UserBean> usersByUsername;
+	private HashMap<String, UserBean> usersByEmail;
 	private HashMap<Integer, PostBean> postsByID;
 
 	private static CollectionsManager instance;
@@ -49,6 +50,7 @@ public class CollectionsManager {
 		this.users = getUsers();
 		createUsersById();
 		createUsersByUsername();
+		createUsersByEmail();
 		// Creating posts without comments
 		this.posts = getPosts();
 		createPostsById();
@@ -72,6 +74,12 @@ public class CollectionsManager {
 		this.usersByID = new HashMap<>();
 		for (UserBean u : this.users) {
 			this.usersByID.put(u.getId(), u);
+		}
+	}
+	private void createUsersByEmail() {
+		this.usersByEmail = new HashMap<>();
+		for(UserBean u: this.users) {
+			this.usersByEmail.put(u.getEmail(), u);
 		}
 	}
 	
@@ -292,6 +300,10 @@ public class CollectionsManager {
 	
 	public boolean alreadyExists(String username) {
 		return usersByUsername.containsKey(username);
+	}
+
+	public boolean alreadyExistsEmail(String email) {
+		return this.usersByEmail.containsKey(email);
 	}
 }
 	 

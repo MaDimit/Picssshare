@@ -121,6 +121,21 @@ public class UserManager {
 			System.out.println("===" + u.getUsername() + "====");
 		}
 	}
+	
+	//username and id are supposed not to be eddited
+		public void updateProfileInfo(UserBean u, String password, String first_name, String last_name, String email) {
+			try {
+				UserDao.getInstance().executeProfileUpdate(u, password, first_name, last_name, email);
+			} catch (SQLException e) {
+				System.out.println("Sorry, problem with updating your profile.");
+				e.printStackTrace();
+			}
+			catch(Exception e) {
+				System.out.println("Sorry, something went wrong!");
+			}
+		}
+
+
 
 	// ==================REGISTER/LOGIN===============//
 	
