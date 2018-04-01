@@ -129,6 +129,10 @@ public class PostBean {
 			return commentsById;
 		}
 
+		public void showInfo() {
+			System.out.println("=========POST "+this.id+"==========");
+			System.out.println();
+		}
 
 		
 

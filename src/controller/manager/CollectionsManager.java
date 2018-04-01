@@ -244,6 +244,10 @@ public class CollectionsManager {
 		return commentsById;
 	}
 	
+	public HashMap<Integer, UserBean> getUsersByID() {
+		return usersByID;
+	}
+	
 	public HashMap<Integer, PostBean> getPostsByID() {
 		return postsByID;
 	}

@@ -14,8 +14,10 @@ import controller.manager.PostManager;
 import controller.manager.UserManager;
 import model.CommentBean;
 import model.UserBean;
+import model.dao.FeedDao;
 import model.dao.PostDao;
 import model.dao.UserDao;
+import model.feed.TrendingFeedBean;
 import model.post.PostBean;
 
 public class Demo {
@@ -51,7 +53,7 @@ public class Demo {
 		// ------------ successfull! --------------//
 		
 		//Adding posts
-//		pm.addPost(u1, "url of post 1");
+//		pm.addPost(u2, "url of post 1");
 //		pm.addPost(u2, "url of post 2");
 //		pm.addPost(u3, "url of post 3");
 //		pm.addPost(u4, "url of post 4");
@@ -96,13 +98,13 @@ public class Demo {
 		// ------------ successfull --------------//
 		
 		//Adding comments to post
-//		cm.createComment("Comment 1!", u2, colm.getPost(1));
+//		cm.createComment("Comment 1!", u2, colm.getPost(26));
 //
-//		cm.createComment("Comment 2!", u3, colm.getPost(1));
+//		cm.createComment("Comment 2!", u3, colm.getPost(26));
 //
-//		cm.createComment("Comment 3!", u4, colm.getPost(1));
-//		cm.createComment("Comment 4!", u1, colm.getPost(2));
-//		cm.createComment("Comment 5!", u2, colm.getPost(2));
+//		cm.createComment("Comment 3!", u4, colm.getPost(26));
+//		cm.createComment("Comment 4!", u1, colm.getPost(26));
+//		cm.createComment("Comment 5!", u2, colm.getPost(26));
 //		cm.createComment("Comment 6!", u3, colm.getPost(2));
 //		cm.createComment("Comment 7!", u4, colm.getPost(2));
 		
@@ -121,10 +123,14 @@ public class Demo {
 //		UserManager.getInstance().updateProfileInfo(u2, null, "Filip", "Kasapov", null);
 		//-------------successfull ----------------//
 		
+		//Generate main feed
 //		FeedManager f = new FeedManager();
 //		f.displayPostsInfo(f.generateMainFeed(u2));
 		
 		//-------------successfull-------------//
+//		Generate trending feed for one week before
+//		f.displayTrendingPostInfo(f.generateTrendingFeed());
+		//-------------successfull------------//
 		
 	}
 }
