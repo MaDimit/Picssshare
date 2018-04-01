@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import model.CommentBean;
 import model.UserBean;
@@ -56,7 +57,7 @@ public class CollectionsManager {
 		createPostsById();
 
 		// Creating comments and adding them to posts
-		HashSet<CommentBean> comments = getComments();
+		HashMap<Integer,CommentBean> comments = getComments();
 		addCommentsToPosts(comments);
 
 		// adding Posts to Users
@@ -98,9 +99,12 @@ public class CollectionsManager {
 		}
 	}
 
-	private void addCommentsToPosts(HashSet<CommentBean> comments) {
-		for (CommentBean c : comments) {
-			c.getBelongedPost().addComment(c);
+	private void addCommentsToPosts(HashMap<Integer, CommentBean> comments) {
+//		for (CommentBean c : comments) {
+//			c.getBelongedPost().addComment(c);
+//		}
+		for(Map.Entry<Integer, CommentBean> entry : comments.entrySet()) {
+			entry.getValue().getBelongedPost().addComment(entry.getValue());
 		}
 	}
 
@@ -212,8 +216,9 @@ public class CollectionsManager {
 		return posts;
 	}
 
-	private HashSet<CommentBean> getComments() {
+	private HashMap<Integer, CommentBean> getComments() {
 		HashSet<CommentBean> comments = new HashSet<>();
+		HashMap<Integer,CommentBean> commentsById = new HashMap<>();
 		try {
 			ResultSet rs = Dao.getAll(Tables.COMMENTS);
 			int id;
@@ -229,12 +234,18 @@ public class CollectionsManager {
 				postID = rs.getInt("post_id");
 				CommentBean comment = new CommentBean(id, usersByID.get(posterID), content, postTime,
 						postsByID.get(postID));
-				comments.add(comment);
+				//comments.add(comment);
+				commentsById.put(id, comment);
+				//this.postsByID.get(postID).addComment(comment);
 			}
 		} catch (SQLException e) {
 			System.out.println("Problem during filling comments collection: " + e.getMessage());
 		}
-		return comments;
+		return commentsById;
+	}
+	
+	public HashMap<Integer, PostBean> getPostsByID() {
+		return postsByID;
 	}
 
 	// ================ Interfaces for objects access ================ //// =============== Interfaces for working with CollectionsManager ================= //

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import controller.manager.PostManager;
@@ -36,7 +37,8 @@ public class PostBean {
 		protected String url;
 		
 		//????? comments sorting can be implemented with TreeSet with comparator by date or id?????
-		protected TreeSet<CommentBean> comments;
+		//protected TreeSet<CommentBean> comments;
+		protected TreeMap<Integer, CommentBean> commentsById;
 		
 		//Constructor for adding new post
 		public PostBean(UserBean poster, String url) {
@@ -44,7 +46,8 @@ public class PostBean {
 			this.url = url;
 			this.likes = 0;
 			this.date = LocalDateTime.now();
-			this.comments = new TreeSet<>(new CommentBean.ComparatorByDate());
+		//	this.comments = new TreeSet<>(new CommentBean.ComparatorByDate());
+			this.commentsById = new TreeMap<>();
 		}
 		
 		//Constructor for creating post from DB
@@ -56,11 +59,15 @@ public class PostBean {
 		}
 		
 		public void addComment(CommentBean comment) {
-			this.comments.add(comment);
+			this.commentsById.put(comment.getId(), comment);
 		}
 		
-		public void removeComment(CommentBean comment) {
-			this.comments.remove(comment);
+//		public void removeComment(CommentBean comment) {
+//			this.comments.remove(comment);
+//		}
+		
+		public void removeCommentByID(int id) {
+			this.commentsById.remove(id);
 		}
 		
 		public void like() {
@@ -116,6 +123,10 @@ public class PostBean {
 
 		public void setUrl(String url) {
 			this.url = url;
+		}
+		
+		public TreeMap<Integer, CommentBean> getCommentsById() {
+			return commentsById;
 		}
 
 

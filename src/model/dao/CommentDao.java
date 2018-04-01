@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.ZoneOffset;
 
+import controller.manager.CollectionsManager;
 import model.CommentBean;
 import model.post.PostBean;
 public class CommentDao extends Dao{
@@ -30,7 +31,7 @@ public class CommentDao extends Dao{
 		String sql = "INSERT INTO comments (poster_id, date, content, post_id) VALUES (?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		stmt.setInt(1, comment.getPoster().getId());
-		stmt.setTimestamp(2, Timestamp.from(comment.getPostTime().toInstant(ZoneOffset.ofHours(0))));
+		stmt.setObject(2, comment.getPostTime());
 		stmt.setString(3, comment.getContent());
 		stmt.setInt(4, comment.getBelongedPost().getId());
 		stmt.executeUpdate();
@@ -55,6 +56,21 @@ public class CommentDao extends Dao{
 		
 		//removing comment from post
 		comment.getBelongedPost().removeComment(comment);
+	}
+	public void deleteCommentByID(int postID, int id) throws SQLException{
+
+		
+		Connection conn = dbManager.getConnection();
+		String sql = "DELETE FROM comments WHERE id=(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, id);
+		stmt.executeUpdate();
+		
+
+		//removing comment from post
+		CollectionsManager.getInstance().getPostsByID().get(postID).removeCommentByID(id);
+		
+		
 	}
 
 }

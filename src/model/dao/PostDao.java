@@ -19,7 +19,7 @@ import model.UserBean;
 import model.post.PostBean;
 
 public class PostDao extends Dao{
-	// collection for storing posts
+	// collection for storing posts --------> WHAT FOR ? CollectionsManager store the posts ? remove it ? 
 	private HashMap<Integer, PostBean> posts;
 	private static PostDao instance;
 
@@ -61,7 +61,7 @@ public class PostDao extends Dao{
 		String sql = "INSERT INTO posts (likes,  date, poster_id, url) VALUES (?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 		stmt.setInt(1, post.getLikes());
-		stmt.setTimestamp(2,Timestamp.from(post.getDate().toInstant(ZoneOffset.ofHours(0))));
+		stmt.setObject(2, post.getDate());
 		stmt.setInt(3, post.getPoster().getId());
 		stmt.setString(4, post.getUrl());
 		stmt.executeUpdate();

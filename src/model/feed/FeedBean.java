@@ -12,7 +12,7 @@ public enum Type{MAIN_FEED, TRENDING_FEED}
 	protected TreeSet<PostBean> posts;
 
 	public FeedBean() {
-		this.posts = new TreeSet<>(new PostBean.ComparatorByCoefficient());
+		this.posts = new TreeSet<>(new PostBean.ComparatorByDate());
 	}
 	
 	public void addPost(PostBean post) {

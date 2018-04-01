@@ -41,13 +41,17 @@ public class UserManager {
 			System.out.println("Subscriber or subscribed is null");
 			return false;
 		}	
-			//TODO Check if already not in subscriptions
+			
+			NotificationBean n = new SubscriptionNotificationBean(subscriber, subscribedTo);
+			NotificationManager.getInstance().proceedNotification(n);
 			
 			//add in DB
 			try {
 				UserDao.getInstance().addSubscription(subscriber, subscribedTo);
 			} catch (SQLException e) {
+				System.out.println("Maybe you have already subscribed to this user!");
 				System.out.println("Adding subscribtin to DB went wrong: " + e.getMessage());
+				
 				return false;
 			}
 

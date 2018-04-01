@@ -43,7 +43,10 @@ public class CommentManager {
 		}
 		return true;
 	}
-	
+	/*
+	 * Not sure how the comment will be deleted by id or object. How the information from the frontend will come here
+	 * 
+	 */
 	public boolean deleteComment(CommentBean comment) {
 		if(comment == null) {
 			System.out.println("Comment is null");
@@ -54,6 +57,22 @@ public class CommentManager {
 			CommentDao.getInstance().deleteComment(comment);
 		}catch(SQLException e) {
 			System.out.println("Problem during comment deletion from DB: " + e.getMessage());
+		}
+		
+		return true;
+	}
+	
+	public boolean deleteCommentById(int postID, int commentID) {
+		if(commentID < 0 ) {
+			System.out.println("Comment id is invalid");
+			return false;
+		}
+		
+		try {
+			CommentDao.getInstance().deleteCommentByID(postID,commentID);
+		}catch(SQLException e) {
+			System.out.println("Problem during comment deletion from DB: " + e.getMessage());
+			return false;
 		}
 		
 		return true;

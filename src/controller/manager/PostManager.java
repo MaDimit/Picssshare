@@ -5,9 +5,13 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import model.CommentBean;
 import model.UserBean;
 import model.dao.PostDao;
+import model.notification.LikeNotificationBean;
+import model.notification.NotificationBean;
 import model.post.PostBean;
 
 public class PostManager {
@@ -47,15 +51,22 @@ public class PostManager {
 	// TODO validation (May be done in JS)
 	public void addLike(UserBean liker, PostBean post) {
 		if(post!=null) {
-			System.out.println(post.getId());
-			PostDao.getInstance().getPosts().get(post.getId()).like();
+			CollectionsManager.getInstance().getPostsByID().get(post.getId()).like();
+			NotificationBean n = new LikeNotificationBean(liker, post.getPoster(), post);
+			NotificationManager.getInstance().proceedNotification(n);
 			try {
-				PostDao.getInstance().updateLikes(post);
 				PostDao.getInstance().addInLikerPostTable(liker, post);
-			} catch (Exception e) {
+				PostDao.getInstance().updateLikes(post);
+				
+			} catch(MySQLIntegrityConstraintViolationException e) {
+				System.out.println("Sorry, you have already added a like to this post!");
+			}
+			
+			catch (Exception e) {
 				System.out.println("Error with updating likes in DB.");
 				e.printStackTrace();
 			}
+		
 		}
 		else {
 			System.out.println("No such post found!");
@@ -65,7 +76,7 @@ public class PostManager {
 	// TODO validation (May be done in JS)
 	public void addDislike(PostBean post) {
 		if(post!=null) {
-			PostDao.getInstance().getPosts().get(post.getId()).dislike();
+			CollectionsManager.getInstance().getPostsByID().get(post.getId()).dislike();
 			try {
 				PostDao.getInstance().updateLikes(post);
 			} catch (Exception e) {
@@ -134,7 +145,7 @@ public class PostManager {
 		System.out.println("Poster: " + post.getPoster().getUsername());
 		System.out.println("URL: " + post.getUrl());
 		System.out.println("Comments: ");
-		for (Map.Entry<Integer, CommentBean> entry : post.getComments().entrySet()) {
+		for (Map.Entry<Integer, CommentBean> entry : post.getCommentsById().entrySet()) {
 			System.out.print(entry.getValue().getPoster().getUsername());
 			System.out.print(": " + entry.getValue().getContent());
 			System.out.print("  --> posted on: " + entry.getValue().getPostTime());
