@@ -39,14 +39,14 @@ public class PostManager {
 		return instance;
 	}
 
-	public double generateCoefficient(PostBean post) {
-		long secondsDifference = ChronoUnit.SECONDS.between(post.getDate(), LocalDateTime.now());
-		System.out.println("Seconds difference: " + secondsDifference);
-		double coefficient = (post.getLikes() * LIKES_COEFFICIENT + post.getCommentsCounter() * COMMENTS_COEFFICIENT)
-				/ secondsDifference * DATE_COEFFICIENT;
-		System.out.println("coefificient: " + coefficient);
-		return coefficient;
-	}
+//	public double generateCoefficient(PostBean post) {
+//		long secondsDifference = ChronoUnit.SECONDS.between(post.getDate(), LocalDateTime.now());
+//		System.out.println("Seconds difference: " + secondsDifference);
+//		double coefficient = (post.getLikes() * LIKES_COEFFICIENT + post.getCommentsCounter() * COMMENTS_COEFFICIENT)
+//				/ secondsDifference * DATE_COEFFICIENT;
+//		System.out.println("coefificient: " + coefficient);
+//		return coefficient;
+//	}
 
 	// TODO validation (May be done in JS)
 	public void addLike(UserBean liker, PostBean post) {

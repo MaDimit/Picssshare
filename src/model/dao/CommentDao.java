@@ -55,7 +55,7 @@ public class CommentDao extends Dao{
 		stmt.executeUpdate();
 		
 		//removing comment from post
-		comment.getBelongedPost().removeComment(comment);
+		//comment.getBelongedPost().removeComment(comment);
 	}
 	public void deleteCommentByID(int postID, int id) throws SQLException{
 

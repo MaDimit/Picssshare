@@ -24,12 +24,12 @@ public class PostBean {
 		}
 	}
 	
-	public static class ComparatorByCoefficient implements Comparator<PostBean>{
-		@Override
-		public int compare(PostBean p1, PostBean p2) {
-			return PostManager.getInstance().generateCoefficient(p1) - PostManager.getInstance().generateCoefficient(p1) > 0 ? -1 : 1;
-		}
-	}
+//	public static class ComparatorByCoefficient implements Comparator<PostBean>{
+//		@Override
+//		public int compare(PostBean p1, PostBean p2) {
+//			return PostManager.getInstance().generateCoefficient(p1) - PostManager.getInstance().generateCoefficient(p1) > 0 ? -1 : 1;
+//		}
+//	}
 		protected int id;
 		protected int likes; 
 		protected LocalDateTime date;
