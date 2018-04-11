@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.manager.LoggingManager;
-import controller.manager.LoggingManager.PasswordException;
-import controller.manager.LoggingManager.UsernameException;
+import controller.manager.LoggingManager.LoggingException;
+
 
 /**
  * Servlet implementation class LoginServlet
@@ -28,25 +28,25 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		try {
 			LoggingManager.getInstance().login(name, password);
-		} catch (UsernameException e) {
+		} catch (LoggingException e) {
 			 out.println("<script type=\"text/javascript\">");
 			   out.println("alert('User incorrect');");
 			   out.println("location='index.html';");
 			   out.println("</script>");
 
 				response.sendRedirect("index.html");
-			
-		} catch (PasswordException e) {
-			 out.println("<script type=\"text/javascript\">");
-			   out.println("alert('Password incorrect');");
-			   out.println("location='index.html';");
-			   out.println("</script>");
-
-				response.sendRedirect("index.html");
 		}
+//		} catch (PasswordException e) {
+//			 out.println("<script type=\"text/javascript\">");
+//			   out.println("alert('Password incorrect');");
+//			   out.println("location='index.html';");
+//			   out.println("</script>");
+//
+//				response.sendRedirect("index.html");
+//		}
 
 		response.sendRedirect("main.jsp");
-        
+
 	}
 
 }

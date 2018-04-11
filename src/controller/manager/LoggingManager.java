@@ -13,20 +13,10 @@ public class LoggingManager {
 		}
 	}
 
-	public class UsernameException extends Exception{
-		
-		public UsernameException() {
-			super("Incorrect username!");
+	public class LoggingException extends Exception{
+		public LoggingException(String msg) {
+			super(msg);
 		}
-		
-	}
-	
-	public class PasswordException extends Exception{
-		
-		public PasswordException() {
-			super("Incorrect password!");
-		}
-		
 	}
 
 	
@@ -142,15 +132,15 @@ public class LoggingManager {
 			return true;
 		}
 		// validate username
-		public boolean validateUsername(String username) throws UsernameException {
+		public boolean validateUsername(String username) throws RegisterException {
 			if(username == null || username.isEmpty()) {
-				throw new EmptyUsernameException();
+				throw new RegisterException("Username can't be empty!");
 			}
 			if(!username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")) {
-				throw new InvalidUsernameCharactersException();
+				throw new RegisterException("Invalid characters in username!");
 			}
 			if(CollectionsManager.getInstance().alreadyExists(username)) {
-				throw new UsernameAlreadyExistsException();
+				throw new RegisterException("User with this name already exists!");
 			}
 			return true;
 		}
@@ -189,13 +179,13 @@ public class LoggingManager {
 		//================================================================//
 			
 		//Logging by username and password
-		public UserBean login(String username, String password) throws UsernameException, PasswordException {
+		public UserBean login(String username, String password) throws LoggingException {
 			UserBean u = CollectionsManager.getInstance().getUser(username);
 			if(u == null) {
-				throw new LoggingManager.UsernameException();
+				throw new LoggingException("Wrong username!");
 			}
 			if(!u.getPassword().equals(password)){
-				throw new LoggingManager.PasswordException();
+				throw new LoggingException("Wrong password!");
 			}
 			return u;
 		}

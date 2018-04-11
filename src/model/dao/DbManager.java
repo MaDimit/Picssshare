@@ -81,7 +81,7 @@ public class DbManager {
 
 	private static Properties getProperties() {
 		Properties properties = new Properties();
-		try(FileReader reader = new FileReader("db.properties");) {
+		try(FileReader reader = new FileReader("db.properties")) {
 			properties.load(reader);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

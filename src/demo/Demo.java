@@ -10,6 +10,7 @@ import controller.manager.CollectionsManager;
 import controller.manager.CommentManager;
 import controller.manager.FeedManager;
 import controller.manager.LoggingManager;
+import controller.manager.LoggingManager.LoggingException;
 import controller.manager.PostManager;
 import controller.manager.UserManager;
 import model.CommentBean;
@@ -46,10 +47,18 @@ public class Demo {
 		// -------------- successfull! ------------ //
 		
 		//Loggging
-		UserBean u1 = lm.login("Maxim", "pass1234QQ");
-		UserBean u2 = lm.login("Phillip", "Pass112233");
-		UserBean u3 = lm.login("John", "pass1234TT");
-		UserBean u4 = lm.login("Peter", "pass2321WW");
+		System.out.println("Logging...");
+		try {
+			UserBean u1 = lm.login("Maxim", "pass1234QQ");
+			System.out.println(u1);
+			UserBean u2 = lm.login("Phillip", "Pass112233");
+			UserBean u3 = lm.login("John", "pass1234TT");
+			UserBean u4 = lm.login("Peter", "pass2321WW");
+		} catch (LoggingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Logged...");
 		// ------------ successfull! --------------//
 		
 		//Adding posts
