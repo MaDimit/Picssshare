@@ -1,3 +1,7 @@
+<%@page import="model.post.PostBean"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="model.UserBean"%>
+<%@page import="controller.manager.CollectionsManager"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -41,8 +45,33 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   
   <!-- Photo grid -->
   <div class="w3-row">
-    <div class="w3-third">
-      <img src="https://www.w3schools.com/w3images/natureboy.jpg" style="width:100%" onclick="onClick(this)" alt="A boy surrounded by beautiful nature ffffffffff">
+    
+    	<%
+    	
+    	UserBean u = CollectionsManager.getInstance().getUser(request.getParameter("username"));
+    	ArrayList<PostBean> posts = new ArrayList<>(u.getPosts());
+    	%>
+    	<%
+    	for(int i = 0; i<posts.size(); i++){
+    		if(i==posts.size()-1) break;
+    		String url = posts.get(i).getUrl();
+    		if(i==0 || i==3 || i==6){ %> 
+    		<div class="w3-third">
+    		<img src="<%=posts.get(i).getUrl()%>" style="width:100%" onclick="onClick(this)">
+   
+    		<%} 
+    		
+    		else if(i==2 || i==5 || i==8){ %> 
+    		<img src="<%=posts.get(i).getUrl()%>" style="width:100%" onclick="onClick(this)" >
+   
+    		 </div>
+    		<%} else { %>
+    		 <img src="<%=posts.get(i).getUrl()%>" style="width:100%" onclick="onClick(this)" >
+    		<%} %>
+    	<%} %>
+      </div>
+      
+      <!-- OLD PART 
       <img src="https://www.w3schools.com/w3images/girl_mountain.jpg" style="width:100%" onclick="onClick(this)" alt="What a beautiful scenery this sunset">
       <img src="https://www.w3schools.com/w3images/girl.jpg" style="width:100%" onclick="onClick(this)" alt="The Beach. Me. Alone. Beautiful">
     </div>
@@ -59,6 +88,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       <img src="https://www.w3schools.com/w3images/closegirl.jpg" style="width:100%" onclick="onClick(this)" alt="What a beautiful day!">
     </div>
   </div>
+-->
 
   <!-- Pagination -->
   <div class="w3-center w3-padding-32">

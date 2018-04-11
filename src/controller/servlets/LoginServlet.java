@@ -38,7 +38,6 @@ public class LoginServlet extends HttpServlet {
 		} catch (LoggingException e) {
 			caughtException = true;
 			response.sendRedirect("http://fs5.directupload.net/images/151026/j63kh5fn.png");
-			//request.getRequestDispatcher().forward(request, response);
 		}
 		if(!caughtException) {
 			request.getSession().setAttribute("user", user);
