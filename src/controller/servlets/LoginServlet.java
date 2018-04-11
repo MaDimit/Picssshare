@@ -30,27 +30,18 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		String name = request.getParameter("username");
 		String password = request.getParameter("password");
+		boolean caughtException = false;
 		try {
 			LoggingManager.getInstance().login(name, password);
 		} catch (LoggingException e) {
-			 out.println("<script type=\"text/javascript\">");
-			   out.println("alert('User incorrect');");
-			   out.println("location='index.html';");
-			   out.println("</script>");
-
-				response.sendRedirect("index.html");
+			caughtException = true;
+			response.sendRedirect("http://fs5.directupload.net/images/151026/j63kh5fn.png");
+			//request.getRequestDispatcher().forward(request, response);
 		}
-//		} catch (PasswordException e) {
-//			 out.println("<script type=\"text/javascript\">");
-//			   out.println("alert('Password incorrect');");
-//			   out.println("location='index.html';");
-//			   out.println("</script>");
-//
-//				response.sendRedirect("index.html");
-//		}
-
-		response.sendRedirect("main.jsp");
-
+		if(!caughtException) {
+			request.getRequestDispatcher("main.jsp").forward(request, response);
+		}
+		
 	}
 
 }
