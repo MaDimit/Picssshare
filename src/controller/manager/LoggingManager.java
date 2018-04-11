@@ -7,20 +7,10 @@ import model.dao.UserDao;
 
 public class LoggingManager {
 	
-	public class UsernameException extends Exception{
-		
-	}
-	
-	public class EmptyUsernameException extends UsernameException{
-		
-	}
-	
-	public class InvalidUsernameCharactersException extends UsernameException{
-		
-	}
-	
-	public class UsernameAlreadyExistsException extends UsernameException{
-		
+	public class RegisterException extends Exception{
+		public RegisterException(String msg) {
+			super(msg);
+		}
 	}
 	
 	private static LoggingManager instance;
@@ -99,21 +89,13 @@ public class LoggingManager {
 //			}
 //		}
 		
-		public synchronized boolean register(String username, String password, String email){
+		public synchronized boolean register(String username, String password, String email) throws RegisterException{
 			
 			//Username validating
 			boolean validUsername = false;
-			try {
-				validUsername = validateUsername(username);
-			}catch(EmptyUsernameException empt){
-				System.out.println("Username is empty.");
-			}catch(InvalidUsernameCharactersException ch) {
-				System.out.println("Username has illigal characters.");
-			}catch(UsernameAlreadyExistsException exis) {
-				System.out.println("Username already exists.");
-			}catch(UsernameException e) {
-				System.out.println("Username is not valid.");
-			}
+			
+			validUsername = validateUsername(username);
+			
 			if(!validUsername) {
 				return false;
 			}

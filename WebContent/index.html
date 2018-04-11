@@ -22,7 +22,7 @@ body, html {height: 100%}
     <p>Picssshare</p>
   </div>
   <div class="w3-display-topleft w3-container w3-xlarge">
-    <p><button onclick="document.getElementById('contact').style.display='block'" class="w3-button w3-black">register</button></p>
+    <p><button onclick="document.getElementById('register').style.display='block'" class="w3-button w3-black">register</button></p>
     
     <p><button onclick="document.getElementById('login').style.display='block'" class="w3-button w3-black">login</button></p>
   </div>
@@ -52,18 +52,18 @@ body, html {height: 100%}
 </div>
 
 <!-- Register Modal -->
-<div id="contact" class="w3-modal">
+<div id="register" class="w3-modal">
   <div class="w3-modal-content w3-animate-zoom">
     <div class="w3-container w3-black">
-      <span onclick="document.getElementById('contact').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
+      <span onclick="document.getElementById('register').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
       <h1>Register</h1>
     </div>
     <div class="w3-container">
       <p>Fill in the fields before get started</p>
-      <form action="main.jsp" target="_blank" method="post">
+      <form action="register" target="_blank" method="post">
         <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Username" name="username"></p>
-        <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Password" name="password"></p>
-        <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Repeat password" name="password"></p>
+        <p><input class="w3-input w3-padding-16 w3-border" type="password" placeholder="Password" name="password1"></p>
+        <p><input class="w3-input w3-padding-16 w3-border" type="password" placeholder="Repeat password" name="password2"></p>
         <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Email" name="email"></p>
         <p><button class="w3-button" type="submit">Register</button></p>
       </form>
