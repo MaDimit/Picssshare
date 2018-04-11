@@ -14,6 +14,7 @@ import controller.manager.CommentManager;
 import controller.manager.LoggingManager;
 import controller.manager.PostManager;
 import controller.manager.UserManager;
+import model.UserBean;
 import controller.manager.LoggingManager.LoggingException;
 
 
@@ -31,14 +32,16 @@ public class LoginServlet extends HttpServlet {
 		String name = request.getParameter("username");
 		String password = request.getParameter("password");
 		boolean caughtException = false;
+		UserBean user = null;
 		try {
-			LoggingManager.getInstance().login(name, password);
+			user = LoggingManager.getInstance().login(name, password);
 		} catch (LoggingException e) {
 			caughtException = true;
 			response.sendRedirect("http://fs5.directupload.net/images/151026/j63kh5fn.png");
 			//request.getRequestDispatcher().forward(request, response);
 		}
 		if(!caughtException) {
+			request.getSession().setAttribute("user", user);
 			request.getRequestDispatcher("main.jsp").forward(request, response);
 		}
 		

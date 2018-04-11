@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,9 +8,10 @@
 </head>
 <body>
 
-<form action="DbServlet" method="GET">
-<input type="submit" name="buton">
-</form>
+	<form method="POST" action="upload" enctype="multipart/form-data">
+		Upload image: <input type="file" name="file" id="file" /> <br />
+        <input type="submit" value="Upload" name="upload" id="upload" />
+	</form>
 
 </body>
 </html>

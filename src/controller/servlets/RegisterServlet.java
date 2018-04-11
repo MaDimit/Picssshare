@@ -39,7 +39,7 @@ public class RegisterServlet extends HttpServlet {
 
 		}
 	
-		request.getRequestDispatcher("successfullregistration.jsp").forward(request, response);;
+		request.getRequestDispatcher("main.jsp").forward(request, response);
 				
 	}
 

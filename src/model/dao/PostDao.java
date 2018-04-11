@@ -61,7 +61,7 @@ public class PostDao extends Dao{
 		String sql = "INSERT INTO posts (likes,  date, poster_id, url) VALUES (?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 		stmt.setInt(1, post.getLikes());
-		stmt.setObject(2, post.getDate());
+		stmt.setObject(2, Timestamp.valueOf(post.getDate()));
 		stmt.setInt(3, post.getPoster().getId());
 		stmt.setString(4, post.getUrl());
 		stmt.executeUpdate();
