@@ -9,6 +9,18 @@ public class LoggingManager {
 	
 	public class UsernameException extends Exception{
 		
+		public UsernameException() {
+			super("Incorrect username!");
+		}
+		
+	}
+	
+public class PasswordException extends Exception{
+		
+		public PasswordException() {
+			super("Incorrect password!");
+		}
+		
 	}
 	
 	public class EmptyUsernameException extends UsernameException{
@@ -190,15 +202,13 @@ public class LoggingManager {
 		//================================================================//
 			
 		//Logging by username and password
-		public UserBean login(String username, String password) {
+		public UserBean login(String username, String password) throws UsernameException, PasswordException {
 			UserBean u = CollectionsManager.getInstance().getUser(username);
 			if(u == null) {
-				System.out.println("Wrong username!");
-				return null;
+				throw new LoggingManager.UsernameException();
 			}
 			if(!u.getPassword().equals(password)){
-				System.out.println("Wrong password");
-				return null;
+				throw new LoggingManager.PasswordException();
 			}
 			return u;
 		}

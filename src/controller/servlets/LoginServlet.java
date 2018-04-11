@@ -1,11 +1,17 @@
 package controller.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import controller.manager.LoggingManager;
+import controller.manager.LoggingManager.PasswordException;
+import controller.manager.LoggingManager.UsernameException;
 
 /**
  * Servlet implementation class LoginServlet
@@ -13,17 +19,34 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		PrintWriter out = response.getWriter();
+		String name = request.getParameter("username");
+		String password = request.getParameter("password");
+		try {
+			LoggingManager.getInstance().login(name, password);
+		} catch (UsernameException e) {
+			 out.println("<script type=\"text/javascript\">");
+			   out.println("alert('User incorrect');");
+			   out.println("location='index.html';");
+			   out.println("</script>");
+
+				response.sendRedirect("index.html");
+			
+		} catch (PasswordException e) {
+			 out.println("<script type=\"text/javascript\">");
+			   out.println("alert('Password incorrect');");
+			   out.println("location='index.html';");
+			   out.println("</script>");
+
+				response.sendRedirect("index.html");
+		}
+
+		response.sendRedirect("main.jsp");
+        
 	}
 
 }
