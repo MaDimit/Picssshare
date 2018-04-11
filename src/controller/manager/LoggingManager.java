@@ -108,13 +108,11 @@ public class LoggingManager {
 			}
 			
 			if(!validatePassword(password)) {
-				System.err.println("Weak password");
-				return false;
+				throw new RegisterException("Weak password");
 			}
 			//TODO check if already exists in runtime collection
 			if(!validateEmailAddress(email)) {
-				System.err.println("Email is not valid");
-				return false;
+				throw new RegisterException("Email is not valid");
 			}
 			
 			//if data is valid user obj is created

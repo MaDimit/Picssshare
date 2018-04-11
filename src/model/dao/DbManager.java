@@ -1,8 +1,10 @@
 package model.dao;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -56,9 +58,9 @@ public class DbManager {
 //		this.PASS = getProperty(Key.PASS);
 //		this.SCHEMA = getProperty(Key.SCHEMA);
 		this.PROPERTIES = null;
-		this.DB_URL = "jdbc:mysql://127.0.0.1:XXXXX/Picssshare";
+		this.DB_URL = "jdbc:mysql://127.0.0.1:30249/Picssshare";
 		this.USER = "root";
-		this.PASS = "";
+		this.PASS = "Mdu526143978";
 		this.SCHEMA = "Picssshare";
 		
 		try {
@@ -86,10 +88,8 @@ public class DbManager {
 
 	private static Properties getProperties() {
 		Properties properties = new Properties();
-		try(FileReader reader = new FileReader("db.properties")) {
-			properties.load(reader);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		try {
+			properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("src/db.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
