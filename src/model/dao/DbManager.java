@@ -50,11 +50,16 @@ public class DbManager {
 	private static Connection connection;
 	
 	private DbManager() {
-		this.PROPERTIES = getProperties();
-		this.DB_URL ="jdbc:"+ getProperty(Key.URL);
-		this.USER = getProperty(Key.USER);
-		this.PASS = getProperty(Key.PASS);
-		this.SCHEMA = getProperty(Key.SCHEMA);
+//		this.PROPERTIES = getProperties();
+//		this.DB_URL ="jdbc:"+ getProperty(Key.URL);
+//		this.USER = getProperty(Key.USER);
+//		this.PASS = getProperty(Key.PASS);
+//		this.SCHEMA = getProperty(Key.SCHEMA);
+		this.PROPERTIES = null;
+		this.DB_URL = "jdbc:mysql://127.0.0.1:XXXXX/Picssshare";
+		this.USER = "root";
+		this.PASS = "";
+		this.SCHEMA = "Picssshare";
 		
 		try {
 			Class.forName(JDBC_DRIVER);

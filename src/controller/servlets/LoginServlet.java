@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.manager.CollectionsManager;
+import controller.manager.CommentManager;
 import controller.manager.LoggingManager;
+import controller.manager.PostManager;
+import controller.manager.UserManager;
 import controller.manager.LoggingManager.LoggingException;
 
 

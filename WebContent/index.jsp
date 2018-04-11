@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form action="login" method="post">
+<form action="DbServlet" method="GET">
 <input type="submit" name="buton">
 </form>
 
