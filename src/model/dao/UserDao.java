@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import controller.manager.CollectionsManager;
+import controller.manager.LoggingManager;
 import model.UserBean;
 import model.post.PostBean;
 
@@ -66,23 +67,31 @@ public class UserDao extends Dao {
 		// information for his profile
 
 		HashMap<String, String> notNullValues = new HashMap<>();
-		if (password != null) {
-			notNullValues.put("password", password);
-			u.setPassword(password);
+		if (!password.equalsIgnoreCase("")) {
+			if(LoggingManager.getInstance().validatePassword(password)) {
+				notNullValues.put("password", password);
+				u.setPassword(password);
+			}
 		}
-		if (first_name != null) {
-			notNullValues.put("first_name", first_name);
-			u.setFirstName(first_name);
+		if (!first_name.equalsIgnoreCase("")) {
+			if(LoggingManager.getInstance().validateFirstName(first_name)) {
+				notNullValues.put("first_name", first_name);
+				u.setFirstName(first_name);
+			}
 		}
-		if (last_name != null) {
-			notNullValues.put("last_name", last_name);
-			u.setLastName(last_name);
+		if (!last_name.equalsIgnoreCase("")) {
+			if(LoggingManager.getInstance().validateLastName(last_name)) {
+				notNullValues.put("last_name", last_name);
+				u.setLastName(last_name);
+			}
 		}
-		if (email != null) {
+		if (!email.equalsIgnoreCase("")) {
 			// check the existing ones and if there is not such an email - set it
-			if (!CollectionsManager.getInstance().alreadyExistsEmail(email))
-				notNullValues.put("email", email);
-			u.setEmail(email);
+			if(LoggingManager.getInstance().validateEmailAddress(email)) {
+				if (!CollectionsManager.getInstance().alreadyExistsEmail(email))
+					notNullValues.put("email", email);
+					u.setEmail(email);
+			}
 		}
 		StringBuilder sb = new StringBuilder();
 		// comma count is used for placing commas between set statements
@@ -99,6 +108,7 @@ public class UserDao extends Dao {
 
 		}
 		String sql = "UPDATE users SET "+sb.toString()+" WHERE id = ?";
+		
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, u.getId());
 		stmt.executeUpdate();

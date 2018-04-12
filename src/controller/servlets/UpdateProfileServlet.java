@@ -7,35 +7,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.manager.UserManager;
+import model.UserBean;
+
 /**
  * Servlet implementation class UpdateProfileServlet
  */
-@WebServlet("/profileupdate")
+@WebServlet("/editProfile")
 public class UpdateProfileServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UpdateProfileServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			String newPassword = request.getParameter("newPassword");
+			String repeatedNewPassword = request.getParameter("rNewPassword");
+			if (newPassword.equalsIgnoreCase(repeatedNewPassword)) {
+				
+					UserManager.getInstance().updateProfileInfo((UserBean) request.getSession().getAttribute("user"),
+							request.getParameter("newPassword"), request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"));
+					
+					request.getRequestDispatcher("user.jsp").forward(request, response);
+				
+			} else {
+				request.setAttribute("error", "New passwords don't match");
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+			}
+		} catch (Exception e) {
+			request.setAttribute("error", "Sorry! Something went completely wrong!");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
 	}
 
 }
