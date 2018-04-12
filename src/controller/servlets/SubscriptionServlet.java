@@ -24,8 +24,10 @@ public class SubscriptionServlet extends HttpServlet {
 					.getUser(Integer.parseInt(request.getParameter("subscribedUserId")));
 
 			UserManager.getInstance().subscribe(subscriber, subscribed);
+
+			request.getRequestDispatcher("userfeed").forward(request, response);
 		} catch (Exception e) {
-			request.setAttribute("error", e.getMessage());
+			request.setAttribute("error", "Sorry, something went completely wrong!");
 			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
