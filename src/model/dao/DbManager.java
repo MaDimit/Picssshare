@@ -59,9 +59,9 @@ public class DbManager {
 //		this.SCHEMA = getProperty(Key.SCHEMA);
 		this.PROPERTIES = null;
 
-		this.DB_URL = "jdbc:mysql://127.0.0.1:30249/Picssshare";
-		this.USER = "root";
-		this.PASS = "";
+		this.DB_URL = "jdbc:mysql://95.87.227.30:30249/Picssshare";
+		this.USER = "Philip";
+		this.PASS = "Picssshare97?";
 		this.SCHEMA = "Picssshare";
 		
 		try {
