@@ -7,13 +7,13 @@ import model.dao.UserDao;
 
 public class LoggingManager {
 	
-	public class RegisterException extends Exception{
-		public RegisterException(String msg) {
+	public static class RegistrationException extends Exception{
+		public RegistrationException(String msg) {
 			super(msg);
 		}
 	}
 
-	public class LoggingException extends Exception{
+	public static class LoggingException extends Exception{
 		public LoggingException(String msg) {
 			super(msg);
 		}
@@ -34,69 +34,8 @@ public class LoggingManager {
 	}
 	
 	//========================REGISTER PART===================================//
-	
-//		public synchronized void register(UserBean user) {
-//			boolean correctUsername = false;
-//			boolean correctPassword = false;
-//			boolean correctFirstName = false;
-//			boolean correctLastName = false;
-//			boolean correctEmail = false;
-//			
-//			if(validateUsername(user.getUsername())){
-//				correctUsername = true;
-//			}
-//			else {
-//				System.out.println("Incorrect username!");
-//			}
-//			
-//			if(validatePassword(user.getPassword())) {
-//				correctPassword = true;
-//			}
-//			else {
-//				System.out.println("Incorrect password!");
-//				System.out.println("Please note that the password must contains at least one uppercase letter"
-//						+ ", one lowercase letter, one digit, one special character and must be at least 8 characters long!");
-//			}
-//			
-//			//unnecessary fields
-//			if(user.getFirstName()!=null && validateFirstName(user.getFirstName())) {
-//				correctFirstName = true;
-//			}
-//			else {
-//				System.out.println("First name error!");
-//			}
-//			
-//			if(user.getLastName() != null && validateLastName(user.getLastName())) {
-//				correctLastName = true;
-//			}
-//			else {
-//				System.out.println("Last name error!");
-//			}
-//			//end of unnecessary fields
-//			
-//			if(validateEmailAddress(user.getEmail())) {
-//				correctEmail = true;
-//			}
-//			else {
-//				System.out.println("Incorrect email address!");
-//			}
-//			//check the if the input data is ok
-//			if(correctUsername && correctPassword && correctEmail) {
-//				//if it is ok, check if the user already exists
-//				if(UserDao.getInstance().getUsers().containsKey(user.getUsername())) {
-//					System.out.println("User already exists. ");
-//				}
-//				else {
-//					//add in collection
-//					UserDao.getInstance().getUsers().put(user.getUsername(),user); 
-//					//add in db
-//					UserDao.getInstance().registerUser(user);
-//					System.out.println(user.getUsername() + " has been successfully registered.");
-//				}
-//			}
-//		}
 		
-		public synchronized UserBean register(String username, String password, String email) throws RegisterException{
+		public synchronized UserBean register(String username, String password, String email) throws RegistrationException{
 			
 			//Username validating
 			boolean validUsername = false;
@@ -104,11 +43,11 @@ public class LoggingManager {
 			validUsername = validateUsername(username);
 			
 			if(!validatePassword(password)) {
-				throw new RegisterException("Weak password");
+				throw new RegistrationException("Weak password");
 			}
 
 			if(!validateEmailAddress(email)) {
-				throw new RegisterException("Email is not valid");
+				throw new RegistrationException("Email is not valid");
 			}
 			
 			//if data is valid user obj is created
@@ -119,22 +58,22 @@ public class LoggingManager {
 				UserDao.getInstance().registerUser(user);
 			}catch (SQLException e) {
 				System.out.println("Registering to DB problem: " + e.getMessage());
-				throw new RegisterException("Data base connection problem!");
+				throw new RegistrationException("Data base connection problem!");
 			}
 			
 			System.out.println("Registration of " + user.getUsername() + " is successfull!");
 			return user;
 		}
 		// validate username
-		public boolean validateUsername(String username) throws RegisterException {
+		public boolean validateUsername(String username) throws RegistrationException {
 			if(username == null || username.isEmpty()) {
-				throw new RegisterException("Username can't be empty!");
+				throw new RegistrationException("Username can't be empty!");
 			}
 			if(!username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")) {
-				throw new RegisterException("Invalid characters in username!");
+				throw new RegistrationException("Invalid characters in username!");
 			}
 			if(CollectionsManager.getInstance().alreadyExists(username)) {
-				throw new RegisterException("User with this name already exists!");
+				throw new RegistrationException("User with this name already exists!");
 			}
 		
 			return true;
