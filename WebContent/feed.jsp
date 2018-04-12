@@ -108,7 +108,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <a href="friendsfeed" onclick="w3_close()" class="w3-bar-item w3-button">Friends Feed</a>
   <a href="trendingfeed" onclick="w3_close()" class="w3-bar-item w3-button">Trending Feed</a>
   <a href="imageupload.jsp" onclick="w3_close()" class="w3-bar-item w3-button">Image upload</a> 
-  <a href="profile.jsp" onclick="w3_close()" class="w3-bar-item w3-button">Profile</a>
+  <a href="profileedit.jsp" onclick="w3_close()" class="w3-bar-item w3-button">Profile</a>
   <a href="logout" onclick="w3_close()" class="w3-bar-item w3-button">Logout</a>
 </nav>
 

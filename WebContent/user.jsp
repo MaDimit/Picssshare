@@ -197,7 +197,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <!-- About section -->
   <div class="w3-container w3-dark-grey w3-center w3-text-light-grey w3-padding-32" id="about">
-   <% UserBean user = (UserBean)session.getAttribute("user");
+   <% UserBean user = (UserBean)request.getAttribute("user");
    String firstName = user.getFirstName() == null ? "" : user.getFirstName();
    String lastName = user.getLastName() == null ? "" : user.getLastName();
    String email = user.getEmail();

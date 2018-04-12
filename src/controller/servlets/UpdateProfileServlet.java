@@ -26,7 +26,7 @@ public class UpdateProfileServlet extends HttpServlet {
 					UserManager.getInstance().updateProfileInfo((UserBean) request.getSession().getAttribute("user"),
 							request.getParameter("newPassword"), request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("email"));
 					
-					request.getRequestDispatcher("user.jsp").forward(request, response);
+					request.getRequestDispatcher("userfeed").forward(request, response);
 				
 			} else {
 				request.setAttribute("error", "New passwords don't match");

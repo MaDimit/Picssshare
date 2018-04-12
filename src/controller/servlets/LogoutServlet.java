@@ -13,8 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		try {
+			request.getSession().invalidate();
+			response.sendRedirect("index.html");
+		} catch (Exception e) {
+			request.setAttribute("error", e.getMessage());
+			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
 	}
 
 }

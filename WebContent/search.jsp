@@ -15,7 +15,10 @@ if(users.size()!=0){
 <h1>Users found:</h1><br><%
 for(UserBean u: users){ String username = u.getUsername();
 %>
-<a href="#"><%=username%></a><br>
+<form action="getuserpage" method="get">
+<input type="hidden" name="userid" value=<%= u.getId()%>>
+<button type="submit"><%=username%></button>
+</form><br>
 
 <% }
 } else { request.setAttribute("error", "There are no such user/s." );
