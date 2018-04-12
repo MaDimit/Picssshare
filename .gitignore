@@ -24,6 +24,7 @@
 .project
 *.properties
 db.properties
+DbManager.java
 
 # Binaries
 *.7z

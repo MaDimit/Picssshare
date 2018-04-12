@@ -3,8 +3,11 @@ package controller.manager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import model.CommentBean;
@@ -162,6 +165,17 @@ public class CollectionsManager {
 			System.out.println("Problem during bookmarked posts adding: " + e.getMessage());
 		}
 	}
+	
+	//search user method
+	public List<UserBean> searchUser(String user){
+		ArrayList<UserBean> users = new ArrayList<>();
+		for(Map.Entry<String, UserBean> u: this.usersByUsername.entrySet()) {
+			if(u.getKey().toLowerCase().contains(user.toLowerCase())) {
+				users.add(u.getValue());
+			}
+		}
+		return users;
+	}
 
 	private HashSet<UserBean> getUsers() {
 		HashSet<UserBean> users = new HashSet<>();
@@ -251,6 +265,7 @@ public class CollectionsManager {
 	public HashMap<Integer, PostBean> getPostsByID() {
 		return postsByID;
 	}
+	
 
 	// ================ Interfaces for objects access ================ //// =============== Interfaces for working with CollectionsManager ================= //
 	
