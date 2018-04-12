@@ -32,7 +32,6 @@ public class FriendsFeedServlet extends HttpServlet {
 			request.setAttribute("error", e.getMessage());
 			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
-		
 	}
 
 }

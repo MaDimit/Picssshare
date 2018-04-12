@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 import com.mysql.jdbc.Statement;
@@ -29,7 +30,7 @@ public class NotificationDao extends Dao{
 		Connection conn = dbManager.getConnection();
 		String sql = "INSERT INTO notifications (`date`, `seen`, `receiver_id`, `causer_id`, `description`) VALUES (?,?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-		stmt.setObject(1, n.getDate());
+		stmt.setObject(1, Timestamp.valueOf(n.getDate()));
 		stmt.setInt(2, n.isSeen());
 		stmt.setInt(3, n.getReceiverID());
 		stmt.setInt(4, n.getCauserID());

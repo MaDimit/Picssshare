@@ -1,9 +1,11 @@
 package model.post;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -127,6 +129,14 @@ public class PostBean {
 		
 		public TreeMap<Integer, CommentBean> getCommentsById() {
 			return commentsById;
+		}
+		
+		public List<CommentBean> getCommentsList(){
+			ArrayList<CommentBean> list = new ArrayList<>(commentsById.values());
+//			for(int i = 0 ; i< commentsById.size(); i++) {
+//				list.add(commentsById.get(i));
+//			}
+			return list;
 		}
 
 		public void showInfo() {

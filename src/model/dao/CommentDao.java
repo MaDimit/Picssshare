@@ -31,7 +31,7 @@ public class CommentDao extends Dao{
 		String sql = "INSERT INTO comments (poster_id, date, content, post_id) VALUES (?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		stmt.setInt(1, comment.getPoster().getId());
-		stmt.setObject(2, comment.getPostTime());
+		stmt.setObject(2, Timestamp.valueOf(comment.getPostTime()));
 		stmt.setString(3, comment.getContent());
 		stmt.setInt(4, comment.getBelongedPost().getId());
 		stmt.executeUpdate();

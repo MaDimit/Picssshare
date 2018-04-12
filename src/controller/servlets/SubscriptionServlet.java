@@ -25,7 +25,7 @@ public class SubscriptionServlet extends HttpServlet {
 
 			UserManager.getInstance().subscribe(subscriber, subscribed);
 		} catch (Exception e) {
-			request.setAttribute("error", e.getMessage());
+			request.setAttribute("error", "Sorry, something went wrong during subscription.");
 			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
