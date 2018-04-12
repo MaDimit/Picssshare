@@ -7,6 +7,7 @@ import java.util.Map;
 
 import controller.manager.CollectionsManager;
 import controller.manager.LoggingManager;
+import controller.manager.LoggingManager.RegistrationException;
 import model.UserBean;
 import model.post.PostBean;
 
@@ -60,7 +61,7 @@ public class UserDao extends Dao {
 
 	// username and id should not be modified
 	public void executeProfileUpdate(UserBean u, String password, String first_name, String last_name, String email)
-			throws SQLException {
+			throws SQLException,RegistrationException {
 		Connection conn = dbManager.getConnection();
 		// Store in collection not null values, because the user could choose to change
 		// different number of

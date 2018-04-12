@@ -7,35 +7,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class SubscriptionServlet
- */
+import controller.manager.CollectionsManager;
+import controller.manager.UserManager;
+import model.UserBean;
+
 @WebServlet("/subscription")
 public class SubscriptionServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SubscriptionServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			UserBean subscriber = CollectionsManager.getInstance()
+					.getUser(Integer.parseInt(request.getParameter("subscriberUserId")));
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+			UserBean subscribed = CollectionsManager.getInstance()
+					.getUser(Integer.parseInt(request.getParameter("subscribedUserId")));
+
+			UserManager.getInstance().subscribe(subscriber, subscribed);
+		} catch (Exception e) {
+			request.setAttribute("error", e.getMessage());
+			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
 	}
 
 }
