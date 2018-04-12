@@ -140,40 +140,4 @@ public class UserManager {
 		}
 
 
-
-	// ==================REGISTER/LOGIN===============//
-	
-	/*
-	 * Register and login functionality is in LoggingManager
-	 */
-
-//	public void registerRequest() {
-//		UserLogging.register(this);
-//	}
-//
-//	public void loginRequest() {
-//		if (UserLogging.login(this)) {
-//			System.out.println(this.username + " successfully logged.");
-//		} else {
-//			System.out.println("Login operation unsuccessfull.");
-//		}
-//	}
-	
-	
-	/*
-	 * TODO decide how feed generation will work for user ????? should be handled by FeedManager ?????
-	 */
-	
-//	public Feed showView(Feed.Type type) {
-//		switch (type) {
-//		case MAIN_FEED:
-//			this.feed = new MainFeed(this);
-//			break;
-//		case TRENDING_FEED:
-//			this.feed = new TrendingFeed();
-//			break;
-//		}
-//		return feed;
-//	}
-
 }
