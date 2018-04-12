@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
 			String password = request.getParameter("password");
 			UserBean user = LoggingManager.getInstance().login(name, password);
 			request.getSession().setAttribute("user", user);
-			request.getRequestDispatcher("main.jsp").forward(request, response);
+			request.getRequestDispatcher("user.jsp").forward(request, response);
 		} catch (LoggingException e) {
 			request.setAttribute("error", e.getMessage());
 			request.getRequestDispatcher("error.jsp").forward(request, response);

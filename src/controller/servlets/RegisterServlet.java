@@ -31,7 +31,7 @@ public class RegisterServlet extends HttpServlet {
 			}
 			UserBean user = LoggingManager.getInstance().register(username, password, email);
 			request.getSession().setAttribute("user", user);
-			request.getRequestDispatcher("main.jsp").forward(request, response);
+			request.getRequestDispatcher("user.jsp").forward(request, response);
 		} catch (LoggingManager.RegistrationException e) {
 			request.setAttribute("error", e.getMessage());
 			request.getRequestDispatcher("error.jsp").forward(request, response);

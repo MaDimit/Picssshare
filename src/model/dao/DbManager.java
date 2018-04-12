@@ -60,7 +60,7 @@ public class DbManager {
 		this.PROPERTIES = null;
 
 		this.DB_URL = "jdbc:mysql://127.0.0.1:30249/Picssshare";
-		this.USER = "root";
+		this.USER = "roo";
 		this.PASS = "";
 		this.SCHEMA = "Picssshare";
 		
