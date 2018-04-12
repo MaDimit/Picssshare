@@ -36,6 +36,7 @@ public class UploadServlet extends HttpServlet {
 		
 		protected void doPost(HttpServletRequest request, HttpServletResponse response)
 				throws ServletException, IOException {
+			try {
 			
 			// constructs path of the directory to save uploaded file
 			String uploadFilePath = "/home/maxim/Programming/Eclipse/PicssshareProject/WebContent/" + UPLOAD_DIR;
@@ -75,6 +76,10 @@ public class UploadServlet extends HttpServlet {
 				
 			}
 			request.getRequestDispatcher("successfullupload.jsp").forward(request, response);
+			} catch(Exception e) {
+				request.setAttribute("error", "Sorry, something went totally wrong!");
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+			}
 	}
 
 }

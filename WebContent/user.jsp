@@ -11,7 +11,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+
 <style>
+
+.myButton {
+	background-color:#44c767;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Verdana;
+	font-size:17px;
+	padding:16px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.myButton:hover {
+	background-color:#5cbf2a;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
 
 <!-- search bar-->
 
@@ -187,6 +213,20 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
    
    %>
     <h4><b><%= user.getUsername()  %></b></h4>
+    <% UserBean currentUser = (UserBean)request.getSession().getAttribute("user");
+   
+    
+    if(!user.getUsername().equals(currentUser.getUsername())) {
+     request.setAttribute("subscriber", currentUser.getId());
+    request.setAttribute("subscribedToUser", user.getId());
+    %>
+    <form action="subscription" method="post">
+	<input type="hidden" name="subscriberUserId" value=<%=currentUser.getId()%> >
+	<input type="hidden" name="subscribedUserId" value=<%=user.getId()%> >
+	<button type="submit" class="myButton">Subscribe</button>
+	</form>
+    <br>
+    <%} %>
     <img src="https://www.w3schools.com/w3images/avatar_hat.jpg" alt="Me" class="w3-image w3-padding-32" width="600" height="650">
     <div class="w3-content w3-justify" style="max-width:600px">
    
