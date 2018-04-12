@@ -128,28 +128,18 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div class="w3-hide-large" style="margin-top:83px"></div>
   
   <!-- Photo grid -->
-  <div class="w3-row">
     
     	<%
     	ArrayList<PostBean> posts = (ArrayList<PostBean>)request.getAttribute("posts");   	
     	for(int i = 0; i<posts.size(); i++){
-    		if(i==posts.size()-1) break;
+    		//	if(i==posts.size()-1) break;
     		String url = posts.get(i).getUrl();
-    		if(i==0 || i==3 || i==6){ %> 
-    		<div class="w3-third">
-    		<img src="<%=posts.get(i).getUrl()%>" style="width:100%" onclick="onClick(this)">
-   
-    		<%} 
+    		%>
+    		 <img src="<%=posts.get(i).getUrl()%>" style="width:31%" onclick="onClick(this)" >
     		
-    		else if(i==2 || i==5 || i==8){ %> 
-    		<img src="<%=posts.get(i).getUrl()%>" style="width:100%" onclick="onClick(this)" >
-   
-    		 </div>
-    		<%} else { %>
-    		 <img src="<%=posts.get(i).getUrl()%>" style="width:100%" onclick="onClick(this)" >
-    		<%} %>
     	<%} %>
-      </div>
+      
+      
       
       <!-- OLD PART 
       <img src="https://www.w3schools.com/w3images/girl_mountain.jpg" style="width:100%" onclick="onClick(this)" alt="What a beautiful scenery this sunset">
@@ -170,29 +160,15 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
 -->
 
-  <!-- Pagination -->
-  <div class="w3-center w3-padding-32">
-    <div class="w3-bar">
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">«</a>
-      <a href="#" class="w3-bar-item w3-black w3-button">1</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">»</a>
-    </div>
-  </div>
   
   <!-- Modal for full size images on click-->
   <div id="modal01" class="w3-modal w3-black" style="padding-top:0" onclick="this.style.display='none'">
-    <span class="w3-button w3-black w3-xlarge w3-display-topright">×</span>
+    <span class="w3-button w3-black w3-xlarge w3-display-topright">x�</span>
     <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
       <img id="img01" class="w3-image">
       <p id="caption"></p>
     </div>
   </div>
-
-  
-  <div class="w3-black w3-center w3-padding-24">Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a></div>
 
 <!-- End page content -->
 </div>
