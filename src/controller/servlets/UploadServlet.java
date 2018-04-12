@@ -33,10 +33,9 @@ public class UploadServlet extends HttpServlet {
 
 	private static final String UPLOAD_DIR = "photos";
 
-		
-		protected void doPost(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-			
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
 			// constructs path of the directory to save uploaded file
 			String uploadFilePath = "/home/maxim/Programming/Eclipse/PicssshareProject/WebContent/" + UPLOAD_DIR;
 			// creates upload folder if it does not exists
@@ -50,31 +49,36 @@ public class UploadServlet extends HttpServlet {
 
 			Part part = request.getPart("file");
 			InputStream input = part.getInputStream();
-			
-				if (part != null && part.getSize() > 0) {
-					String fileName = user.getUsername() + "img" + user.getPosts().size() + ".jpg";
-					
-					// allows only JPEG files to be uploaded
-//					if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
-//						continue;
-//					}
-					File f = new File(uploadFilePath + File.separator + fileName);
-					f.createNewFile();
-					FileOutputStream out = new FileOutputStream(f);
-					
-					IOUtils.copy(input,out);
-					input.close();
-					out.close();
-					
-					//part.write(uploadFilePath + File.separator + fileName);
-					
-					PostManager.getInstance().addPost(user, (UPLOAD_DIR + "\\" + fileName));
-					
-					writer.append("File successfully uploaded to " + uploadFolder.getAbsolutePath() + File.separator
-							+ fileName);
-				
+
+			if (part != null && part.getSize() > 0) {
+				String fileName = user.getUsername() + "img" + user.getPosts().size() + ".jpg";
+
+				// allows only JPEG files to be uploaded
+				// if (!contentType.equalsIgnoreCase("image/jpeg") &&
+				// !contentType.equalsIgnoreCase("image/png")) {
+				// continue;
+				// }
+				File f = new File(uploadFilePath + File.separator + fileName);
+				f.createNewFile();
+				FileOutputStream out = new FileOutputStream(f);
+
+				IOUtils.copy(input, out);
+				input.close();
+				out.close();
+
+				// part.write(uploadFilePath + File.separator + fileName);
+
+				PostManager.getInstance().addPost(user, (UPLOAD_DIR + "\\" + fileName));
+
+				writer.append(
+						"File successfully uploaded to " + uploadFolder.getAbsolutePath() + File.separator + fileName);
+
 			}
 			request.getRequestDispatcher("successfullupload.jsp").forward(request, response);
+		} catch (Exception e) {
+			request.setAttribute("error", "Sorry! Something went completely wrong!");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
 	}
 
 }

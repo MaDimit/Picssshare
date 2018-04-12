@@ -15,12 +15,14 @@ import model.notification.NotificationBean;
 import model.post.PostBean;
 
 public class PostManager {
+	
+	public static class PostException extends Exception{
+		public PostException(String msg) {
+			super(msg);
+		}
+	}
 
-	/*
-	 * Singleton (may be changed later) ????? using eager singleton for better
-	 * performance ?????
-	 */
-	private static PostManager instance;
+	private final static PostManager instance = new PostManager();
 	private static int uid;
 
 	// Coefficients for sorting posts in feed
@@ -29,13 +31,10 @@ public class PostManager {
 	private static final double DATE_COEFFICIENT = 0.5;
 	 
 	private PostManager() {
-		// uid = TODO get uid from db or collection
+	
 	}
 
-	public static synchronized PostManager getInstance() {
-		if (instance == null) {
-			instance = new PostManager();
-		}
+	public static PostManager getInstance() {
 		return instance;
 	}
 
@@ -48,59 +47,31 @@ public class PostManager {
 //		return coefficient;
 //	}
 
-	// TODO validation (May be done in JS)
-	public void addLike(UserBean liker, PostBean post) {
+	public void addLike(UserBean liker, PostBean post) throws SQLException, PostException {
 		if(post!=null) {
 			CollectionsManager.getInstance().getPostsByID().get(post.getId()).like();
 			NotificationBean n = new LikeNotificationBean(liker, post.getPoster(), post);
 			NotificationManager.getInstance().proceedNotification(n);
-			try {
-				PostDao.getInstance().addInLikerPostTable(liker, post);
-				PostDao.getInstance().updateLikes(post);
-				
-			} catch(MySQLIntegrityConstraintViolationException e) {
-				System.out.println("Sorry, you have already added a like to this post!");
-			}
-			
-			catch (Exception e) {
-				System.out.println("Error with updating likes in DB.");
-				e.printStackTrace();
-			}
-		
+			PostDao.getInstance().addInLikerPostTable(liker, post);
+			PostDao.getInstance().updateLikes(post);
 		}
 		else {
-			System.out.println("No such post found!");
+			throw new PostException("Selected post does not exist");
 		}
 	}
 
-	// TODO validation (May be done in JS)
-	public void addDislike(PostBean post) {
+	public void addDislike(PostBean post) throws SQLException,PostException {
 		if(post!=null) {
 			CollectionsManager.getInstance().getPostsByID().get(post.getId()).dislike();
-			try {
-				PostDao.getInstance().updateLikes(post);
-			} catch (Exception e) {
-				System.out.println("Problem with updating likes.");
-				e.printStackTrace();
-			}
+			PostDao.getInstance().updateLikes(post);	
 		}
 		else {
-			System.out.println("No such post found!");
+			throw new PostException("Selected post does not exist");
 		}
 	}
 
-	// TODO Comments id
-//	public boolean addComment(PostBean post, CommentBean comment) {
-//		if (post != null && comment != null) {
-//			PostDao.getInstance().
-//			post.addComment(comment);
-//			return true;
-//		}
-//		return false;
-//	}
-
 	
-	public boolean addPost(UserBean user, String url) {
+	public boolean addPost(UserBean user, String url) throws SQLException {
 		if (url == null || url.isEmpty()) {
 			System.out.println("Post url is empty.");
 			return false;
@@ -111,31 +82,18 @@ public class PostManager {
 		}
 		
 		PostBean post = new PostBean(user, url);
-		
-		try {
-			PostDao.getInstance().addPost(post);
-		} catch (SQLException e) {
-			System.out.println("Problem during adding post to DB: " + e.getMessage());
-			return false;
-		}
+		PostDao.getInstance().addPost(post);
+
 		user.addPost(post);
 		System.out.println("Post added by " + user.getUsername());
 		return true;	
 	}
 	
-	public boolean deletePost(int postID) {
+	public void deletePost(int postID) throws PostException, SQLException{
 		if(postID <= 0) {
-			System.out.println("Negative id value");
-			return false;
-		}
-		try {
+			throw new PostException("Invalid post");
+		}		
 			PostDao.getInstance().deletePost(postID);
-		}catch(SQLException e) {
-			System.out.println("Problem during post deleting: " + e.getMessage());
-			return false;
-		}
-		
-		return true;
 	}
 
 	public void showInfo(PostBean post) {

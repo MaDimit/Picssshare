@@ -48,7 +48,7 @@ public class DbManager {
 	private final String SCHEMA;
 	
 	
-	private static DbManager instance;
+	private final static DbManager instance = new DbManager();
 	private static Connection connection;
 	
 	private DbManager() {
@@ -78,10 +78,7 @@ public class DbManager {
 		useStatment(this.SCHEMA);
 	}
 	
-	public static synchronized DbManager getInstance() {
-		if(instance == null) {
-			instance = new DbManager();
-		}
+	public static DbManager getInstance() {
 		return instance;
 	}
 	

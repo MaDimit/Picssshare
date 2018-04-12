@@ -24,17 +24,13 @@ public class NotificationManager {
 		return instance;
 	}
 	
-	public void proceedNotification(NotificationBean n) {
+	public void proceedNotification(NotificationBean n) throws SQLException {
 		if(n!=null) {
 			//add in collection
 			this.notifications.put(n.getCauserID(), n);
-			//add in db
-			try {
-				NotificationDao.getInstance().addNotificationInDB(n);
-			} catch (SQLException e) {
-				System.out.println("Error while trying to add notification in db.");
-				e.printStackTrace();
-			}
+			//add in db	
+			NotificationDao.getInstance().addNotificationInDB(n);
+			
 		}
 	}
 }

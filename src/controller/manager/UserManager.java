@@ -3,6 +3,7 @@ package controller.manager;
 import java.sql.SQLException;
 import java.util.TreeSet;
 
+import controller.manager.PostManager.PostException;
 import model.UserBean;
 import model.dao.NotificationDao;
 import model.dao.PostDao;
@@ -14,14 +15,16 @@ import model.post.PostBean;
 
 public class UserManager {
 	
-	/*
-	 * Singleton (May be changed later)
-	 */
+	public static class UserManagerException extends Exception{
+		private UserManagerException(String msg) {
+			super(msg);
+		}
+	}
+	
 
 	private static UserManager instance;
 
 	private UserManager() {
-		//uid = TODO get last uid from DB or collection;
 	}
 
 	public static synchronized UserManager getInstance() {
@@ -32,69 +35,42 @@ public class UserManager {
 	}
 
 	// =================FILL COLLECTIONS===============//
-	/*
-	 * TODO more validation for all insertions to UserBean collections
-	 */
 
-	public boolean subscribe(UserBean subscriber, UserBean subscribedTo) {
+	public void subscribe(UserBean subscriber, UserBean subscribedTo) throws SQLException,UserManagerException {
 		if (subscribedTo == null && subscriber == null) {
-			System.out.println("Subscriber or subscribed is null");
-			return false;
-		}	
+			throw new UserManagerException("subscription user is empty or null");
 			
+		}			
 			NotificationBean n = new SubscriptionNotificationBean(subscriber, subscribedTo);
 			NotificationManager.getInstance().proceedNotification(n);
 			
 			//add in DB
-			try {
-				UserDao.getInstance().addSubscription(subscriber, subscribedTo);
-			} catch (SQLException e) {
-				System.out.println("Maybe you have already subscribed to this user!");
-				System.out.println("Adding subscribtin to DB went wrong: " + e.getMessage());
-				
-				return false;
-			}
-
+			
+			UserDao.getInstance().addSubscription(subscriber, subscribedTo);
+			
 			// Adding to UserBean subscriptions collections
 			subscriber.addSubscribtion(subscribedTo);
 			subscribedTo.addSubscriber(subscriber);
-		
-			
-			//TODO add notification to DB
-			
+					
 			// Adding to notifications collection of subscribedTo UserBean
 			SubscriptionNotificationBean notification = new SubscriptionNotificationBean(subscriber, subscribedTo);
 			subscribedTo.addNotification(notification);
 
 			System.out.println(subscriber.getUsername() + " subscribed to " + subscribedTo.getUsername());
 			
-//			try {
-//				NotificationDao.getInstance().addNotificationInDB(notification);
-//			} catch (SQLException e) {
-//				System.out.println("Error while inserting notification in DB.");
-//				e.printStackTrace();
-//			}
-			return true;
 	}
 	
 	
 	//TODO adding liked post to DB
 	// ????? dividing on separate methods for liking and adding to liked ?????
-	public void like(UserBean liker, PostBean likedPost) {
+	public void like(UserBean liker, PostBean likedPost) throws SQLException, PostException {
 		if (likedPost != null) {
 			PostManager.getInstance().addLike(liker, likedPost);
 			liker.addLikedPost(likedPost);
 			NotificationBean n = new LikeNotificationBean(liker,likedPost.getPoster(), likedPost);
+			NotificationDao.getInstance().addNotificationInDB(n);
 			likedPost.getPoster().addNotification(n);
-			System.out.println("Post added to liked photos in " + liker.getUsername() + " collection.");
-			try {
-				NotificationDao.getInstance().addNotificationInDB(n);
-			} catch (SQLException e) {
-				System.out.println("Problem with adding notification to db.");
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Problem with adding a post to liked ones.");
+			System.out.println("Post added to liked photos in " + liker.getUsername() + " collection.");	
 		}
 	}
 	

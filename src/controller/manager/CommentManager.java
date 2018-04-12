@@ -8,74 +8,57 @@ import model.dao.CommentDao;
 import model.post.PostBean;
 
 public class CommentManager {
-	
-	private static CommentManager instance;
-	
+
+	public static class CommentException extends Exception {
+		public CommentException(String msg) {
+			super(msg);
+		}
+	}
+
+	private final static CommentManager instance = new CommentManager();
+
 	private CommentManager() {
 	}
-	
-	public static synchronized CommentManager getInstance() {
-		if(instance == null) {
-			instance = new CommentManager();
-		}
+
+	public static CommentManager getInstance() {
 		return instance;
 	}
-	
-	public boolean createComment(String content, UserBean poster, PostBean belongedPost) {
-		if(content == null || content.isEmpty()) {
-			System.out.println("Comment is empty.");
-			return false;
+
+	public void createComment(String content, UserBean poster, PostBean belongedPost)
+			throws SQLException, CommentException {
+		if (content == null || content.isEmpty()) {
+			throw new CommentException("Comment is empty.");
 		}
-		if(poster == null) {
-			System.out.println("Comment poster is null");
-			return false;
+		if (poster == null) {
+			throw new CommentException("Comment poster is null");
 		}
-		if(belongedPost == null) {
-			System.out.println("Comment post is null");
-			return false;
+		if (belongedPost == null) {
+			throw new CommentException("Comment post is null");
 		}
-		
-		CommentBean comment = new CommentBean(poster,content,belongedPost);
-		try {
-			CommentDao.getInstance().addComment(comment);
-		}catch(SQLException e) {
-			System.out.println("Problem during adding comment to DB: " + e.getMessage());
-		}
-		return true;
+
+		CommentBean comment = new CommentBean(poster, content, belongedPost);
+
+		CommentDao.getInstance().addComment(comment);
+
 	}
+
 	/*
-	 * Not sure how the comment will be deleted by id or object. How the information from the frontend will come here
+	 * Not sure how the comment will be deleted by id or object. How the information
+	 * from the frontend will come here
 	 * 
 	 */
-	public boolean deleteComment(CommentBean comment) {
-		if(comment == null) {
-			System.out.println("Comment is null");
-			return false;
+	public void deleteComment(CommentBean comment) throws SQLException, CommentException {
+		if (comment == null) {
+			throw new CommentException("Comment is empty");
 		}
-		
-		try {
-			CommentDao.getInstance().deleteComment(comment);
-		}catch(SQLException e) {
-			System.out.println("Problem during comment deletion from DB: " + e.getMessage());
-		}
-		
-		return true;
+		CommentDao.getInstance().deleteComment(comment);
 	}
-	
-	public boolean deleteCommentById(int postID, int commentID) {
-		if(commentID < 0 ) {
-			System.out.println("Comment id is invalid");
-			return false;
+
+	public void deleteCommentById(int postID, int commentID) throws SQLException, CommentException {
+		if (commentID < 0) {
+			throw new CommentException("Comment id is invalid");
 		}
-		
-		try {
-			CommentDao.getInstance().deleteCommentByID(postID,commentID);
-		}catch(SQLException e) {
-			System.out.println("Problem during comment deletion from DB: " + e.getMessage());
-			return false;
-		}
-		
-		return true;
+		CommentDao.getInstance().deleteCommentByID(postID, commentID);
 	}
 
 }

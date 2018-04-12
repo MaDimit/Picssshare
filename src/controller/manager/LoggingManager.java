@@ -20,22 +20,19 @@ public class LoggingManager {
 	}
 
 	
-	private static LoggingManager instance;
+	private final static LoggingManager instance = new LoggingManager();
 	
 	private LoggingManager() {
 		
 	}
 	
-	public static synchronized LoggingManager getInstance() {
-		if(instance == null) {
-			instance = new LoggingManager();
-		}
+	public static LoggingManager getInstance() {
 		return instance;
 	}
 	
 	//========================REGISTER PART===================================//
 		
-		public synchronized UserBean register(String username, String password, String email) throws RegistrationException{
+		public UserBean register(String username, String password, String email) throws RegistrationException{
 			
 			//Username validating
 			boolean validUsername = false;
@@ -72,8 +69,10 @@ public class LoggingManager {
 			if(!username.matches("^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")) {
 				throw new RegistrationException("Invalid characters in username!");
 			}
-			if(CollectionsManager.getInstance().alreadyExists(username)) {
-				throw new RegistrationException("User with this name already exists!");
+			synchronized (CollectionsManager.getInstance()) {
+				if(CollectionsManager.getInstance().alreadyExists(username)) {
+					throw new RegistrationException("User with this name already exists!");
+				}
 			}
 		
 			return true;
@@ -103,10 +102,15 @@ public class LoggingManager {
 		}
 
 		// validate email address
-		public boolean validateEmailAddress(String email) {
+		public boolean validateEmailAddress(String email) throws RegistrationException{
 			String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 			java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
 			java.util.regex.Matcher m = p.matcher(email);
+			synchronized (CollectionsManager.getInstance()) {
+				if(CollectionsManager.getInstance().alreadyExistsEmail(email)) {
+					throw new RegistrationException("User with this email already exists");
+				}
+			}
 			return m.matches();
 		}
 

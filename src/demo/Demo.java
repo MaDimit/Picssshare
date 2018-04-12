@@ -18,7 +18,6 @@ import model.UserBean;
 import model.dao.FeedDao;
 import model.dao.PostDao;
 import model.dao.UserDao;
-import model.feed.TrendingFeedBean;
 import model.post.PostBean;
 
 public class Demo {
