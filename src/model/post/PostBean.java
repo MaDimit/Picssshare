@@ -133,7 +133,11 @@ public class PostBean {
 			System.out.println("=========POST "+this.id+"==========");
 			System.out.println();
 		}
-
+		
+		@Override
+		public String toString() {
+			return "Post id: " + id + ", likes: " + likes + ", date: " + date + ", poster: " + poster.getUsername() + ", url: " + url;
+		}
 		
 
 }

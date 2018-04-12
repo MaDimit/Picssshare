@@ -63,6 +63,7 @@ public class DbManager {
 		this.USER = "Philip";
 		this.PASS = "Picssshare97?";
 
+
 		this.SCHEMA = "Picssshare";
 		
 		try {

@@ -6,10 +6,19 @@ import model.UserBean;
 import model.dao.FeedDao;
 import model.feed.FeedBean;
 import model.feed.MainFeedBean;
-import model.feed.TrendingFeedBean;
 import model.post.PostBean;
 
 public class FeedManager {
+	
+	private static final FeedManager instance = new FeedManager();
+	
+	private FeedManager() {
+		
+	}
+	
+	public static FeedManager getInstance() {
+		return instance;
+	}
 
 	public void displayPostsInfo(FeedBean feed) {
 		feed.getPosts().forEach(p -> PostManager.getInstance().showInfo(p));
@@ -30,8 +39,8 @@ public class FeedManager {
 		return feed;
 	}
 
-	public TrendingFeedBean generateTrendingFeed() {
-		TrendingFeedBean feed = new TrendingFeedBean();
+	public FeedBean generateTrendingFeed() {
+		FeedBean feed = new FeedBean();
 		for (Integer id : FeedDao.getInstance().getTrendingPosts()) {
 			feed.addPostByComment(CollectionsManager.getInstance().getPostsByID().get(id));
 		}
