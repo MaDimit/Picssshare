@@ -12,18 +12,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/")
 public class RedirectServlet extends HttpServlet {
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	if(request.getSession(false)==null) {
-		response.sendRedirect("index.html");
-	}
-	else {
 
-		response.sendRedirect("userfeed");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (request.getSession(false) == null) {
+			response.sendRedirect("index.html");
+		} else {
+			response.sendRedirect("userfeed");
+		}
 	}
-	
-	}
-
-
 }

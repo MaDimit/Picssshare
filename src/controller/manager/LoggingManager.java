@@ -35,9 +35,7 @@ public class LoggingManager {
 		public UserBean register(String username, String password, String email) throws RegistrationException{
 			
 			//Username validating
-			boolean validUsername = false;
-			
-			validUsername = validateUsername(username);
+			validateUsername(username);
 			
 			if(!validatePassword(password)) {
 				throw new RegistrationException("Weak password");
@@ -57,7 +55,7 @@ public class LoggingManager {
 				System.out.println("Registering to DB problem: " + e.getMessage());
 				throw new RegistrationException("Data base connection problem!");
 			}
-			
+			CollectionsManager.getInstance().addUser(user);
 			System.out.println("Registration of " + user.getUsername() + " is successfull!");
 			return user;
 		}
