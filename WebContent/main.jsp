@@ -23,9 +23,9 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <h3 class="w3-padding-64 w3-center"><b>Hello,  <%= request.getParameter("username") %></b></h3>
   <img src="https://www.w3schools.com/w3images/natureboy.jpg" style="width:70%"></img>
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-hide-large">CLOSE</a>
-  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button">PORTFOLIO</a> 
-  <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">ABOUT ME</a> 
-  <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">CONTACT</a>
+  <a href="friendsfeed.jsp" onclick="w3_close()" class="w3-bar-item w3-button">Friends Feed</a> 
+  <a href="imageupload.jsp" onclick="w3_close()" class="w3-bar-item w3-button">Image upload</a> 
+  <a href="profile.jsp" onclick="w3_close()" class="w3-bar-item w3-button">Profile</a>
 </nav>
 
 <!-- Top menu on small screens -->
@@ -48,7 +48,7 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     
     	<%
     	
-    	UserBean u = CollectionsManager.getInstance().getUser(request.getParameter("username"));
+    	UserBean u = (UserBean)session.getAttribute("user");
     	ArrayList<PostBean> posts = new ArrayList<>(u.getPosts());
     	%>
     	<%

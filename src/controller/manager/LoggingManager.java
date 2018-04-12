@@ -96,21 +96,17 @@ public class LoggingManager {
 //			}
 //		}
 		
-		public synchronized boolean register(String username, String password, String email) throws RegisterException{
+		public synchronized UserBean register(String username, String password, String email) throws RegisterException{
 			
 			//Username validating
 			boolean validUsername = false;
 			
 			validUsername = validateUsername(username);
 			
-			if(!validUsername) {
-				return false;
-			}
-			
 			if(!validatePassword(password)) {
 				throw new RegisterException("Weak password");
 			}
-			//TODO check if already exists in runtime collection
+
 			if(!validateEmailAddress(email)) {
 				throw new RegisterException("Email is not valid");
 			}
@@ -123,11 +119,11 @@ public class LoggingManager {
 				UserDao.getInstance().registerUser(user);
 			}catch (SQLException e) {
 				System.out.println("Registering to DB problem: " + e.getMessage());
-				return false;
+				throw new RegisterException("Data base connection problem!");
 			}
 			
 			System.out.println("Registration of " + user.getUsername() + " is successfull!");
-			return true;
+			return user;
 		}
 		// validate username
 		public boolean validateUsername(String username) throws RegisterException {
@@ -140,6 +136,7 @@ public class LoggingManager {
 			if(CollectionsManager.getInstance().alreadyExists(username)) {
 				throw new RegisterException("User with this name already exists!");
 			}
+		
 			return true;
 		}
 

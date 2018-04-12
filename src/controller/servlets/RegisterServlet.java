@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import controller.manager.LoggingManager;
 import controller.manager.LoggingManager.RegisterException;
+import model.UserBean;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -30,15 +31,15 @@ public class RegisterServlet extends HttpServlet {
 			out.println("Password does not match!");
 			return;
 		}
-		
+		UserBean user;
 		try {
-			LoggingManager.getInstance().register(username, password, email);
+			user = LoggingManager.getInstance().register(username, password, email);
 		} catch (RegisterException e) {
 			out.println(e.getMessage());
 			return;
 
 		}
-	
+		request.getSession().setAttribute("user", user);
 		request.getRequestDispatcher("main.jsp").forward(request, response);
 				
 	}

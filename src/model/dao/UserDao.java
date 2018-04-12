@@ -45,8 +45,7 @@ public class UserDao extends Dao {
 			throw new SQLException("Creating user failed, no ID obtained.");
 		}
 
-		// adding to runtime users collection
-		// this.users.put(user.getUsername(), user);
+		CollectionsManager.getInstance().addUser(user);
 	}
 
 	public void addSubscription(UserBean subscriber, UserBean subscribed) throws SQLException {

@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+
 import controller.manager.PostManager;
 import model.UserBean;
 
@@ -36,7 +38,7 @@ public class UploadServlet extends HttpServlet {
 				throws ServletException, IOException {
 			
 			// constructs path of the directory to save uploaded file
-			String uploadFilePath = "/home/maxim/Programming/Eclipse/PicssshareProject/" + UPLOAD_DIR;
+			String uploadFilePath = "/home/maxim/Programming/Eclipse/PicssshareProject/WebContent/" + UPLOAD_DIR;
 			// creates upload folder if it does not exists
 			File uploadFolder = new File(uploadFilePath);
 			if (!uploadFolder.exists()) {
@@ -46,24 +48,33 @@ public class UploadServlet extends HttpServlet {
 			// write all files in upload folder
 			UserBean user = (UserBean) request.getSession().getAttribute("user");
 
-			for (Part part : request.getParts()) {
+			Part part = request.getPart("file");
+			InputStream input = part.getInputStream();
+			
 				if (part != null && part.getSize() > 0) {
-					String fileName = user.getUsername() + "img" + user.getPosts().size();
-					String contentType = part.getContentType();
+					String fileName = user.getUsername() + "img" + user.getPosts().size() + ".jpg";
 					
 					// allows only JPEG files to be uploaded
 //					if (!contentType.equalsIgnoreCase("image/jpeg") && !contentType.equalsIgnoreCase("image/png")) {
 //						continue;
 //					}
-
-					part.write(uploadFilePath + File.separator + fileName);
+					File f = new File(uploadFilePath + File.separator + fileName);
+					f.createNewFile();
+					FileOutputStream out = new FileOutputStream(f);
 					
-					PostManager.getInstance().addPost(user, UPLOAD_DIR + File.separator + fileName);
+					IOUtils.copy(input,out);
+					input.close();
+					out.close();
+					
+					//part.write(uploadFilePath + File.separator + fileName);
+					
+					PostManager.getInstance().addPost(user, (UPLOAD_DIR + "\\" + fileName));
 					
 					writer.append("File successfully uploaded to " + uploadFolder.getAbsolutePath() + File.separator
 							+ fileName);
-				}
+				
 			}
+			request.getRequestDispatcher("successfullupload.jsp").forward(request, response);
 	}
 
 }
