@@ -1,147 +1,144 @@
 package demo;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeSet;
 
-import project.Server;
-import project.UserLogging;
-import project.content.PhotoPost;
-import project.content.Post;
-import project.feed.Feed;
-import project.feed.Feed.Type;
-import project.feed.MainFeed;
-import project.user.User;
+import controller.manager.CollectionsManager;
+import controller.manager.CommentManager;
+import controller.manager.FeedManager;
+import controller.manager.LoggingManager;
+import controller.manager.LoggingManager.LoggingException;
+import controller.manager.PostManager;
+import controller.manager.UserManager;
+import model.CommentBean;
+import model.UserBean;
+import model.dao.FeedDao;
+import model.dao.PostDao;
+import model.dao.UserDao;
+import model.post.PostBean;
 
 public class Demo {
-	
+
 	public static int getRandomNumber(int range, int startPoint) {
 		Random r = new Random();
-		return r.nextInt(range)+startPoint;
+		return r.nextInt(range) + startPoint;
+	}
+
+	public static void main(String[] args) throws Exception {
+		demo();
 	}
 	
-	public static void main(String[] args){
-		Server server = Server.getInstance();
-		User user = new User("amatrixable", "YesssssBe5!", "Philip", "Kasapov", "amatrixable@gmail.com");
-		User user1 = new User("distmist", "Heyhey123", "Slovan", "Kaspeev", "slovko@gmail.com");
-		User user2 = new User("peshoO91", "toughpassword123", "Petyr", "Petrov", "peshko@gmail.com");
-		User user3 = new User("tigra", "TigaraBe3?", "Tisho", "Petrov", "tishoooooo@gmail.com");
-		User user4 = new User("amatrixable", "qWerty123","Name", "Surname", "Email@email.com");
-		user.setServer(server);
-		user1.setServer(server);
-		user2.setServer(server);
-		user3.setServer(server);
+	public static void demo() {
+		UserManager um = UserManager.getInstance();
+		PostManager pm = PostManager.getInstance();
+		CommentManager cm = CommentManager.getInstance();
+		LoggingManager lm = LoggingManager.getInstance();
+		CollectionsManager colm = CollectionsManager.getInstance();
 		
-		user.registerRequest();
-		user1.registerRequest();
-		user2.registerRequest();
-		user3.registerRequest();
-		user4.registerRequest();
+		//Registration
+//		lm.register("Maxim", "pass1234QQ", "myEmail@gmail.com");
+//		lm.register("Phillip", "QWErty123", "hisEmail@gmail.com");
+//		lm.register("John", "pass1234TT", "someEmail@gmail.com");
+//		lm.register("Peter", "pass2321WW", "email@gmail.com");
+		// -------------- successfull! ------------ //
 		
-		server.showUsers();
-		
-		user.loginRequest();
-		user1.loginRequest();
-		//adding post and show that deleteComment function works
-		Post post = new PhotoPost(user, "C:\\Users\\Philip\\Desktop\\saf.ttxt");
-		post.addLike();
-		post.addLike();
-		post.addLike();
-		post.addComment(user3, "MNOO QK");
-		post.addComment(user2, "CHESTNO");
-		post.addComment(user1, "TAKA E");
-		post.showInfo();
-		post.deleteComment(1);
-		post.showInfo();
-		user.addPost(post);
-		
-		//add 2 more posts which are posted from different user
-		Post post1 = new PhotoPost(user3, "daf.ttxt");
-		post1.addLike();
-		post1.addLike();
-		post1.addLike();
-		post1.addLike();
-		post1.addLike();
-		post1.addDislike();
-		post1.addDislike();
-		post1.addComment(user3, "buu");
-		post1.addComment(user2, "bee");
-		post1.addComment(user1, "eee");
-		user1.addPost(post1);
-		Post post3 = new PhotoPost(user1, "uaf.ttxt");
-		post3.addLike();
-		post3.addLike();
-		post3.addLike();
-		post3.addLike();
-		post3.addDislike();
-		post3.addComment(user3, "te");
-		post3.addComment(user2, "sa");
-		post3.addComment(user1, "te");
-		user3.addPost(post3);
-		user1.addBookmark(post);
-		user1.addLiked(post);
-		
-		//showNotifications && showSubscribers test
-		System.out.println(user.getUsername() + " notifications ------>");
-		user.showNotifications();
-		user.subscribeTo(user1);
-		user.subscribeTo(user3);
-		user1.showSubscribers();
-		System.out.println(user1.getUsername() + " notifications ----->");
-		user1.showNotifications();
-
-		System.out.println();
-		System.out.println();
-		System.out.println("===FEED SHOWING===");
-		//user has been subscribed to user1 and user3 / each have posted 1 post / result: displayed 2 posts
-		System.out.println();
-		System.out.println();
-		user.getFeed(Type.MAIN_FEED).displayPostsInfo();
-		
+		//Loggging
+		System.out.println("Logging...");
 		try {
-			feedTest();
-		} catch (InterruptedException e) {
+			UserBean u1 = lm.login("Maxim", "pass1234QQ");
+			System.out.println(u1);
+			UserBean u2 = lm.login("Phillip", "Pass112233");
+			UserBean u3 = lm.login("John", "pass1234TT");
+			UserBean u4 = lm.login("Peter", "pass2321WW");
+		} catch (LoggingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	private static void feedTest() throws InterruptedException {
-		User user1 = new User("user1","password123","email@email.com");
-		User user2 = new User("user2","notpassword321","email2@email.com");
-		user1.setServer(Server.getInstance());
-		user2.setServer(Server.getInstance());
+		System.out.println("Logged...");
+		// ------------ successfull! --------------//
 		
-		user1.subscribeTo(user2);
-		user2.subscribeTo(user1);
+		//Adding posts
+//		pm.addPost(u2, "url of post 1");
+//		pm.addPost(u2, "url of post 2");
+//		pm.addPost(u3, "url of post 3");
+//		pm.addPost(u4, "url of post 4");
+//		pm.addPost(u2, "url of post 5");
+//		pm.addPost(u3, "url of post 6");
+//		pm.addPost(u2, "url of post 7");
+//		pm.addPost(u1, "url of post 8");
+//		pm.addPost(u1, "url of post 9");
+//		pm.addPost(u2, "url of post 10");
+//		pm.addPost(u3, "url of post 11");
+//		pm.addPost(u4, "url of post 12");
+		// ------------ successfull --------------//
 		
-		Post post1 = new PhotoPost(user1, "some photo url1");
-		Thread.sleep(1000);
-		Post post2 = new PhotoPost(user1, "some photo url2");
-		Thread.sleep(1000);
-		Post post3 = new PhotoPost(user1, "some photo url3");
-		Thread.sleep(1000);
+		//Delete post
+//		pm.deletePost(3);
+		//-------------successfull---------------//
 		
-		post1.addLike();
-		post1.addLike();
-		post1.addLike();
-		post1.addLike();
-		post2.addLike();
+		//Adding like to post
+//		pm.addLike(u2, colm.getPostsByID().get(7));
+//		pm.addLike(u1, colm.getPostsByID().get(7));
+//		pm.addLike(u2, colm.getPostsByID().get(7));
+//		pm.addLike(u3, colm.getPostsByID().get(8));
+//		pm.addLike(u3, colm.getPostsByID().get(11));
+//		pm.addLike(u4, colm.getPostsByID().get(12));
+//		pm.addLike(u1, colm.getPostsByID().get(20));
+//		pm.addLike(u4, colm.getPostsByID().get(22));
+//		pm.addLike(u2, colm.getPostsByID().get(7));
+//		
 		
-		post1.addComment(user2, "comment1");
-		post1.addComment(user2, "comment2");
-		post1.addComment(user2, "comment3");
-		post1.addComment(user2, "comment4");
-		post2.addComment(user2, "comment");
+		//----------successfull-----------------//
 		
-		user1.addPost(post1);
-		user1.addPost(post2);
-		user1.addPost(post3);
+		//Addig dislike to post
+//		pm.addDislike(colm.getPostsByID().get(2));
 		
-		user2.getFeed(Type.MAIN_FEED).displayPostsInfo();
+		//-------------successfull-------------//
 		
-		System.out.println("\n\nTrending posts: \n");
-		user2.getFeed(Type.TRENDING_FEED).displayPostsInfo();
+		
+		//Subscription
+//		um.subscribe(u2, u3); 
+//		um.subscribe(u2, u4); 
+//		System.out.println(u1.getSubscriptions()); // Checking if collection manager successfully added subscriptions
+		// ------------ successfull --------------//
+		
+		//Adding comments to post
+//		cm.createComment("Comment 1!", u2, colm.getPost(26));
+//
+//		cm.createComment("Comment 2!", u3, colm.getPost(26));
+//
+//		cm.createComment("Comment 3!", u4, colm.getPost(26));
+//		cm.createComment("Comment 4!", u1, colm.getPost(26));
+//		cm.createComment("Comment 5!", u2, colm.getPost(26));
+//		cm.createComment("Comment 6!", u3, colm.getPost(2));
+//		cm.createComment("Comment 7!", u4, colm.getPost(2));
+		
+		//-------------successfull-------------//
 
+		//Delete comment
+		//parameters: postID, commentID
+//		cm.deleteCommentById(4,11);
+		
+		//---------successfull---------///
+		
+		
+		//UPDATE PROFILE INFO
+		
+		//fill the fileds with new values, the old ones stay with null
+//		UserManager.getInstance().updateProfileInfo(u2, null, "Filip", "Kasapov", null);
+		//-------------successfull ----------------//
+		
+		//Generate main feed
+//		FeedManager f = new FeedManager();
+//		f.displayPostsInfo(f.generateMainFeed(u2));
+		
+		//-------------successfull-------------//
+//		Generate trending feed for one week before
+//		f.displayTrendingPostInfo(f.generateTrendingFeed());
+		//-------------successfull------------//
+		
 	}
-
 }

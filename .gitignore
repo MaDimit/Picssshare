@@ -22,6 +22,10 @@
 .settings/
 .classpath
 .project
+*.properties
+db.properties
+DbManager.java
+src/model/dao/DbManager.java
 
 # Binaries
 *.7z
